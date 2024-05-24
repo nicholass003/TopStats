@@ -1,0 +1,36 @@
+# TopStats Configuration #
+# Supported Databases:
+# - json
+database: "json"
+
+# TopStats Format
+# Leaderboard Max List:
+max-list: 10
+# Supported Models:
+# - player
+# - text
+# Supported Types:
+# - deaths
+# - kills
+# Supported Tags:
+# - deaths -> Deaths value
+# - kills -> Kills value
+# - player -> Player name
+# Rank Tags:
+# - rank_deaths -> Top Rank value of deaths
+# - rank_kills -> Top Rank value of kills
+models:
+  player:
+    deaths:
+      title: "#{rank_deaths} {player}"
+      description: "With deaths {deaths}"
+    kills:
+      title: "#{rank_kills} {player}"
+      description: "With kills {kills}"
+  text:
+    deaths:
+      title: ">> TOP DEATHS <<"
+      description: "#{rank_deaths} {player} {deaths}"
+    kills:
+      title: ">> TOP KILLS <<"
+      description: "#{rank_kills} {player} {kills}"

@@ -1,8 +1,21 @@
-## TopStats
+</br>
 
+<div align="center">
+
+<img src="assets/icon.png">
+
+<h3 align="center">TopStats</h4>
+
+<p align="center">
 🏆 TopStats plugin for tracking top player statistics for PocketMine-MP.
 
-## Commands
+[![State](https://poggit.pmmp.io/shield.state/TopStats)](https://poggit.pmmp.io/p/TopStats) [![API](https://poggit.pmmp.io/shield.api/TopStats)](https://poggit.pmmp.io/p/TopStats) [![Total Downloads](https://poggit.pmmp.io/shield.dl.total/TopStats)](https://poggit.pmmp.io/p/TopStats) [![GitHub License](https://img.shields.io/github/license/nicholass003/TopStats)](LICENSE) [![Discord](https://img.shields.io/discord/1230982180742631457?logo=discord&logoColor=white&color=5865F2)](https://discord.gg/EEJK2vxtCp) 
+
+</p>
+
+</div>
+
+## 🛠️ Commands
 ### Main Commands
 | Commands                                      | Description                                      | Permissions                 |
 | --------------------------------------------- | ------------------------------------------------ | --------------------------- |
@@ -11,29 +24,39 @@
 ### SubCommands
 | SubCommands | Description |
 |----- | --------|
-|`create` |  `Spawn TopStats` |
-|`delete` | `Delete TopStats` |
-|`list` | `TopStats List` |
-|`teleport` | `Teleport Player to TopStats` |
-|`types` | `List of TopStats Type` |
+|`create` |  Spawn TopStats |
+|`delete` | Delete TopStats |
+|`list` | TopStats List |
+|`teleport` | Teleport Player to TopStats |
+|`types` | List of TopStats Type |
 
-## Models
+## 🖼️ Models
 
 **TopStats has 2 models:**
 | `player` | `text` |
 | -- | -- |
 | ⚠️ Still Underdevelopmet ⚠️ | Simple TopStats with Floating Text. |
 
-## TODO List:
+## 📊 Types
+**TopStats has 2 types:**
+
+>Other types will added soon!
+
+| Types | Description |
+| -- | -- |
+| `deaths` | Count Player Deaths |
+| `kills` | Count Player Kills |
+
+## 📋 TODO List:
 
 - [ ] Implement player models
 - [ ] Save TopStats while server restart
 
-## Issues & Suggestions
+## 💡 Issues & Suggestions
 
 Feel free to creating an issues for bug reports and feature requests!
 
-## Support Development
+## 🌟 Support Development
 
 If you find my PocketMine-MP plugins useful and wish to support their ongoing development and maintenance, your contributions are greatly appreciated. Your generosity enables me to dedicate more time and resources to improving and expanding the functionality of these plugins for the benefit of the community.
 
@@ -53,5 +76,5 @@ I would like to express my heartfelt gratitude to all the individuals and organi
 
 Thank you for your continued support and encouragement!
 
-## Credits
+## 🎖️ Credits
 <a target="_blank" href="https://icons8.com/icon/CJOznVjwe3u5/podium">Podium</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>

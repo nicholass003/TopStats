@@ -48,8 +48,9 @@ class TopStats extends PluginBase{
 		$this->registerCommands();
 		$this->registerListeners();
 		$this->registerTasks();
-		$this->database = match(strtolower($this->getConfig()->get("database", "json"))){
-			"json" => new JsonDatabase($this)
+		$this->database = match(strtolower($this->getConfig()->get("database"))){
+			"json" => new JsonDatabase($this),
+			default => new JsonDatabase($this)
 		};
 		$this->database->loadData();
 		$this->leaderboardManager->loadData();

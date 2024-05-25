@@ -29,7 +29,6 @@ use nicholass003\topstats\database\data\DataType;
 use nicholass003\topstats\TopStats;
 use pocketmine\player\Player;
 use pocketmine\utils\Config;
-use function var_dump;
 
 class JsonDatabase implements IDatabase{
 
@@ -73,7 +72,6 @@ class JsonDatabase implements IDatabase{
 				}
 			}
 		}
-		var_dump($this->data);
 	}
 
 	public function update(Player $player, array $data, int $action) : void{

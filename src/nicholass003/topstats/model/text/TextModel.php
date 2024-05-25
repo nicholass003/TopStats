@@ -48,7 +48,7 @@ class TextModel extends FloatingTextParticle implements IModel{
 		return $this->id;
 	}
 
-	public function getModel() : string{
+	public function getVariant() : string{
 		return ModelVariant::TEXT;
 	}
 

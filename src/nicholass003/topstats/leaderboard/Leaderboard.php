@@ -29,6 +29,7 @@ use nicholass003\topstats\model\IModel;
 use nicholass003\topstats\model\text\TextModel;
 use nicholass003\topstats\TopStats;
 use nicholass003\topstats\utils\Utils;
+use function json_encode;
 
 class Leaderboard{
 
@@ -43,8 +44,8 @@ class Leaderboard{
 		protected IModel $model
 	){
 		$this->database = TopStats::getInstance()->getDatabase();
-		$this->text = TopStats::getInstance()->getConfig()->getNested("models." . $model->getModel() . "." . $model->getType() . ".description");
-		$this->title = TopStats::getInstance()->getConfig()->getNested("models." . $model->getModel() . "." . $model->getType() . ".title");
+		$this->text = TopStats::getInstance()->getConfig()->getNested("models." . $model->getVariant() . "." . $model->getType() . ".description");
+		$this->title = TopStats::getInstance()->getConfig()->getNested("models." . $model->getVariant() . "." . $model->getType() . ".title");
 		$this->id = $model->getId();
 	}
 
@@ -76,5 +77,19 @@ class Leaderboard{
 	public function update() : void{
 		$this->updateText(Utils::getTopStatsText($this->database->getTemporaryData(), $this->model->getType(), $this->text));
 		$this->updateTitle(Utils::getTopStatsText($this->database->getTemporaryData(), $this->model->getType(), $this->title));
+	}
+
+	public function toJSON() : string{
+		return json_encode([
+			"id" => $this->model->getId(),
+			"model" => $this->model->getVariant(),
+			"type" => $this->model->getType(),
+			"position" => [
+				"x" => $this->model->getPosition()->getX(),
+				"y" => $this->model->getPosition()->getY(),
+				"z" => $this->model->getPosition()->getZ(),
+				"world" => $this->model->getPosition()->getWorld()->getFolderName()
+			]
+		]);
 	}
 }

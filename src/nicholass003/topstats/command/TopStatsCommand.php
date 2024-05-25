@@ -123,12 +123,12 @@ class TopStatsCommand extends Command implements PluginOwned{
 					}
 					break;
 				case "list":
-					if(count($this->modelManager->models()) < 1){
+					if(count($this->leaderboardManager->leaderboards()) < 1){
 						$sender->sendMessage(TextFormat::RED . "There are no TopStats Model available.");
 					}else{
-						foreach($this->modelManager->models() as $id => $model){
-							if(!$model instanceof IModel) continue;
-							$sender->sendMessage(TextFormat::GREEN . "- ModelID: {$id} ModelVariant: " . $model->getModel());
+						foreach($this->leaderboardManager->leaderboards() as $id => $leaderboard){
+							if(!$leaderboard->getModel() instanceof IModel) continue;
+							$sender->sendMessage(TextFormat::GREEN . "- ModelID: {$id} ModelVariant: " . $leaderboard->getModel()->getVariant());
 						}
 					}
 					break;

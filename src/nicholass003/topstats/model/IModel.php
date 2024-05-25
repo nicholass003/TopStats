@@ -28,7 +28,7 @@ use pocketmine\world\Position;
 
 interface IModel{
 
-	public function getModel() : string;
+	public function getVariant() : string;
 
 	public function getType() : string;
 

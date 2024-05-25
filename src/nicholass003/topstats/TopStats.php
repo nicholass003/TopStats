@@ -47,7 +47,7 @@ class TopStats extends PluginBase{
 	protected function onEnable() : void{
 		self::setInstance($this);
 		$this->modelManager = new ModelManager();
-		$this->leaderboardManager = new LeaderboardManager();
+		$this->leaderboardManager = new LeaderboardManager($this);
 		$this->registerCommands();
 		$this->registerListeners();
 		$this->registerTasks();
@@ -55,10 +55,12 @@ class TopStats extends PluginBase{
 			"json" => new JsonDatabase($this)
 		};
 		$this->database->loadData();
+		$this->leaderboardManager->loadData();
 	}
 
 	protected function onDisable() : void{
 		$this->database->saveData();
+		$this->leaderboardManager->saveData();
 	}
 
 	private function registerCommands() : void{

@@ -112,9 +112,10 @@ class TopStatsCommand extends Command implements PluginOwned{
 					if(count($this->leaderboardManager->leaderboards()) < 1){
 						$sender->sendMessage(TextFormat::RED . "There are no TopStats Model available.");
 					}else{
+						$sender->sendMessage(TextFormat::YELLOW . "TopStats List:");
 						foreach($this->leaderboardManager->leaderboards() as $id => $leaderboard){
 							if(!$leaderboard->getModel() instanceof IModel) continue;
-							$sender->sendMessage(TextFormat::GREEN . "- ModelID: {$id} ModelVariant: " . $leaderboard->getModel()->getVariant());
+							$sender->sendMessage(TextFormat::GREEN . "- ModelID: {$id}, ModelVariant: " . $leaderboard->getModel()->getVariant() . ", ModelType: " . $leaderboard->getModel()->getType());
 						}
 					}
 					break;
@@ -145,7 +146,7 @@ class TopStatsCommand extends Command implements PluginOwned{
 					break;
 				case "type":
 				case "types":
-					$sender->sendMessage(TextFormat::YELLOW . "Type List");
+					$sender->sendMessage(TextFormat::YELLOW . "Type List:");
 					foreach(ModelType::ALL as $type){
 						$sender->sendMessage(TextFormat::GREEN . " - {$type}");
 					}

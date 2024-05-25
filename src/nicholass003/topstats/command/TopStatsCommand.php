@@ -27,7 +27,6 @@ namespace nicholass003\topstats\command;
 use nicholass003\topstats\leaderboard\Leaderboard;
 use nicholass003\topstats\leaderboard\LeaderboardManager;
 use nicholass003\topstats\model\IModel;
-use nicholass003\topstats\model\ModelManager;
 use nicholass003\topstats\model\ModelType;
 use nicholass003\topstats\model\ModelVariant;
 use nicholass003\topstats\model\text\TextModel;
@@ -46,7 +45,6 @@ use function strtolower;
 
 class TopStatsCommand extends Command implements PluginOwned{
 
-	private ModelManager $modelManager;
 	private LeaderboardManager $leaderboardManager;
 
 	public function __construct(
@@ -54,7 +52,6 @@ class TopStatsCommand extends Command implements PluginOwned{
 	){
 		parent::__construct("topstats", "TopStats Command", "Usage: /topstats <subcommand>");
 		$this->setPermission("topstats.command");
-		$this->modelManager = $plugin->getModelManager();
 		$this->leaderboardManager = $plugin->getLeaderboardManager();
 	}
 
@@ -82,7 +79,6 @@ class TopStatsCommand extends Command implements PluginOwned{
 								case ModelVariant::TEXT:
 									$leaderboard = new Leaderboard(new TextModel($sender->getPosition(), $args[2]));
 									$leaderboard->spawn();
-									$this->modelManager->add($leaderboard->getModel());
 									$this->leaderboardManager->add($leaderboard);
 									$sender->sendMessage(TextFormat::GREEN . "Successfully spawn TopStats with model: " . $args[1] . " type: " . $args[2]);
 									break;
@@ -101,16 +97,6 @@ class TopStatsCommand extends Command implements PluginOwned{
 				case "despawn":
 				case "destroy":
 				case "remove":
-					//TODO: better management
-					$models = $this->modelManager->models();
-					foreach($models as $id => $model){
-						if($id === (int) $args[1]){
-							if($model instanceof TextModel){
-								$this->modelManager->remove($id);
-								$model->destroy();
-							}
-						}
-					}
 					$leaderboards = $this->leaderboardManager->leaderboards();
 					foreach($leaderboards as $id => $leaderboard){
 						if($id === (int) $args[1]){
@@ -134,13 +120,13 @@ class TopStatsCommand extends Command implements PluginOwned{
 					break;
 				case "teleport":
 				case "tp":
-					$models = $this->modelManager->models();
+					$leaderboards = $this->leaderboardManager->leaderboards();
 					if(isset($args[1])){
 						if(ctype_digit((string) $args[1])){
-							if(in_array((int) $args[1], array_keys($models), true)){
-								foreach($models as $id => $model){
-									if($model instanceof IModel && $id === (int) $args[1]){
-										$sender->teleport($model->getPosition());
+							if(in_array((int) $args[1], array_keys($leaderboards), true)){
+								foreach($leaderboards as $id => $leaderboard){
+									if($leaderboard->getModel() instanceof IModel && $id === (int) $args[1]){
+										$sender->teleport($leaderboard->getModel()->getPosition());
 										$sender->sendMessage(TextFormat::GREEN . "Success teleported to TopStats position with id: {$id}");
 										break;
 									}

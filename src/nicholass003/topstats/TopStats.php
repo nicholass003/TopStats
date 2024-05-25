@@ -29,7 +29,6 @@ use nicholass003\topstats\database\IDatabase;
 use nicholass003\topstats\database\JsonDatabase;
 use nicholass003\topstats\leaderboard\LeaderboardManager;
 use nicholass003\topstats\listener\EventListener;
-use nicholass003\topstats\model\ModelManager;
 use nicholass003\topstats\task\UpdateTask;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\SingletonTrait;
@@ -41,12 +40,10 @@ class TopStats extends PluginBase{
 	public const MAX_LIST = 10;
 
 	protected IDatabase $database;
-	protected ModelManager $modelManager;
 	protected LeaderboardManager $leaderboardManager;
 
 	protected function onEnable() : void{
 		self::setInstance($this);
-		$this->modelManager = new ModelManager();
 		$this->leaderboardManager = new LeaderboardManager($this);
 		$this->registerCommands();
 		$this->registerListeners();
@@ -80,10 +77,6 @@ class TopStats extends PluginBase{
 
 	public function getDatabase() : IDatabase{
 		return $this->database;
-	}
-
-	public function getModelManager() : ModelManager{
-		return $this->modelManager;
 	}
 
 	public function getLeaderboardManager() : LeaderboardManager{

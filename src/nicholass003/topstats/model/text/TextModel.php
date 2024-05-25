@@ -39,7 +39,7 @@ class TextModel extends FloatingTextParticle implements IModel{
 
 	public function __construct(Position $pos, string $type, string $text = "", string $title = ""){
 		parent::__construct($text, $title);
-		$this->id = count(TopStats::getInstance()->getModelManager()->models());
+		$this->id = count(TopStats::getInstance()->getLeaderboardManager()->leaderboards());
 		$this->position = $pos;
 		$this->type = $type;
 	}

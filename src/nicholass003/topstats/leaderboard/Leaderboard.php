@@ -42,13 +42,12 @@ class Leaderboard{
 	protected int $id;
 
 	public function __construct(
-		protected IModel $model,
-		int $id
+		protected IModel $model
 	){
 		$this->database = TopStats::getInstance()->getDatabase();
 		$this->text = TopStats::getInstance()->getConfig()->getNested("models." . $model->getVariant() . "." . $model->getType() . ".description");
 		$this->title = TopStats::getInstance()->getConfig()->getNested("models." . $model->getVariant() . "." . $model->getType() . ".title");
-		$this->id = $id;
+		$this->id = $model->getModelId();
 	}
 
 	public function getId() : int{
@@ -57,6 +56,11 @@ class Leaderboard{
 
 	public function getModel() : IModel{
 		return $this->model;
+	}
+
+	public function setModel(IModel $model) : Leaderboard{
+		$this->model = $model;
+		return $this;
 	}
 
 	public function updateText(string $text) : Leaderboard{

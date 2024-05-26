@@ -65,6 +65,7 @@ class PlayerModel extends Human implements IModel{
 			$this->modelID = $modelIdTag->getValue();
 		}
 		$this->setNameTagAlwaysVisible(true);
+		$this->setHasGravity(false);
 	}
 
 	public function saveNBT() : CompoundTag{

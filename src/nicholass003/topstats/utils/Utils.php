@@ -24,10 +24,12 @@ declare(strict_types=1);
 
 namespace nicholass003\topstats\utils;
 
+use nicholass003\topstats\leaderboard\Leaderboard;
+use nicholass003\topstats\model\player\PlayerModel;
 use nicholass003\topstats\TopStats;
 use pocketmine\entity\Human;
 use pocketmine\entity\Skin;
-
+use pocketmine\Server;
 use function count;
 use function str_replace;
 use function uasort;
@@ -71,5 +73,36 @@ class Utils{
 
 	public static function getNextTopStatsIds() : int{
 		return count(TopStats::getInstance()->getLeaderboardManager()->leaderboards());
+	}
+
+	public static function validatePlayerModels(Leaderboard $leaderboard) : void{
+		foreach(Server::getInstance()->getWorldManager()->getWorlds() as $world){
+			$garbageModels = [];
+			foreach($world->getEntities() as $entity){
+				$model = $leaderboard->getModel();
+				if($entity instanceof PlayerModel && $model instanceof PlayerModel){
+					if($entity->getModelId() === $leaderboard->getId()){
+						$pos = $model->getPosition();
+						if($entity->getWorld()->getFolderName() === $pos->getWorld()->getFolderName()){
+							if($entity->getPosition()->equals($pos)){
+								$garbageModels[] = $entity;
+							}
+						}
+					}
+				}
+			}
+			$garbageTotal = count($garbageModels);
+			if($garbageTotal > 1){
+				$num = 1;
+				foreach($garbageModels as $garbageModel){
+					if($num === $garbageTotal){
+						$leaderboard->setModel($garbageModel);
+						break;
+					}
+					$garbageModel->flagForDespawn();
+					++$num;
+				}
+			}
+		}
 	}
 }

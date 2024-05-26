@@ -78,13 +78,13 @@ class TopStatsCommand extends Command implements PluginOwned{
 							$id = Utils::getNextTopStatsIds();
 							switch(strtolower($args[1])){
 								case ModelVariant::PLAYER:
-									$leaderboard = new Leaderboard(new PlayerModel($sender->getLocation(), $sender->getSkin(), $id, $args[2]), $id);
+									$leaderboard = new Leaderboard(new PlayerModel($sender->getLocation(), $sender->getSkin(), $id, $args[2]));
 									$leaderboard->spawn();
 									$this->leaderboardManager->add($leaderboard);
 									$sender->sendMessage(TextFormat::GREEN . "Successfully spawn TopStats with model: " . $args[1] . " type: " . $args[2]);
 									break;
 								case ModelVariant::TEXT:
-									$leaderboard = new Leaderboard(new TextModel($sender->getPosition(), $args[2]), $id);
+									$leaderboard = new Leaderboard(new TextModel($sender->getPosition(), $id, $args[2]));
 									$leaderboard->spawn();
 									$this->leaderboardManager->add($leaderboard);
 									$sender->sendMessage(TextFormat::GREEN . "Successfully spawn TopStats with model: " . $args[1] . " type: " . $args[2]);

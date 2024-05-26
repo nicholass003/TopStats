@@ -26,10 +26,8 @@ namespace nicholass003\topstats\model\text;
 
 use nicholass003\topstats\model\IModel;
 use nicholass003\topstats\model\ModelVariant;
-use nicholass003\topstats\TopStats;
 use pocketmine\world\particle\FloatingTextParticle;
 use pocketmine\world\Position;
-use function count;
 
 class TextModel extends FloatingTextParticle implements IModel{
 
@@ -37,9 +35,9 @@ class TextModel extends FloatingTextParticle implements IModel{
 	protected string $type;
 	protected ?Position $position = null;
 
-	public function __construct(Position $pos, string $type, string $text = "", string $title = ""){
+	public function __construct(Position $pos, int $id, string $type, string $text = "", string $title = ""){
 		parent::__construct($text, $title);
-		$this->modelID = count(TopStats::getInstance()->getLeaderboardManager()->leaderboards());
+		$this->modelID = $id;
 		$this->position = $pos;
 		$this->type = $type;
 	}

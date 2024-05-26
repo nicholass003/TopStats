@@ -77,7 +77,7 @@ class LeaderboardManager{
 	public function loadData() : void{
 		foreach($this->leaderboardData->getAll() as $sid => $data){
 			$id = (int) substr($sid, 3);
-			$leaderboard = new Leaderboard($this->validateModel(json_decode($data, true)), $id);
+			$leaderboard = new Leaderboard($this->validateModel(json_decode($data, true)));
 			$this->leaderboards[$id] = $leaderboard;
 		}
 	}
@@ -103,7 +103,7 @@ class LeaderboardManager{
 				$playerModel = new PlayerModel(Location::fromObject($pos, $pos->getWorld()), Utils::getTopStatsPlayerSkin($this->plugin->getDatabase()->getTemporaryData(), $data["type"]), $data["id"], $data["type"]);
 				return $playerModel;
 			case ModelVariant::TEXT:
-				$textModel = new TextModel($pos, $data["type"]);
+				$textModel = new TextModel($pos, $data["id"], $data["type"]);
 				return $textModel;
 			default:
 				throw new \InvalidArgumentException("Invalid IModel: " . $data["model"]);

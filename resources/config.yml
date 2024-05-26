@@ -24,13 +24,13 @@ models:
     death:
       title: "#{rank_death} {player}"
       description: "With deaths {death}"
-    kills:
+    kill:
       title: "#{rank_kill} {player}"
       description: "With kills {kill}"
   text:
     death:
       title: ">> TOP DEATHS <<"
       description: "#{rank_death} {player} {death}"
-    kills:
+    kill:
       title: ">> TOP KILLS <<"
       description: "#{rank_kill} {player} {kill}"

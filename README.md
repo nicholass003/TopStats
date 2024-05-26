@@ -35,7 +35,7 @@
 **TopStats has 2 models:**
 | `player` | `text` |
 | -- | -- |
-| ⚠️ Still Underdevelopmet ⚠️ | Simple TopStats with Floating Text. |
+| Still Underdevelopmet | Simple TopStats with Floating Text |
 
 ## 📊 Types
 **TopStats has 2 types:**
@@ -47,10 +47,28 @@
 | `deaths` | Count Player Deaths |
 | `kills` | Count Player Kills |
 
+>Upcoming Types!
+> - `block-break`
+> - `block-place`
+> - `change-skin`
+> - `chat`
+> - `consume`
+> - `crafting`
+> - `drop-item`
+> - `emote`
+> - `enchant`
+> - `item-pickup`
+> - `jump`
+> - `kicked`
+> - `money`
+> - `online-times`
+> - `xp`
+
 ## 📋 TODO List:
 
 - [x] Implement player models (v0.2.0)
 - [x] Save TopStats while server restart (v0.2.0)
+- [ ] Implement More Types
 
 ## 💡 Issues & Suggestions
 

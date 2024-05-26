@@ -24,10 +24,10 @@ declare(strict_types=1);
 
 namespace nicholass003\topstats\command;
 
+use nicholass003\topstats\database\data\DataType;
 use nicholass003\topstats\leaderboard\Leaderboard;
 use nicholass003\topstats\leaderboard\LeaderboardManager;
 use nicholass003\topstats\model\IModel;
-use nicholass003\topstats\model\ModelType;
 use nicholass003\topstats\model\ModelVariant;
 use nicholass003\topstats\model\player\PlayerModel;
 use nicholass003\topstats\model\text\TextModel;
@@ -70,7 +70,7 @@ class TopStatsCommand extends Command implements PluginOwned{
 				case "spawn":
 					if(isset($args[1])){
 						if(isset($args[2])){
-							if(!in_array($args[2], ModelType::ALL, true)){
+							if(!in_array($args[2], DataType::ALL, true)){
 								$sender->sendMessage(TextFormat::RED . "Usage: /topstats " . $args[0] . " " . $args[1] . " <type>");
 								$sender->sendMessage(TextFormat::RED . "Type \"/topstats types\" to get type list");
 								return;
@@ -122,7 +122,7 @@ class TopStatsCommand extends Command implements PluginOwned{
 						$sender->sendMessage(TextFormat::YELLOW . "TopStats List:");
 						foreach($this->leaderboardManager->leaderboards() as $id => $leaderboard){
 							if(!$leaderboard->getModel() instanceof IModel) continue;
-							$sender->sendMessage(TextFormat::GREEN . "- ModelID: {$id}, ModelVariant: " . $leaderboard->getModel()->getVariant() . ", ModelType: " . $leaderboard->getModel()->getType());
+							$sender->sendMessage(TextFormat::GREEN . "- ModelID: {$id}, ModelVariant: " . $leaderboard->getModel()->getVariant() . ", DataType: " . $leaderboard->getModel()->getType());
 						}
 					}
 					break;
@@ -153,8 +153,8 @@ class TopStatsCommand extends Command implements PluginOwned{
 					break;
 				case "type":
 				case "types":
-					$sender->sendMessage(TextFormat::YELLOW . "Type List:");
-					foreach(ModelType::ALL as $type){
+					$sender->sendMessage(TextFormat::YELLOW . "DataType List:");
+					foreach(DataType::ALL as $type){
 						$sender->sendMessage(TextFormat::GREEN . " - {$type}");
 					}
 					break;

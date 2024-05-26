@@ -79,11 +79,11 @@ class JsonDatabase implements IDatabase{
 		if(isset($this->data[$xuid])){
 			foreach($data as $key => $value){
 				switch($key){
-					case DataType::DEATHS:
-						$this->action($xuid, DataType::DEATHS, $value, $action);
+					case DataType::DEATH:
+						$this->action($xuid, DataType::DEATH, $value, $action);
 						break;
-					case DataType::KILLS:
-						$this->action($xuid, DataType::KILLS, $value, $action);
+					case DataType::KILL:
+						$this->action($xuid, DataType::KILL, $value, $action);
 						break;
 					default:
 						throw new \InvalidArgumentException("Invalid DataType {$key}");

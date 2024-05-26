@@ -26,11 +26,11 @@ namespace nicholass003\topstats\database\data;
 
 final class DataType{
 
-	public const DEATHS = "deaths";
-	public const KILLS = "kills";
+	public const DEATH = "death";
+	public const KILL = "kill";
 
 	public const ALL = [
-		self::DEATHS,
-		self::KILLS
+		self::DEATH,
+		self::KILL
 	];
 }

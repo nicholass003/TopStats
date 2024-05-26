@@ -39,7 +39,7 @@ class JsonDatabase implements IDatabase{
 	public function __construct(
 		private TopStats $plugin
 	){
-		$this->database = new Config($plugin->getDataFolder() . "data.json", Config::JSON);
+		$this->database = new Config($this->plugin->getDataFolder() . "data.json", Config::JSON);
 	}
 
 	public function getName() : string{

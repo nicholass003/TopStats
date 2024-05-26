@@ -16,6 +16,7 @@ max-list: 10
 # - death -> Deaths value
 # - kill -> Kills value
 # - player -> Player name
+# - line -> New line
 # Rank Tags:
 # - rank_death -> Top Rank value of deaths
 # - rank_kill -> Top Rank value of kills
@@ -30,7 +31,7 @@ models:
   text:
     death:
       title: ">> TOP DEATHS <<"
-      description: "#{rank_death} {player} {death}"
+      description: "#{rank_death} {player} {death}{line}"
     kill:
       title: ">> TOP KILLS <<"
-      description: "#{rank_kill} {player} {kill}"
+      description: "#{rank_kill} {player} {kill}{line}"

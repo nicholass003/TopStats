@@ -51,13 +51,11 @@ class LeaderboardManager{
 
 	public function add(Leaderboard $leaderboard) : LeaderboardManager{
 		$this->leaderboards[$leaderboard->getId()] = $leaderboard;
-		$this->plugin->getPlayerModelManager()->add($leaderboard->getModel());
 		return $this;
 	}
 
 	public function remove(int $id) : LeaderboardManager{
 		if(isset($this->leaderboards[$id])){
-			$this->plugin->getPlayerModelManager()->remove($id);
 			unset($this->leaderboards[$id]);
 		}
 		return $this;
@@ -100,7 +98,7 @@ class LeaderboardManager{
 		$pos = new Position($data["position"]["x"], $data["position"]["y"], $data["position"]["z"], $this->plugin->getServer()->getWorldManager()->getWorldByName($data["position"]["world"]));
 		switch($data["model"]){
 			case ModelVariant::PLAYER:
-				$playerModel = new PlayerModel(Location::fromObject($pos, $pos->getWorld()), Utils::getTopStatsPlayerSkin($this->plugin->getDatabase()->getTemporaryData(), $data["type"]), $data["id"], $data["type"]);
+				$playerModel = new PlayerModel(Location::fromObject($pos, $pos->getWorld()), Utils::getTopStatsPlayerSkin($this->plugin->getDatabase()->getTemporaryData(), $data["type"], $data["top"]), $data["id"], $data["type"], $data["top"]);
 				return $playerModel;
 			case ModelVariant::TEXT:
 				$textModel = new TextModel($pos, $data["id"], $data["type"]);

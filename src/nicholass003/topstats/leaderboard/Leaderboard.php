@@ -39,6 +39,9 @@ class Leaderboard{
 	protected string $text = "";
 	protected string $title = "";
 
+	public const TYPE_TEXT = "text";
+	public const TYPE_TITLE = "title";
+
 	protected int $id;
 
 	public function __construct(
@@ -83,10 +86,10 @@ class Leaderboard{
 	}
 
 	public function update() : void{
-		$this->updateText(Utils::getTopStatsText($this->database->getTemporaryData(), $this->model->getVariant(), $this->model->getType(), $this->text));
-		$this->updateTitle(Utils::getTopStatsText($this->database->getTemporaryData(), $this->model->getVariant(), $this->model->getType(), $this->title));
+		$this->updateText(Utils::getTopStatsText($this->database->getTemporaryData(), $this->model, $this->text, self::TYPE_TEXT));
+		$this->updateTitle(Utils::getTopStatsText($this->database->getTemporaryData(), $this->model, $this->title, self::TYPE_TITLE));
 		if($this->model instanceof PlayerModel){
-			$skin = Utils::getTopStatsPlayerSkin($this->database->getTemporaryData(), $this->model->getType());
+			$skin = Utils::getTopStatsPlayerSkin($this->database->getTemporaryData(), $this->model->getType(), $this->model->getTop());
 			if($skin !== null){
 				$this->model->setSkin($skin);
 			}
@@ -98,6 +101,7 @@ class Leaderboard{
 			"id" => $this->model->getModelId(),
 			"model" => $this->model->getVariant(),
 			"type" => $this->model->getType(),
+			"top" => $this->model instanceof PlayerModel ? $this->model->getTop() : "none",
 			"position" => [
 				"x" => $this->model->getPosition()->getX(),
 				"y" => $this->model->getPosition()->getY(),

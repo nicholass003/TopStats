@@ -30,7 +30,6 @@ use nicholass003\topstats\database\JsonDatabase;
 use nicholass003\topstats\leaderboard\LeaderboardManager;
 use nicholass003\topstats\listener\EventListener;
 use nicholass003\topstats\model\player\PlayerModel;
-use nicholass003\topstats\model\player\PlayerModelManager;
 use nicholass003\topstats\task\UpdateTask;
 use pocketmine\data\SavedDataLoadingException;
 use pocketmine\entity\EntityDataHelper;
@@ -51,12 +50,10 @@ class TopStats extends PluginBase{
 
 	protected IDatabase $database;
 	protected LeaderboardManager $leaderboardManager;
-	protected PlayerModelManager $playerModelManager;
 
 	protected function onEnable() : void{
 		self::setInstance($this);
 		$this->leaderboardManager = new LeaderboardManager($this);
-		$this->playerModelManager = new PlayerModelManager();
 		$this->registerCommands();
 		$this->registerEntities();
 		$this->registerListeners();
@@ -84,13 +81,23 @@ class TopStats extends PluginBase{
 		$entityFactory->register(PlayerModel::class, function(World $world, CompoundTag $nbt) : PlayerModel{
 			$typeTag = $nbt->getTag(PlayerModel::TAG_TYPE);
 			$modelIdTag = $nbt->getTag(PlayerModel::TAG_MODEL_ID);
-			if($typeTag instanceof StringTag && $modelIdTag instanceof IntTag){
+			$topTag = $nbt->getTag(PlayerModel::TAG_TOP);
+			if($typeTag instanceof StringTag){
 				$type = $typeTag->getValue();
-				$modelID = $modelIdTag->getValue();
 			}else{
 				throw new SavedDataLoadingException("Expected \"" . PlayerModel::TAG_TYPE . "\" NBT tag not found");
 			}
-			return new PlayerModel(EntityDataHelper::parseLocation($nbt, $world), Human::parseSkinNBT($nbt), $modelID, $type, $nbt);
+			if($modelIdTag instanceof IntTag){
+				$modelID = $modelIdTag->getValue();
+			}else{
+				throw new SavedDataLoadingException("Expected \"" . PlayerModel::TAG_MODEL_ID . "\" NBT tag not found");
+			}
+			if($topTag instanceof IntTag){
+				$top = $topTag->getValue();
+			}else{
+				throw new SavedDataLoadingException("Expected \"" . PlayerModel::TAG_TOP . "\" NBT tag not found");
+			}
+			return new PlayerModel(EntityDataHelper::parseLocation($nbt, $world), Human::parseSkinNBT($nbt), $modelID, $type, $top, $nbt);
 		}, ["PlayerModel"]);
 	}
 
@@ -110,10 +117,6 @@ class TopStats extends PluginBase{
 
 	public function getLeaderboardManager() : LeaderboardManager{
 		return $this->leaderboardManager;
-	}
-
-	public function getPlayerModelManager() : PlayerModelManager{
-		return $this->playerModelManager;
 	}
 
 	public function getMaxList() : int{

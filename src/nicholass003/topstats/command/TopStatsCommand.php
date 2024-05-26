@@ -71,17 +71,17 @@ class TopStatsCommand extends Command implements PluginOwned{
 					if(isset($args[1])){
 						if(isset($args[2])){
 							if(!in_array($args[2], DataType::ALL, true)){
-								$sender->sendMessage(TextFormat::RED . "Usage: /topstats " . $args[0] . " " . $args[1] . " <type>");
+								$sender->sendMessage(TextFormat::RED . "Usage: /topstats " . $args[0] . " " . $args[1] . " <type> <top>");
 								$sender->sendMessage(TextFormat::RED . "Type \"/topstats types\" to get type list");
 								return;
 							}
 							$id = Utils::getNextTopStatsIds();
 							switch(strtolower($args[1])){
 								case ModelVariant::PLAYER:
-									$leaderboard = new Leaderboard(new PlayerModel($sender->getLocation(), $sender->getSkin(), $id, $args[2]));
+									$leaderboard = new Leaderboard(new PlayerModel($sender->getLocation(), Utils::getTopStatsPlayerSkin($this->plugin->getDatabase()->getTemporaryData(), $args[2], (int) $args[3] ?? 1), $id, $args[2], (int) $args[3] ?? 1));
 									$leaderboard->spawn();
 									$this->leaderboardManager->add($leaderboard);
-									$sender->sendMessage(TextFormat::GREEN . "Successfully spawn TopStats with model: " . $args[1] . " type: " . $args[2]);
+									$sender->sendMessage(TextFormat::GREEN . "Successfully spawn TopStats with model: " . $args[1] . " type: " . $args[2] . " top: " . $args[3]);
 									break;
 								case ModelVariant::TEXT:
 									$leaderboard = new Leaderboard(new TextModel($sender->getPosition(), $id, $args[2]));
@@ -158,6 +158,8 @@ class TopStatsCommand extends Command implements PluginOwned{
 						$sender->sendMessage(TextFormat::GREEN . " - {$type}");
 					}
 					break;
+				default:
+					$sender->sendMessage(TextFormat::RED . $this->usageMessage);
 			}
 		}else{
 			$sender->sendMessage(TextFormat::RED . $this->usageMessage);

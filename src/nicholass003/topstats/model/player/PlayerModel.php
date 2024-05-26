@@ -32,24 +32,26 @@ use pocketmine\entity\Skin;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
-use const PHP_EOL;
 
 class PlayerModel extends Human implements IModel{
 
 	protected int $modelID;
 	protected string $type;
+	protected int $top;
 
 	public const TAG_MODEL_ID = "ModelID";
 	public const TAG_TYPE = "Type";
+	public const TAG_TOP = "Top";
 
 	protected bool $spawned = false;
 
 	protected array $texts = [];
 
-	public function __construct(Location $location, Skin $skin, int $id, string $type, ?CompoundTag $nbt = null){
+	public function __construct(Location $location, Skin $skin, int $id, string $type, int $top, ?CompoundTag $nbt = null){
 		parent::__construct($location, $skin, $nbt);
 		$this->modelID = $id;
 		$this->type = $type;
+		$this->top = $top;
 		$this->texts["text"] = "";
 		$this->texts["title"] = "";
 	}
@@ -64,6 +66,10 @@ class PlayerModel extends Human implements IModel{
 		if($modelIdTag instanceof IntTag){
 			$this->modelID = $modelIdTag->getValue();
 		}
+		$topTag = $nbt->getTag(self::TAG_TOP);
+		if($topTag instanceof IntTag){
+			$this->top = $topTag->getValue();
+		}
 		$this->setNameTagAlwaysVisible(true);
 		$this->setHasGravity(false);
 	}
@@ -72,6 +78,7 @@ class PlayerModel extends Human implements IModel{
 		$nbt = parent::saveNBT();
 		$nbt->setInt(self::TAG_MODEL_ID, $this->modelID);
 		$nbt->setString(self::TAG_TYPE, $this->type);
+		$nbt->setInt(self::TAG_TOP, $this->top);
 		return $nbt;
 	}
 
@@ -81,6 +88,15 @@ class PlayerModel extends Human implements IModel{
 
 	public function setModelId(int $id) : PlayerModel{
 		$this->modelID = $id;
+		return $this;
+	}
+
+	public function getTop() : int{
+		return $this->top;
+	}
+
+	public function setTop(int $top) : PlayerModel{
+		$this->top = $top;
 		return $this;
 	}
 
@@ -119,7 +135,7 @@ class PlayerModel extends Human implements IModel{
 
 	public function update() : void{
 		$this->setNameTag(
-			$this->texts["title"] . PHP_EOL . $this->texts["text"]
+			$this->texts["title"] . "\n" . $this->texts["text"]
 		);
 	}
 

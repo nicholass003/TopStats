@@ -53,12 +53,12 @@ class EventListener implements Listener{
 
 	public function onPlayerDeath(PlayerDeathEvent $event) : void{
 		$player = $event->getPlayer();
-		$this->plugin->getDatabase()->update($player, [DataType::DEATHS => 1], DataAction::ADDITION);
+		$this->plugin->getDatabase()->update($player, [DataType::DEATH => 1], DataAction::ADDITION);
 		$source = $player->getLastDamageCause();
 		if($source instanceof EntityDamageByEntityEvent){
 			$attacker = $source->getDamager() ;
 			if($attacker instanceof Player){
-				$this->plugin->getDatabase()->update($attacker, [DataType::KILLS => 1], DataAction::ADDITION);
+				$this->plugin->getDatabase()->update($attacker, [DataType::KILL => 1], DataAction::ADDITION);
 			}
 		}
 	}

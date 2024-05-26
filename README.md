@@ -49,8 +49,8 @@
 
 ## 📋 TODO List:
 
-- [ ] Implement player models
-- [x] Save TopStats while server restart
+- [x] Implement player models (v0.2.0)
+- [x] Save TopStats while server restart (v0.2.0)
 
 ## 💡 Issues & Suggestions
 

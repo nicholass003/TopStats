@@ -25,6 +25,7 @@ declare(strict_types=1);
 namespace nicholass003\topstats\utils;
 
 use nicholass003\topstats\leaderboard\Leaderboard;
+use nicholass003\topstats\model\ModelVariant;
 use nicholass003\topstats\model\player\PlayerModel;
 use nicholass003\topstats\TopStats;
 use pocketmine\entity\Human;
@@ -43,12 +44,16 @@ class Utils{
 		return $data;
 	}
 
-	public static function getTopStatsText(array $data, string $type, string $text) : string{
+	public static function getTopStatsText(array $data, string $variant, string $type, string $text) : string{
 		$result = "";
 		$num = 1;
+		$max = TopStats::getInstance()->getMaxList();
+		if($variant === ModelVariant::PLAYER){
+			$max = 1;
+		}
 		foreach(self::getSortedArrayBoard($data, $type) as $xuid => $userData){
 			$result .= str_replace(["{player}", "{" . $type . "}", "{rank_" . $type . "}"], [$userData["name"], $userData[$type], $num], $text);
-			if($num >= TopStats::getInstance()->getMaxList()){
+			if($num >= $max){
 				break;
 			}
 			++$num;
@@ -56,10 +61,15 @@ class Utils{
 		return $result;
 	}
 
-	public static function getTopStatsPlayerSkin(array $data, string $type) : ?Skin{
+	public static function getTopStatsPlayerSkin(array $data, string $type, int $top = 1) : ?Skin{
 		$playerName = "";
+		$num = 1;
 		foreach(self::getSortedArrayBoard($data, $type) as $xuid => $userData){
-			$playerName = $userData["name"];
+			if($num === $top){
+				$playerName = $userData["name"];
+				break;
+			}
+			++$num;
 		}
 
 		$player = TopStats::getInstance()->getServer()->getPlayerByPrefix($playerName);

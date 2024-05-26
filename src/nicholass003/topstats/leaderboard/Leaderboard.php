@@ -83,8 +83,8 @@ class Leaderboard{
 	}
 
 	public function update() : void{
-		$this->updateText(Utils::getTopStatsText($this->database->getTemporaryData(), $this->model->getType(), $this->text));
-		$this->updateTitle(Utils::getTopStatsText($this->database->getTemporaryData(), $this->model->getType(), $this->title));
+		$this->updateText(Utils::getTopStatsText($this->database->getTemporaryData(), $this->model->getVariant(), $this->model->getType(), $this->text));
+		$this->updateTitle(Utils::getTopStatsText($this->database->getTemporaryData(), $this->model->getVariant(), $this->model->getType(), $this->title));
 		if($this->model instanceof PlayerModel){
 			$skin = Utils::getTopStatsPlayerSkin($this->database->getTemporaryData(), $this->model->getType());
 			if($skin !== null){

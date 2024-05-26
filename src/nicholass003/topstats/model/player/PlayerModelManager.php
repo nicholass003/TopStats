@@ -22,27 +22,30 @@
 
 declare(strict_types=1);
 
-namespace nicholass003\topstats\model;
+namespace nicholass003\topstats\model\player;
 
-use pocketmine\world\Position;
+class PlayerModelManager{
 
-interface IModel{
+	/** @var array<int, PlayerModel> */
+	protected array $playerModels = [];
 
-	public function getVariant() : string;
+	public function add(PlayerModel $model) : PlayerModelManager{
+		$this->playerModels[$model->getModelId()] = $model;
+		return $this;
+	}
 
-	public function getType() : string;
+	public function remove(int $id) : PlayerModelManager{
+		if(isset($this->playerModels[$id])){
+			unset($this->playerModels[$id]);
+		}
+		return $this;
+	}
 
-	public function getModelId() : int;
+	public function get(int $id) : ?PlayerModel{
+		return $this->playerModels[$id] ?? null;
+	}
 
-	public function setModelId(int $id) : IModel;
-
-	public function getPosition() : Position;
-
-	public function updateText(string $text) : IModel;
-
-	public function updateTitle(string $title) : IModel;
-
-	public function update() : void;
-
-	public function destroy() : void;
+	public function models() : array{
+		return $this->playerModels;
+	}
 }

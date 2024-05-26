@@ -26,8 +26,11 @@ namespace nicholass003\topstats\leaderboard;
 
 use nicholass003\topstats\model\IModel;
 use nicholass003\topstats\model\ModelVariant;
+use nicholass003\topstats\model\player\PlayerModel;
 use nicholass003\topstats\model\text\TextModel;
 use nicholass003\topstats\TopStats;
+use nicholass003\topstats\utils\Utils;
+use pocketmine\entity\Location;
 use pocketmine\utils\Config;
 use pocketmine\world\Position;
 use function json_decode;
@@ -48,11 +51,13 @@ class LeaderboardManager{
 
 	public function add(Leaderboard $leaderboard) : LeaderboardManager{
 		$this->leaderboards[$leaderboard->getId()] = $leaderboard;
+		$this->plugin->getPlayerModelManager()->add($leaderboard->getModel());
 		return $this;
 	}
 
 	public function remove(int $id) : LeaderboardManager{
 		if(isset($this->leaderboards[$id])){
+			$this->plugin->getPlayerModelManager()->remove($id);
 			unset($this->leaderboards[$id]);
 		}
 		return $this;
@@ -72,7 +77,8 @@ class LeaderboardManager{
 	public function loadData() : void{
 		foreach($this->leaderboardData->getAll() as $sid => $data){
 			$id = (int) substr($sid, 3);
-			$this->leaderboards[$id] = new Leaderboard($this->validateModel(json_decode($data, true)));
+			$leaderboard = new Leaderboard($this->validateModel(json_decode($data, true)), $id);
+			$this->leaderboards[$id] = $leaderboard;
 		}
 	}
 
@@ -81,18 +87,23 @@ class LeaderboardManager{
 	}
 
 	public function saveData() : void{
+		$data = [];
 		foreach($this->leaderboards() as $id => $leaderboard){
-			$this->leaderboardData->set("ID:{$id}", $leaderboard->toJSON());
+			$data["ID:{$id}"] = $leaderboard->toJSON();
+			$leaderboard->getModel()->destroy();
 		}
+		$this->leaderboardData->setAll($data);
 		$this->leaderboardData->save();
 	}
 
 	public function validateModel(array $data) : IModel{
+		$pos = new Position($data["position"]["x"], $data["position"]["y"], $data["position"]["z"], $this->plugin->getServer()->getWorldManager()->getWorldByName($data["position"]["world"]));
 		switch($data["model"]){
 			case ModelVariant::PLAYER:
-				break;
+				$playerModel = new PlayerModel(Location::fromObject($pos, $pos->getWorld()), Utils::getTopStatsPlayerSkin($this->plugin->getDatabase()->getTemporaryData(), $data["type"]), $data["id"], $data["type"]);
+				return $playerModel;
 			case ModelVariant::TEXT:
-				$textModel = new TextModel(new Position($data["position"]["x"], $data["position"]["y"], $data["position"]["z"], $this->plugin->getServer()->getWorldManager()->getWorldByName($data["position"]["world"])), $data["type"]);
+				$textModel = new TextModel($pos, $data["type"]);
 				return $textModel;
 			default:
 				throw new \InvalidArgumentException("Invalid IModel: " . $data["model"]);

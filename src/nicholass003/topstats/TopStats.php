@@ -29,9 +29,19 @@ use nicholass003\topstats\database\IDatabase;
 use nicholass003\topstats\database\JsonDatabase;
 use nicholass003\topstats\leaderboard\LeaderboardManager;
 use nicholass003\topstats\listener\EventListener;
+use nicholass003\topstats\model\player\PlayerModel;
+use nicholass003\topstats\model\player\PlayerModelManager;
 use nicholass003\topstats\task\UpdateTask;
+use pocketmine\data\SavedDataLoadingException;
+use pocketmine\entity\EntityDataHelper;
+use pocketmine\entity\EntityFactory;
+use pocketmine\entity\Human;
+use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\nbt\tag\IntTag;
+use pocketmine\nbt\tag\StringTag;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\SingletonTrait;
+use pocketmine\world\World;
 use function strtolower;
 
 class TopStats extends PluginBase{
@@ -41,11 +51,14 @@ class TopStats extends PluginBase{
 
 	protected IDatabase $database;
 	protected LeaderboardManager $leaderboardManager;
+	protected PlayerModelManager $playerModelManager;
 
 	protected function onEnable() : void{
 		self::setInstance($this);
 		$this->leaderboardManager = new LeaderboardManager($this);
+		$this->playerModelManager = new PlayerModelManager();
 		$this->registerCommands();
+		$this->registerEntities();
 		$this->registerListeners();
 		$this->registerTasks();
 		$this->database = match(strtolower($this->getConfig()->get("database"))){
@@ -66,6 +79,21 @@ class TopStats extends PluginBase{
 		$commandMap->register("topstats", new TopStatsCommand($this));
 	}
 
+	private function registerEntities() : void{
+		$entityFactory = EntityFactory::getInstance();
+		$entityFactory->register(PlayerModel::class, function(World $world, CompoundTag $nbt) : PlayerModel{
+			$typeTag = $nbt->getTag(PlayerModel::TAG_TYPE);
+			$modelIdTag = $nbt->getTag(PlayerModel::TAG_MODEL_ID);
+			if($typeTag instanceof StringTag && $modelIdTag instanceof IntTag){
+				$type = $typeTag->getValue();
+				$modelID = $modelIdTag->getValue();
+			}else{
+				throw new SavedDataLoadingException("Expected \"" . PlayerModel::TAG_TYPE . "\" NBT tag not found");
+			}
+			return new PlayerModel(EntityDataHelper::parseLocation($nbt, $world), Human::parseSkinNBT($nbt), $modelID, $type, $nbt);
+		}, ["PlayerModel"]);
+	}
+
 	private function registerListeners() : void{
 		$pluginManager = $this->getServer()->getPluginManager();
 		$pluginManager->registerEvents(new EventListener($this), $this);
@@ -82,6 +110,10 @@ class TopStats extends PluginBase{
 
 	public function getLeaderboardManager() : LeaderboardManager{
 		return $this->leaderboardManager;
+	}
+
+	public function getPlayerModelManager() : PlayerModelManager{
+		return $this->playerModelManager;
 	}
 
 	public function getMaxList() : int{

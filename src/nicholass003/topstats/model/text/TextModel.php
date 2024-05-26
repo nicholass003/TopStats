@@ -33,19 +33,24 @@ use function count;
 
 class TextModel extends FloatingTextParticle implements IModel{
 
-	protected int $id;
+	protected int $modelID;
 	protected string $type;
 	protected ?Position $position = null;
 
 	public function __construct(Position $pos, string $type, string $text = "", string $title = ""){
 		parent::__construct($text, $title);
-		$this->id = count(TopStats::getInstance()->getLeaderboardManager()->leaderboards());
+		$this->modelID = count(TopStats::getInstance()->getLeaderboardManager()->leaderboards());
 		$this->position = $pos;
 		$this->type = $type;
 	}
 
-	public function getId() : int{
-		return $this->id;
+	public function getModelId() : int{
+		return $this->modelID;
+	}
+
+	public function setModelId(int $id) : TextModel{
+		$this->modelID = $id;
+		return $this;
 	}
 
 	public function getVariant() : string{

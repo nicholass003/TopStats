@@ -29,8 +29,10 @@ use nicholass003\topstats\leaderboard\LeaderboardManager;
 use nicholass003\topstats\model\IModel;
 use nicholass003\topstats\model\ModelType;
 use nicholass003\topstats\model\ModelVariant;
+use nicholass003\topstats\model\player\PlayerModel;
 use nicholass003\topstats\model\text\TextModel;
 use nicholass003\topstats\TopStats;
+use nicholass003\topstats\utils\Utils;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\player\Player;
@@ -73,11 +75,16 @@ class TopStatsCommand extends Command implements PluginOwned{
 								$sender->sendMessage(TextFormat::RED . "Type \"/topstats types\" to get type list");
 								return;
 							}
+							$id = Utils::getNextTopStatsIds();
 							switch(strtolower($args[1])){
 								case ModelVariant::PLAYER:
+									$leaderboard = new Leaderboard(new PlayerModel($sender->getLocation(), $sender->getSkin(), $id, $args[2]), $id);
+									$leaderboard->spawn();
+									$this->leaderboardManager->add($leaderboard);
+									$sender->sendMessage(TextFormat::GREEN . "Successfully spawn TopStats with model: " . $args[1] . " type: " . $args[2]);
 									break;
 								case ModelVariant::TEXT:
-									$leaderboard = new Leaderboard(new TextModel($sender->getPosition(), $args[2]));
+									$leaderboard = new Leaderboard(new TextModel($sender->getPosition(), $args[2]), $id);
 									$leaderboard->spawn();
 									$this->leaderboardManager->add($leaderboard);
 									$sender->sendMessage(TextFormat::GREEN . "Successfully spawn TopStats with model: " . $args[1] . " type: " . $args[2]);

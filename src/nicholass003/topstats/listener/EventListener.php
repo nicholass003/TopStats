@@ -26,12 +26,19 @@ namespace nicholass003\topstats\listener;
 
 use nicholass003\topstats\database\data\DataAction;
 use nicholass003\topstats\database\data\DataType;
+use nicholass003\topstats\model\player\PlayerModel;
 use nicholass003\topstats\TopStats;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
+use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\event\player\PlayerJoinEvent;
+use pocketmine\event\player\PlayerMoveEvent;
+use pocketmine\math\Vector2;
+use pocketmine\network\mcpe\protocol\MovePlayerPacket;
 use pocketmine\player\Player;
+use function atan2;
+use const M_PI;
 
 class EventListener implements Listener{
 
@@ -52,6 +59,45 @@ class EventListener implements Listener{
 			$attacker = $source->getDamager() ;
 			if($attacker instanceof Player){
 				$this->plugin->getDatabase()->update($attacker, [DataType::KILLS => 1], DataAction::ADDITION);
+			}
+		}
+	}
+
+	public function onEntityDamage(EntityDamageEvent $event) : void{
+		$entity = $event->getEntity();
+		if($entity instanceof PlayerModel){
+			$event->cancel();
+		}
+	}
+
+	public function onPlayerMove(PlayerMoveEvent $event) : void{
+		$player = $event->getPlayer();
+		$from = $event->getFrom();
+		$to = $event->getTo();
+
+		if($from->distance($to) < 0.1){
+			return;
+		}
+
+		$maxDistance = 16;
+		foreach($player->getWorld()->getNearbyEntities($player->getBoundingBox()->expandedCopy($maxDistance, $maxDistance, $maxDistance), $player) as $entity){
+			if($entity instanceof Player){
+				continue;
+			}
+
+			$xdiff = $player->getLocation()->x - $entity->getLocation()->x;
+			$zdiff = $player->getLocation()->z - $entity->getLocation()->z;
+			$angle = atan2($zdiff, $xdiff);
+			$yaw = (($angle * 180) / M_PI) - 90;
+			$ydiff = $player->getLocation()->y - $entity->getLocation()->y;
+			$v = new Vector2($entity->getLocation()->x, $entity->getLocation()->z);
+			$dist = $v->distance(new Vector2($player->getLocation()->x, $player->getLocation()->z));
+			$angle = atan2($dist, $ydiff);
+			$pitch = (($angle * 180) / M_PI) - 90;
+
+			if($entity instanceof PlayerModel){
+				$pk = MovePlayerPacket::create($entity->getId(), $entity->getPosition()->add(0, $entity->getEyeHeight(), 0), $pitch, $yaw, $yaw, MovePlayerPacket::MODE_NORMAL, $entity->onGround, 0, 0, 0, 0);
+				$player->getNetworkSession()->sendDataPacket($pk);
 			}
 		}
 	}

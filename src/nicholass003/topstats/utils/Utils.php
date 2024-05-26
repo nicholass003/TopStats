@@ -25,6 +25,10 @@ declare(strict_types=1);
 namespace nicholass003\topstats\utils;
 
 use nicholass003\topstats\TopStats;
+use pocketmine\entity\Human;
+use pocketmine\entity\Skin;
+
+use function count;
 use function str_replace;
 use function uasort;
 
@@ -48,5 +52,24 @@ class Utils{
 			++$num;
 		}
 		return $result;
+	}
+
+	public static function getTopStatsPlayerSkin(array $data, string $type) : ?Skin{
+		$playerName = "";
+		foreach(self::getSortedArrayBoard($data, $type) as $xuid => $userData){
+			$playerName = $userData["name"];
+		}
+
+		$player = TopStats::getInstance()->getServer()->getPlayerByPrefix($playerName);
+		if($player !== null){
+			return Human::parseSkinNBT($player->getSaveData());
+		}else{
+			$playerData = TopStats::getInstance()->getServer()->getOfflinePlayerData($playerName);
+			return $playerData !== null ? Human::parseSkinNBT($playerData) : null;
+		}
+	}
+
+	public static function getNextTopStatsIds() : int{
+		return count(TopStats::getInstance()->getLeaderboardManager()->leaderboards());
 	}
 }

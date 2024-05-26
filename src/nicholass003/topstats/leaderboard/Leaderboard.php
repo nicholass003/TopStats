@@ -26,6 +26,7 @@ namespace nicholass003\topstats\leaderboard;
 
 use nicholass003\topstats\database\IDatabase;
 use nicholass003\topstats\model\IModel;
+use nicholass003\topstats\model\player\PlayerModel;
 use nicholass003\topstats\model\text\TextModel;
 use nicholass003\topstats\TopStats;
 use nicholass003\topstats\utils\Utils;
@@ -41,12 +42,13 @@ class Leaderboard{
 	protected int $id;
 
 	public function __construct(
-		protected IModel $model
+		protected IModel $model,
+		int $id
 	){
 		$this->database = TopStats::getInstance()->getDatabase();
 		$this->text = TopStats::getInstance()->getConfig()->getNested("models." . $model->getVariant() . "." . $model->getType() . ".description");
 		$this->title = TopStats::getInstance()->getConfig()->getNested("models." . $model->getVariant() . "." . $model->getType() . ".title");
-		$this->id = $model->getId();
+		$this->id = $id;
 	}
 
 	public function getId() : int{
@@ -71,17 +73,25 @@ class Leaderboard{
 		if($this->model instanceof TextModel){
 			$pos = $this->model->getPosition();
 			$pos->getWorld()->addParticle($pos, $this->model);
+		}elseif($this->model instanceof PlayerModel){
+			$this->model->spawnToAll();
 		}
 	}
 
 	public function update() : void{
 		$this->updateText(Utils::getTopStatsText($this->database->getTemporaryData(), $this->model->getType(), $this->text));
 		$this->updateTitle(Utils::getTopStatsText($this->database->getTemporaryData(), $this->model->getType(), $this->title));
+		if($this->model instanceof PlayerModel){
+			$skin = Utils::getTopStatsPlayerSkin($this->database->getTemporaryData(), $this->model->getType());
+			if($skin !== null){
+				$this->model->setSkin($skin);
+			}
+		}
 	}
 
 	public function toJSON() : string{
 		return json_encode([
-			"id" => $this->model->getId(),
+			"id" => $this->model->getModelId(),
 			"model" => $this->model->getVariant(),
 			"type" => $this->model->getType(),
 			"position" => [

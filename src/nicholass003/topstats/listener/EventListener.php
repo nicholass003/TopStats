@@ -28,6 +28,7 @@ use nicholass003\topstats\database\data\DataAction;
 use nicholass003\topstats\database\data\DataType;
 use nicholass003\topstats\model\player\PlayerModel;
 use nicholass003\topstats\TopStats;
+use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\Listener;
@@ -60,6 +61,13 @@ class EventListener implements Listener{
 			if($attacker instanceof Player){
 				$this->plugin->getDatabase()->update($attacker, [DataType::KILL => 1], DataAction::ADDITION);
 			}
+		}
+	}
+
+	public function onBlockBreak(BlockBreakEvent $event) : void{
+		$player = $event->getPlayer();
+		if($player->hasFiniteResources() && !$event->isCancelled()){
+			$this->plugin->getDatabase()->update($player, [DataType::BLOCK_BREAK => 1], DataAction::ADDITION);
 		}
 	}
 

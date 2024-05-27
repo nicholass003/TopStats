@@ -85,6 +85,9 @@ class JsonDatabase implements IDatabase{
 					case DataType::KILL:
 						$this->action($xuid, DataType::KILL, $value, $action);
 						break;
+					case DataType::BLOCK_BREAK:
+						$this->action($xuid, DataType::BLOCK_BREAK, $value, $action);
+						break;
 					default:
 						throw new \InvalidArgumentException("Invalid DataType {$key}");
 				}

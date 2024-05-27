@@ -28,9 +28,11 @@ final class DataType{
 
 	public const DEATH = "death";
 	public const KILL = "kill";
+	public const BLOCK_BREAK = "block-break";
 
 	public const ALL = [
 		self::DEATH,
-		self::KILL
+		self::KILL,
+		self::BLOCK_BREAK
 	];
 }

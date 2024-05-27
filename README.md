@@ -44,11 +44,11 @@
 
 | Types | Description |
 | -- | -- |
-| `deaths` | Count Player Deaths |
-| `kills` | Count Player Kills |
+| `death` | Number of Player Deaths |
+| `kill` | Number of Player Kills |
+| `block-break` | Number of Break Blocks |
 
 >Upcoming Types!
-> - `block-break`
 > - `block-place`
 > - `change-skin`
 > - `chat`

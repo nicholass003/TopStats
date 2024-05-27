@@ -23,6 +23,7 @@ max-list: 10
 # - enchant
 # - item-pickup
 # - jump
+# - kick
 # Supported Tags:
 # - death -> Number of Player Deaths
 # - kill -> Number of Player Kills
@@ -37,6 +38,7 @@ max-list: 10
 # - enchant -> Number of Enchanted Items
 # - item-pickup -> Number of Items Taken
 # - jump -> Number of Player Jumps
+# - kick -> Number of Player Kicked
 # - player -> Player name
 # - line -> New line
 # Rank Tags:
@@ -53,6 +55,7 @@ max-list: 10
 # - rank_enchant -> Top Rank value of Enchanted Items
 # - rank_item-pickup -> Top Rank value of Items Taken
 # - rank_jump -> Top Rank value of Player Jumps
+# - rank_kick-> Top Rank value of Player Kicked
 models:
   player:
     death:
@@ -94,6 +97,9 @@ models:
     jump:
       title: "#{rank_jump} {player}"
       description: "With jumps {jump}"
+    kick:
+      title: "#{rank_kick} {player}"
+      description: "With kicked {kick}"
   text:
     death:
       title: ">> TOP DEATHS <<"
@@ -134,3 +140,6 @@ models:
     jump:
       title: ">> TOP JUMPS <<"
       description: "#{rank_jump} {player} {jump}{line}"
+    kick:
+      title: ">> TOP KICKED <<"
+      description: "#{rank_kick} {player} {kick}{line}"

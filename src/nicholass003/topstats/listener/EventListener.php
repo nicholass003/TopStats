@@ -44,6 +44,7 @@ use pocketmine\event\player\PlayerItemConsumeEvent;
 use pocketmine\event\player\PlayerItemEnchantEvent;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerJumpEvent;
+use pocketmine\event\player\PlayerKickEvent;
 use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\math\Vector2;
 use pocketmine\network\mcpe\protocol\MovePlayerPacket;
@@ -150,6 +151,13 @@ class EventListener implements Listener{
 		$player = $event->getPlayer();
 		if($player->hasFiniteResources()){
 			$this->plugin->getDatabase()->update($player, [DataType::JUMP => 1], DataAction::ADDITION);
+		}
+	}
+
+	public function onPlayerKick(PlayerKickEvent $event) : void{
+		$player = $event->getPlayer();
+		if(!$event->isCancelled()){
+			$this->plugin->getDatabase()->update($player, [DataType::KICK => 1], DataAction::ADDITION);
 		}
 	}
 

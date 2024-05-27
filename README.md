@@ -57,9 +57,9 @@
 | `enchant` | Number of Enchanted Items |
 | `item-pickup` | Number of Items Taken |
 | `jump` | Number of Player Jumps |
+| `kick` | Number of Player Kicked |
 
 >Upcoming Types!
-> - `kicked`
 > - `money`
 > - `online-times`
 > - `xp`

@@ -19,6 +19,7 @@ max-list: 10
 # - consume
 # - crafting
 # - drop-item
+# - emote
 # Supported Tags:
 # - death -> Number of Player Deaths
 # - kill -> Number of Player Kills
@@ -29,6 +30,7 @@ max-list: 10
 # - consume -> Number of Items Consumed
 # - crafting -> Number of Items Crafted
 # - drop-item -> Number of Items Dropped
+# - emote -> Number of Player Emotes
 # - player -> Player name
 # - line -> New line
 # Rank Tags:
@@ -41,6 +43,7 @@ max-list: 10
 # - rank_consume -> Top Rank value of Items Consumed
 # - rank_crafting -> Top Rank value of Items Crafted
 # - rank_drop-item -> Top Rank value of Items Dropped
+# - rank_emote -> Top Rank value of Player Emotes
 models:
   player:
     death:
@@ -70,6 +73,9 @@ models:
     drop-item:
       title: "#{rank_drop-item} {player}"
       description: "With item dropped {drop-item}"
+    emote:
+      title: "#{rank_emote} {player}"
+      description: "With emotes {emote}"
   text:
     death:
       title: ">> TOP DEATHS <<"
@@ -98,3 +104,6 @@ models:
     drop-item:
       title: ">> TOP ITEM DROPPED <<"
       description: "#{rank_drop-item} {player} {drop-item}{line}"
+    emote:
+      title: ">> TOP EMOTES <<"
+      description: "#{rank_emote} {player} {emote}{line}"

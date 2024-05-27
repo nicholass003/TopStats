@@ -106,6 +106,9 @@ class JsonDatabase implements IDatabase{
 					case DataType::DROP_ITEM:
 						$this->action($xuid, DataType::DROP_ITEM, $value, $action);
 						break;
+					case DataType::EMOTE:
+						$this->action($xuid, DataType::EMOTE, $value, $action);
+						break;
 					default:
 						throw new \InvalidArgumentException("Invalid DataType {$key}");
 				}

@@ -35,6 +35,7 @@ final class DataType{
 	public const CONSUME = "consume";
 	public const CRAFTING = "crafting";
 	public const DROP_ITEM = "drop-item";
+	public const EMOTE = "emote";
 
 	public const ALL = [
 		self::DEATH,
@@ -45,6 +46,7 @@ final class DataType{
 		self::CHAT,
 		self::CONSUME,
 		self::CRAFTING,
-		self::DROP_ITEM
+		self::DROP_ITEM,
+		self::EMOTE
 	];
 }

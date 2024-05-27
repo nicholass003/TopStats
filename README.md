@@ -53,9 +53,9 @@
 | `consume` | Number of Items Consumed |
 | `crafting` | Number of Items Crafted |
 | `drop-item` | Number of Items Dropped |
+| `emote` | Number of Player Emotes |
 
 >Upcoming Types!
-> - `emote`
 > - `enchant`
 > - `item-pickup`
 > - `jump`

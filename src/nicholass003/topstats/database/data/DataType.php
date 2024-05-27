@@ -30,11 +30,13 @@ final class DataType{
 	public const KILL = "kill";
 	public const BLOCK_BREAK = "block-break";
 	public const BLOCK_PLACE = "block-place";
+	public const CHANGE_SKIN = "change-skin";
 
 	public const ALL = [
 		self::DEATH,
 		self::KILL,
 		self::BLOCK_BREAK,
-		self::BLOCK_PLACE
+		self::BLOCK_PLACE,
+		self::CHANGE_SKIN
 	];
 }

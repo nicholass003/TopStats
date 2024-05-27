@@ -18,6 +18,7 @@ max-list: 10
 # - kill -> Number of Player Kills
 # - block-break -> Number of Break Blocks
 # - block-place -> Number of Block Placed
+# - change-skin -> Number of Player Skin Changes
 # - player -> Player name
 # - line -> New line
 # Rank Tags:
@@ -37,6 +38,9 @@ models:
     block-place:
       title: "#{rank_block-place} {player}"
       description: "With place blocks {block-place}"
+    change-skin:
+      title: "#{rank_change-skin} {player}"
+      description: "With skin changes {change-skin}"
   text:
     death:
       title: ">> TOP DEATHS <<"
@@ -50,3 +54,6 @@ models:
     block-place:
       title: ">> TOP BLOCK PLACES <<"
       description: "#{rank_block-place} {player} {block-place}{line}"
+    change-skin:
+      title: ">> TOP SKIN CHANGES <<"
+      description: "#{rank_change-skin} {player} {change-skin}{line}"

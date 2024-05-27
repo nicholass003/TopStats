@@ -33,6 +33,7 @@ use pocketmine\event\block\BlockPlaceEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\Listener;
+use pocketmine\event\player\PlayerChangeSkinEvent;
 use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerMoveEvent;
@@ -76,6 +77,13 @@ class EventListener implements Listener{
 		$player = $event->getPlayer();
 		if($player->hasFiniteResources() && !$event->isCancelled()){
 			$this->plugin->getDatabase()->update($player, [DataType::BLOCK_PLACE => 1], DataAction::ADDITION);
+		}
+	}
+
+	public function onPlayerChangeSkin(PlayerChangeSkinEvent $event) : void{
+		$player = $event->getPlayer();
+		if(!$event->isCancelled()){
+			$this->plugin->getDatabase()->update($player, [DataType::CHANGE_SKIN => 1], DataAction::ADDITION);
 		}
 	}
 

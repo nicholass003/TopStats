@@ -94,6 +94,9 @@ class JsonDatabase implements IDatabase{
 					case DataType::CHANGE_SKIN:
 						$this->action($xuid, DataType::CHANGE_SKIN, $value, $action);
 						break;
+					case DataType::CHAT:
+						$this->action($xuid, DataType::CHAT, $value, $action);
+						break;
 					default:
 						throw new \InvalidArgumentException("Invalid DataType {$key}");
 				}

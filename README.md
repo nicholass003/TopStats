@@ -49,9 +49,9 @@
 | `block-break` | Number of Break Blocks |
 | `block-place` | Number of Blocks Placed |
 | `change-skin ` | Number of Player Skin Changes |
+| `chat` | Number of Messages Sent |
 
 >Upcoming Types!
-> - `chat`
 > - `consume`
 > - `crafting`
 > - `drop-item`

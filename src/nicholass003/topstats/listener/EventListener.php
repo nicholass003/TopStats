@@ -34,6 +34,7 @@ use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerChangeSkinEvent;
+use pocketmine\event\player\PlayerChatEvent;
 use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerMoveEvent;
@@ -84,6 +85,13 @@ class EventListener implements Listener{
 		$player = $event->getPlayer();
 		if(!$event->isCancelled()){
 			$this->plugin->getDatabase()->update($player, [DataType::CHANGE_SKIN => 1], DataAction::ADDITION);
+		}
+	}
+
+	public function onPlayerChat(PlayerChatEvent $event) : void{
+		$player = $event->getPlayer();
+		if(!$event->isCancelled()){
+			$this->plugin->getDatabase()->update($player, [DataType::CHAT => 1], DataAction::ADDITION);
 		}
 	}
 

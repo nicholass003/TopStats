@@ -19,11 +19,16 @@ max-list: 10
 # - block-break -> Number of Break Blocks
 # - block-place -> Number of Block Placed
 # - change-skin -> Number of Player Skin Changes
+# - chat -> Number of Messages Sent
 # - player -> Player name
 # - line -> New line
 # Rank Tags:
-# - rank_death -> Top Rank value of deaths
-# - rank_kill -> Top Rank value of kills
+# - rank_death -> Top Rank value of Player Deaths
+# - rank_kill -> Top Rank value of Player Kills
+# - rank_block-break -> Top Rank value of Break Blocks
+# - rank_block-place -> Top Rank value of Block Placed
+# - rank_change-skin -> Top Rank value of Player Skin Changes
+# - rank_chat -> Top Rank value of Messages Sent
 models:
   player:
     death:
@@ -41,6 +46,9 @@ models:
     change-skin:
       title: "#{rank_change-skin} {player}"
       description: "With skin changes {change-skin}"
+    chat:
+      title: "#{rank_chat} {player}"
+      description: "With chats {chat}"
   text:
     death:
       title: ">> TOP DEATHS <<"
@@ -57,3 +65,6 @@ models:
     change-skin:
       title: ">> TOP SKIN CHANGES <<"
       description: "#{rank_change-skin} {player} {change-skin}{line}"
+    chat:
+      title: ">> TOP CHATS <<"
+      description: "#{rank_chat} {player} {chat}{line}"

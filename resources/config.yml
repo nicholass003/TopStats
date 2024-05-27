@@ -18,6 +18,7 @@ max-list: 10
 # - chat
 # - consume
 # - crafting
+# - drop-item
 # Supported Tags:
 # - death -> Number of Player Deaths
 # - kill -> Number of Player Kills
@@ -27,6 +28,7 @@ max-list: 10
 # - chat -> Number of Messages Sent
 # - consume -> Number of Items Consumed
 # - crafting -> Number of Items Crafted
+# - drop-item -> Number of Items Dropped
 # - player -> Player name
 # - line -> New line
 # Rank Tags:
@@ -38,6 +40,7 @@ max-list: 10
 # - rank_chat -> Top Rank value of Messages Sent
 # - rank_consume -> Top Rank value of Items Consumed
 # - rank_crafting -> Top Rank value of Items Crafted
+# - rank_drop-item -> Top Rank value of Items Dropped
 models:
   player:
     death:
@@ -64,6 +67,9 @@ models:
     crafting:
       title: "#{rank_crafting} {player}"
       description: "With item crafted {crafting}"
+    drop-item:
+      title: "#{rank_drop-item} {player}"
+      description: "With item dropped {drop-item}"
   text:
     death:
       title: ">> TOP DEATHS <<"
@@ -89,3 +95,6 @@ models:
     crafting:
       title: ">> TOP ITEM CRAFTING <<"
       description: "#{rank_crafting} {player} {crafting}{line}"
+    drop-item:
+      title: ">> TOP ITEM DROPPED <<"
+      description: "#{rank_drop-item} {player} {drop-item}{line}"

@@ -37,6 +37,7 @@ use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerChangeSkinEvent;
 use pocketmine\event\player\PlayerChatEvent;
 use pocketmine\event\player\PlayerDeathEvent;
+use pocketmine\event\player\PlayerDropItemEvent;
 use pocketmine\event\player\PlayerItemConsumeEvent;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerMoveEvent;
@@ -108,6 +109,13 @@ class EventListener implements Listener{
 		$player = $event->getPlayer();
 		if($player->hasFiniteResources() && !$event->isCancelled()){
 			$this->plugin->getDatabase()->update($player, [DataType::CRAFTING => 1], DataAction::ADDITION);
+		}
+	}
+
+	public function onPlayerDropItem(PlayerDropItemEvent $event) : void{
+		$player = $event->getPlayer();
+		if($player->hasFiniteResources() && !$event->isCancelled()){
+			$this->plugin->getDatabase()->update($player, [DataType::DROP_ITEM => 1], DataAction::ADDITION);
 		}
 	}
 

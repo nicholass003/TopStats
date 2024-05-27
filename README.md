@@ -52,9 +52,9 @@
 | `chat` | Number of Messages Sent |
 | `consume` | Number of Items Consumed |
 | `crafting` | Number of Items Crafted |
+| `drop-item` | Number of Items Dropped |
 
 >Upcoming Types!
-> - `drop-item`
 > - `emote`
 > - `enchant`
 > - `item-pickup`

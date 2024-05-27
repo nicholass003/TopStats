@@ -63,6 +63,9 @@
 > - `money`
 > - `online-times`
 > - `xp`
+> - `damage`
+> - `heal`
+> - `farm`
 
 ## 📋 TODO List:
 

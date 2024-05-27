@@ -17,6 +17,7 @@ max-list: 10
 # - death -> Number of Player Deaths
 # - kill -> Number of Player Kills
 # - block-break -> Number of Break Blocks
+# - block-place -> Number of Block Placed
 # - player -> Player name
 # - line -> New line
 # Rank Tags:
@@ -33,6 +34,9 @@ models:
     block-break:
       title: "#{rank_block-break} {player}"
       description: "With break blocks {block-break}"
+    block-place:
+      title: "#{rank_block-place} {player}"
+      description: "With place blocks {block-place}"
   text:
     death:
       title: ">> TOP DEATHS <<"
@@ -43,3 +47,6 @@ models:
     block-break:
       title: ">> TOP BLOCK BREAKS <<"
       description: "#{rank_block-break} {player} {block-break}{line}"
+    block-place:
+      title: ">> TOP BLOCK PLACES <<"
+      description: "#{rank_block-place} {player} {block-place}{line}"

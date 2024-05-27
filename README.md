@@ -47,9 +47,9 @@
 | `death` | Number of Player Deaths |
 | `kill` | Number of Player Kills |
 | `block-break` | Number of Break Blocks |
+| `block-place` | Number of Blocks Placed |
 
 >Upcoming Types!
-> - `block-place`
 > - `change-skin`
 > - `chat`
 > - `consume`

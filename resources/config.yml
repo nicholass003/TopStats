@@ -22,6 +22,7 @@ max-list: 10
 # - emote
 # - enchant
 # - item-pickup
+# - jump
 # Supported Tags:
 # - death -> Number of Player Deaths
 # - kill -> Number of Player Kills
@@ -35,6 +36,7 @@ max-list: 10
 # - emote -> Number of Player Emotes
 # - enchant -> Number of Enchanted Items
 # - item-pickup -> Number of Items Taken
+# - jump -> Number of Player Jumps
 # - player -> Player name
 # - line -> New line
 # Rank Tags:
@@ -50,6 +52,7 @@ max-list: 10
 # - rank_emote -> Top Rank value of Player Emotes
 # - rank_enchant -> Top Rank value of Enchanted Items
 # - rank_item-pickup -> Top Rank value of Items Taken
+# - rank_jump -> Top Rank value of Player Jumps
 models:
   player:
     death:
@@ -88,6 +91,9 @@ models:
     item-pickup:
       title: "#{rank_item-pickup} {player}"
       description: "With items taken {item-pickup}"
+    jump:
+      title: "#{rank_jump} {player}"
+      description: "With jumps {jump}"
   text:
     death:
       title: ">> TOP DEATHS <<"
@@ -125,3 +131,6 @@ models:
     item-pickup:
       title: ">> TOP ITEMS TAKEN <<"
       description: "#{rank_item-pickup} {player} {item-pickup}{line}"
+    jump:
+      title: ">> TOP JUMPS <<"
+      description: "#{rank_jump} {player} {jump}{line}"

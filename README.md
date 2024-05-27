@@ -56,9 +56,9 @@
 | `emote` | Number of Player Emotes |
 | `enchant` | Number of Enchanted Items |
 | `item-pickup` | Number of Items Taken |
+| `jump` | Number of Player Jumps |
 
 >Upcoming Types!
-> - `jump`
 > - `kicked`
 > - `money`
 > - `online-times`

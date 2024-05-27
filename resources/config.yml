@@ -17,6 +17,7 @@ max-list: 10
 # - change-skin
 # - chat
 # - consume
+# - crafting
 # Supported Tags:
 # - death -> Number of Player Deaths
 # - kill -> Number of Player Kills
@@ -25,6 +26,7 @@ max-list: 10
 # - change-skin -> Number of Player Skin Changes
 # - chat -> Number of Messages Sent
 # - consume -> Number of Items Consumed
+# - crafting -> Number of Items Crafted
 # - player -> Player name
 # - line -> New line
 # Rank Tags:
@@ -35,6 +37,7 @@ max-list: 10
 # - rank_change-skin -> Top Rank value of Player Skin Changes
 # - rank_chat -> Top Rank value of Messages Sent
 # - rank_consume -> Top Rank value of Items Consumed
+# - rank_crafting -> Top Rank value of Items Crafted
 models:
   player:
     death:
@@ -58,6 +61,9 @@ models:
     consume:
       title: "#{rank_consume} {player}"
       description: "With item consumes {consume}"
+    crafting:
+      title: "#{rank_crafting} {player}"
+      description: "With item crafted {crafting}"
   text:
     death:
       title: ">> TOP DEATHS <<"
@@ -78,5 +84,8 @@ models:
       title: ">> TOP CHATS <<"
       description: "#{rank_chat} {player} {chat}{line}"
     consume:
-      title: ">> TOP ITEM COMSUMES <<"
+      title: ">> TOP ITEM CONSUMES <<"
       description: "#{rank_consume} {player} {consume}{line}"
+    crafting:
+      title: ">> TOP ITEM CRAFTING <<"
+      description: "#{rank_crafting} {player} {crafting}{line}"

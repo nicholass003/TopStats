@@ -51,9 +51,9 @@
 | `change-skin ` | Number of Player Skin Changes |
 | `chat` | Number of Messages Sent |
 | `consume` | Number of Items Consumed |
+| `crafting` | Number of Items Crafted |
 
 >Upcoming Types!
-> - `crafting`
 > - `drop-item`
 > - `emote`
 > - `enchant`

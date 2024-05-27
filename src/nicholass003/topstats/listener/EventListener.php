@@ -32,6 +32,7 @@ use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\block\BlockPlaceEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
+use pocketmine\event\entity\EntityItemPickupEvent;
 use pocketmine\event\inventory\CraftItemEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerChangeSkinEvent;
@@ -132,6 +133,15 @@ class EventListener implements Listener{
 		$player = $event->getPlayer();
 		if($player->hasFiniteResources() && !$event->isCancelled()){
 			$this->plugin->getDatabase()->update($player, [DataType::ENCHANT => 1], DataAction::ADDITION);
+		}
+	}
+
+	public function onEntityItemPickup(EntityItemPickupEvent $event) : void{
+		$player = $event->getEntity();
+		if($player instanceof Player){
+			if($player->hasFiniteResources() && !$event->isCancelled()){
+				$this->plugin->getDatabase()->update($player, [DataType::ITEM_PICKUP => 1], DataAction::ADDITION);
+			}
 		}
 	}
 

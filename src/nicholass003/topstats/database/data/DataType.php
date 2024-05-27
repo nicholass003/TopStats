@@ -37,6 +37,7 @@ final class DataType{
 	public const DROP_ITEM = "drop-item";
 	public const EMOTE = "emote";
 	public const ENCHANT = "enchant";
+	public const ITEM_PICKUP = "item-pickup";
 
 	public const ALL = [
 		self::DEATH,
@@ -49,6 +50,7 @@ final class DataType{
 		self::CRAFTING,
 		self::DROP_ITEM,
 		self::EMOTE,
-		self::ENCHANT
+		self::ENCHANT,
+		self::ITEM_PICKUP
 	];
 }

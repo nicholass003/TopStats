@@ -55,9 +55,9 @@
 | `drop-item` | Number of Items Dropped |
 | `emote` | Number of Player Emotes |
 | `enchant` | Number of Enchanted Items |
+| `item-pickup` | Number of Items Taken |
 
 >Upcoming Types!
-> - `item-pickup`
 > - `jump`
 > - `kicked`
 > - `money`

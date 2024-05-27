@@ -54,9 +54,9 @@
 | `crafting` | Number of Items Crafted |
 | `drop-item` | Number of Items Dropped |
 | `emote` | Number of Player Emotes |
+| `enchant` | Number of Enchanted Items |
 
 >Upcoming Types!
-> - `enchant`
 > - `item-pickup`
 > - `jump`
 > - `kicked`

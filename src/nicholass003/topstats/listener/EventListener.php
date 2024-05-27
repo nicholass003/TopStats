@@ -40,6 +40,7 @@ use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\event\player\PlayerDropItemEvent;
 use pocketmine\event\player\PlayerEmoteEvent;
 use pocketmine\event\player\PlayerItemConsumeEvent;
+use pocketmine\event\player\PlayerItemEnchantEvent;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\math\Vector2;
@@ -124,6 +125,13 @@ class EventListener implements Listener{
 		$player = $event->getPlayer();
 		if(!$event->isCancelled()){
 			$this->plugin->getDatabase()->update($player, [DataType::EMOTE => 1], DataAction::ADDITION);
+		}
+	}
+
+	public function onPlayerItemEnchant(PlayerItemEnchantEvent $event) : void{
+		$player = $event->getPlayer();
+		if($player->hasFiniteResources() && !$event->isCancelled()){
+			$this->plugin->getDatabase()->update($player, [DataType::ENCHANT => 1], DataAction::ADDITION);
 		}
 	}
 

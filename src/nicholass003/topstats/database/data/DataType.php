@@ -32,6 +32,7 @@ final class DataType{
 	public const BLOCK_PLACE = "block-place";
 	public const CHANGE_SKIN = "change-skin";
 	public const CHAT = "chat";
+	public const CONSUME = "consume";
 
 	public const ALL = [
 		self::DEATH,
@@ -39,6 +40,7 @@ final class DataType{
 		self::BLOCK_BREAK,
 		self::BLOCK_PLACE,
 		self::CHANGE_SKIN,
-		self::CHAT
+		self::CHAT,
+		self::CONSUME
 	];
 }

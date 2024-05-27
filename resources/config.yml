@@ -13,6 +13,10 @@ max-list: 10
 # - death
 # - kill
 # - block-break
+# - block-place
+# - change-skin
+# - chat
+# - consume
 # Supported Tags:
 # - death -> Number of Player Deaths
 # - kill -> Number of Player Kills
@@ -20,6 +24,7 @@ max-list: 10
 # - block-place -> Number of Block Placed
 # - change-skin -> Number of Player Skin Changes
 # - chat -> Number of Messages Sent
+# - consume -> Number of Items Consumed
 # - player -> Player name
 # - line -> New line
 # Rank Tags:
@@ -29,6 +34,7 @@ max-list: 10
 # - rank_block-place -> Top Rank value of Block Placed
 # - rank_change-skin -> Top Rank value of Player Skin Changes
 # - rank_chat -> Top Rank value of Messages Sent
+# - rank_consume -> Top Rank value of Items Consumed
 models:
   player:
     death:
@@ -49,6 +55,9 @@ models:
     chat:
       title: "#{rank_chat} {player}"
       description: "With chats {chat}"
+    consume:
+      title: "#{rank_consume} {player}"
+      description: "With item consumes {consume}"
   text:
     death:
       title: ">> TOP DEATHS <<"
@@ -68,3 +77,6 @@ models:
     chat:
       title: ">> TOP CHATS <<"
       description: "#{rank_chat} {player} {chat}{line}"
+    consume:
+      title: ">> TOP ITEM COMSUMES <<"
+      description: "#{rank_consume} {player} {consume}{line}"

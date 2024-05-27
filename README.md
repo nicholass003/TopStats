@@ -50,9 +50,9 @@
 | `block-place` | Number of Blocks Placed |
 | `change-skin ` | Number of Player Skin Changes |
 | `chat` | Number of Messages Sent |
+| `consume` | Number of Items Consumed |
 
 >Upcoming Types!
-> - `consume`
 > - `crafting`
 > - `drop-item`
 > - `emote`

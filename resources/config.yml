@@ -22,6 +22,7 @@ max-list: 10
 # - emote
 # - enchant
 # - farm
+# - heal
 # - item-pickup
 # - jump
 # - kick
@@ -38,6 +39,7 @@ max-list: 10
 # - emote -> Number of Player Emotes
 # - enchant -> Number of Enchanted Items
 # - farm -> Number of Planted Crops
+# - heal -> Number of Health Recovered
 # - item-pickup -> Number of Items Taken
 # - jump -> Number of Player Jumps
 # - kick -> Number of Player Kicked
@@ -56,6 +58,7 @@ max-list: 10
 # - rank_emote -> Top Rank value of Player Emotes
 # - rank_enchant -> Top Rank value of Enchanted Items
 # - rank_farm -> Top Rank value of Planted Crops
+# - rank_heal -> Top Rank value of Health Recovered
 # - rank_item-pickup -> Top Rank value of Items Taken
 # - rank_jump -> Top Rank value of Player Jumps
 # - rank_kick-> Top Rank value of Player Kicked
@@ -97,6 +100,9 @@ models:
     farm:
       title: "#{rank_farm} {player}"
       description: "With planted crops {farm}"
+    heal:
+      title: "#{rank_heal} {player}"
+      description: "With health recovered {heal}"
     item-pickup:
       title: "#{rank_item-pickup} {player}"
       description: "With items taken {item-pickup}"
@@ -143,6 +149,9 @@ models:
     farm:
       title: ">> TOP FARMS <<"
       description: "#{rank_farm} {player} {farm}{line}"
+    heal:
+      title: ">> TOP HEALING <<"
+      description: "#{rank_heal} {player} {heal}{line}"
     item-pickup:
       title: ">> TOP ITEMS TAKEN <<"
       description: "#{rank_item-pickup} {player} {item-pickup}{line}"

@@ -63,7 +63,8 @@
 > - `money`
 > - `online-times`
 > - `xp`
-> - `damage`
+> - `damage-dealt`
+> - `damage-received`
 > - `heal`
 > - `farm`
 

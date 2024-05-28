@@ -103,6 +103,12 @@ class JsonDatabase implements IDatabase{
 					case DataType::CRAFTING:
 						$this->action($xuid, DataType::CRAFTING, $value, $action);
 						break;
+					case DataType::DAMAGE_DEALT:
+						$this->action($xuid, DataType::DAMAGE_DEALT, $value, $action);
+						break;
+					case DataType::DAMAGE_RECEIVED:
+						$this->action($xuid, DataType::DAMAGE_RECEIVED, $value, $action);
+						break;
 					case DataType::DROP_ITEM:
 						$this->action($xuid, DataType::DROP_ITEM, $value, $action);
 						break;

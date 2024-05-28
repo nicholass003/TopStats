@@ -52,6 +52,8 @@
 | `chat` | Number of Messages Sent |
 | `consume` | Number of Items Consumed |
 | `crafting` | Number of Items Crafted |
+| `damage-dealt` | Number of Damage Dealt |
+| `damage-received` | Number of Damage Received |
 | `drop-item` | Number of Items Dropped |
 | `emote` | Number of Player Emotes |
 | `enchant` | Number of Enchanted Items |
@@ -65,8 +67,6 @@
 > - `money`
 > - `online-times`
 > - `xp`
-> - `damage-dealt`
-> - `damage-received`
 
 ## 📋 TODO List:
 

@@ -34,6 +34,8 @@ final class DataType{
 	public const CHAT = "chat";
 	public const CONSUME = "consume";
 	public const CRAFTING = "crafting";
+	public const DAMAGE_DEALT = "damage-dealt";
+	public const DAMAGE_RECEIVED = "damage-received";
 	public const DROP_ITEM = "drop-item";
 	public const EMOTE = "emote";
 	public const ENCHANT = "enchant";
@@ -52,6 +54,8 @@ final class DataType{
 		self::CHAT,
 		self::CONSUME,
 		self::CRAFTING,
+		self::DAMAGE_DEALT,
+		self::DAMAGE_RECEIVED,
 		self::DROP_ITEM,
 		self::EMOTE,
 		self::ENCHANT,

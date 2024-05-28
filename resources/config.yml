@@ -18,6 +18,8 @@ max-list: 10
 # - chat
 # - consume
 # - crafting
+# - damage-dealt
+# - damage-received
 # - drop-item
 # - emote
 # - enchant
@@ -35,6 +37,8 @@ max-list: 10
 # - chat -> Number of Messages Sent
 # - consume -> Number of Items Consumed
 # - crafting -> Number of Items Crafted
+# - damage-dealt -> Number of Damage Dealt
+# - damage-received -> Number of Damage Received
 # - drop-item -> Number of Items Dropped
 # - emote -> Number of Player Emotes
 # - enchant -> Number of Enchanted Items
@@ -54,6 +58,8 @@ max-list: 10
 # - rank_chat -> Top Rank value of Messages Sent
 # - rank_consume -> Top Rank value of Items Consumed
 # - rank_crafting -> Top Rank value of Items Crafted
+# - rank_damage-dealt -> Top Rank value of Damage Dealt
+# - rank_damage-received -> Top Rank value of Damage Received
 # - rank_drop-item -> Top Rank value of Items Dropped
 # - rank_emote -> Top Rank value of Player Emotes
 # - rank_enchant -> Top Rank value of Enchanted Items
@@ -91,6 +97,12 @@ models:
     drop-item:
       title: "#{rank_drop-item} {player}"
       description: "With item dropped {drop-item}"
+    damage-dealt:
+      title: "#{rank_damage-dealt} {player}"
+      description: "With damage dealt {damage-dealt}"
+    damage-received:
+      title: "#{rank_damage-received} {player}"
+      description: "With damage received {damage-received}"
     emote:
       title: "#{rank_emote} {player}"
       description: "With emotes {emote}"
@@ -137,6 +149,12 @@ models:
     crafting:
       title: ">> TOP ITEM CRAFTING <<"
       description: "#{rank_crafting} {player} {crafting}{line}"
+    damage-dealt:
+      title: ">> TOP DAMAGE DEALT <<"
+      description: "#{rank_damage-dealt} {player} {damage-dealt}{line}"
+    damage-received:
+      title: ">> TOP DAMAGE RECEIVED <<"
+      description: "#{rank_damage-received} {player} {damage-received}{line}"
     drop-item:
       title: ">> TOP ITEM DROPPED <<"
       description: "#{rank_drop-item} {player} {drop-item}{line}"

@@ -28,8 +28,10 @@ use nicholass003\topstats\database\data\DataAction;
 use nicholass003\topstats\database\data\DataType;
 use nicholass003\topstats\model\player\PlayerModel;
 use nicholass003\topstats\TopStats;
+use pocketmine\entity\projectile\Projectile;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\block\BlockPlaceEvent;
+use pocketmine\event\entity\EntityDamageByChildEntityEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\entity\EntityItemPickupEvent;
@@ -190,6 +192,32 @@ class EventListener implements Listener{
 		$entity = $event->getEntity();
 		if($entity instanceof PlayerModel){
 			$event->cancel();
+		}
+		if($event instanceof EntityDamageByEntityEvent){
+			$victim = $event->getEntity();
+			if($victim instanceof Player){
+				$attacker = $event->getDamager();
+				if($attacker instanceof Player){
+					if($victim->hasFiniteResources() && $attacker->hasFiniteResources() && !$event->isCancelled()){
+						$this->plugin->getDatabase()->update($attacker, [DataType::DAMAGE_DEALT => $event->getOriginalBaseDamage()], DataAction::ADDITION);
+						$this->plugin->getDatabase()->update($victim, [DataType::DAMAGE_RECEIVED => $event->getFinalDamage()], DataAction::ADDITION);
+					}
+				}
+			}
+		}elseif($event instanceof EntityDamageByChildEntityEvent){
+			$victim = $event->getEntity();
+			if($victim instanceof Player){
+				$attacker = $event->getDamager();
+				if($attacker instanceof Player){
+					$child = $event->getChild();
+					if($child instanceof Projectile){
+						if($victim->hasFiniteResources() && $attacker->hasFiniteResources() && !$event->isCancelled()){
+							$this->plugin->getDatabase()->update($attacker, [DataType::DAMAGE_DEALT => $event->getOriginalBaseDamage()], DataAction::ADDITION);
+							$this->plugin->getDatabase()->update($victim, [DataType::DAMAGE_RECEIVED => $event->getFinalDamage()], DataAction::ADDITION);
+						}
+					}
+				}
+			}
 		}
 	}
 

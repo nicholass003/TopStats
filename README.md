@@ -55,6 +55,7 @@
 | `drop-item` | Number of Items Dropped |
 | `emote` | Number of Player Emotes |
 | `enchant` | Number of Enchanted Items |
+| `farm` | Number of Planted Crops |
 | `item-pickup` | Number of Items Taken |
 | `jump` | Number of Player Jumps |
 | `kick` | Number of Player Kicked |
@@ -66,7 +67,6 @@
 > - `damage-dealt`
 > - `damage-received`
 > - `heal`
-> - `farm`
 
 ## 📋 TODO List:
 

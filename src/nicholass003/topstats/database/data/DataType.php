@@ -37,6 +37,7 @@ final class DataType{
 	public const DROP_ITEM = "drop-item";
 	public const EMOTE = "emote";
 	public const ENCHANT = "enchant";
+	public const FARM = "farm";
 	public const ITEM_PICKUP = "item-pickup";
 	public const JUMP = "jump";
 	public const KICK = "kick";
@@ -53,6 +54,7 @@ final class DataType{
 		self::DROP_ITEM,
 		self::EMOTE,
 		self::ENCHANT,
+		self::FARM,
 		self::ITEM_PICKUP,
 		self::JUMP,
 		self::KICK

@@ -21,6 +21,7 @@ max-list: 10
 # - drop-item
 # - emote
 # - enchant
+# - farm
 # - item-pickup
 # - jump
 # - kick
@@ -36,6 +37,7 @@ max-list: 10
 # - drop-item -> Number of Items Dropped
 # - emote -> Number of Player Emotes
 # - enchant -> Number of Enchanted Items
+# - farm -> Number of Planted Crops
 # - item-pickup -> Number of Items Taken
 # - jump -> Number of Player Jumps
 # - kick -> Number of Player Kicked
@@ -53,6 +55,7 @@ max-list: 10
 # - rank_drop-item -> Top Rank value of Items Dropped
 # - rank_emote -> Top Rank value of Player Emotes
 # - rank_enchant -> Top Rank value of Enchanted Items
+# - rank_farm -> Top Rank value of Planted Crops
 # - rank_item-pickup -> Top Rank value of Items Taken
 # - rank_jump -> Top Rank value of Player Jumps
 # - rank_kick-> Top Rank value of Player Kicked
@@ -91,6 +94,9 @@ models:
     enchant:
       title: "#{rank_enchant} {player}"
       description: "With enchants {enchant}"
+    farm:
+      title: "#{rank_farm} {player}"
+      description: "With planted crops {farm}"
     item-pickup:
       title: "#{rank_item-pickup} {player}"
       description: "With items taken {item-pickup}"
@@ -134,6 +140,9 @@ models:
     enchant:
       title: ">> TOP ENCHANTS <<"
       description: "#{rank_enchant} {player} {enchant}{line}"
+    farm:
+      title: ">> TOP FARMS <<"
+      description: "#{rank_farm} {player} {farm}{line}"
     item-pickup:
       title: ">> TOP ITEMS TAKEN <<"
       description: "#{rank_item-pickup} {player} {item-pickup}{line}"

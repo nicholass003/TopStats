@@ -46,10 +46,12 @@ use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerJumpEvent;
 use pocketmine\event\player\PlayerKickEvent;
 use pocketmine\event\player\PlayerMoveEvent;
+use pocketmine\item\VanillaItems;
 use pocketmine\math\Vector2;
 use pocketmine\network\mcpe\protocol\MovePlayerPacket;
 use pocketmine\player\Player;
 use function atan2;
+use function in_array;
 use const M_PI;
 
 class EventListener implements Listener{
@@ -86,6 +88,19 @@ class EventListener implements Listener{
 		$player = $event->getPlayer();
 		if($player->hasFiniteResources() && !$event->isCancelled()){
 			$this->plugin->getDatabase()->update($player, [DataType::BLOCK_PLACE => 1], DataAction::ADDITION);
+			if(in_array($event->getItem(), [
+				VanillaItems::BEETROOT_SEEDS(),
+				VanillaItems::CARROT(),
+				VanillaItems::MELON_SEEDS(),
+				//TODO: Nether Wart ??
+				VanillaItems::PITCHER_POD(),
+				VanillaItems::POTATO(),
+				VanillaItems::PUMPKIN_SEEDS(),
+				VanillaItems::TORCHFLOWER_SEEDS(),
+				VanillaItems::WHEAT_SEEDS()
+			], true)){
+				$this->plugin->getDatabase()->update($player, [DataType::FARM => 1], DataAction::ADDITION);
+			}
 		}
 	}
 

@@ -28,6 +28,7 @@ max-list: 10
 # - item-pickup
 # - jump
 # - kick
+# - xp
 # Supported Tags:
 # - death -> Number of Player Deaths
 # - kill -> Number of Player Kills
@@ -47,6 +48,7 @@ max-list: 10
 # - item-pickup -> Number of Items Taken
 # - jump -> Number of Player Jumps
 # - kick -> Number of Player Kicked
+# - xp -> Numper of Player XP
 # - player -> Player name
 # - line -> New line
 # Rank Tags:
@@ -68,6 +70,7 @@ max-list: 10
 # - rank_item-pickup -> Top Rank value of Items Taken
 # - rank_jump -> Top Rank value of Player Jumps
 # - rank_kick-> Top Rank value of Player Kicked
+# - rank_xp-> Top Rank value of Player XP
 models:
   player:
     death:
@@ -124,6 +127,9 @@ models:
     kick:
       title: "#{rank_kick} {player}"
       description: "With kicked {kick}"
+    xp:
+      title: "#{rank_xp} {player}"
+      description: "With xp {xp}"
   text:
     death:
       title: ">> TOP DEATHS <<"
@@ -179,3 +185,6 @@ models:
     kick:
       title: ">> TOP KICKED <<"
       description: "#{rank_kick} {player} {kick}{line}"
+    xp:
+      title: ">> TOP XP <<"
+      description: "#{rank_xp} {player} {xp}{line}"

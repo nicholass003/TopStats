@@ -133,6 +133,9 @@ class JsonDatabase implements IDatabase{
 					case DataType::KICK:
 						$this->action($xuid, DataType::KICK, $value, $action);
 						break;
+					case DataType::XP:
+						$this->action($xuid, DataType::XP, $value, $action);
+						break;
 					default:
 						throw new \InvalidArgumentException("Invalid DataType {$key}");
 				}

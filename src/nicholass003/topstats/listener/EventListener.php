@@ -43,6 +43,7 @@ use pocketmine\event\player\PlayerChatEvent;
 use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\event\player\PlayerDropItemEvent;
 use pocketmine\event\player\PlayerEmoteEvent;
+use pocketmine\event\player\PlayerExperienceChangeEvent;
 use pocketmine\event\player\PlayerItemConsumeEvent;
 use pocketmine\event\player\PlayerItemEnchantEvent;
 use pocketmine\event\player\PlayerJoinEvent;
@@ -184,6 +185,15 @@ class EventListener implements Listener{
 		if($player instanceof Player){
 			if($player->hasFiniteResources() && !$event->isCancelled()){
 				$this->plugin->getDatabase()->update($player, [DataType::HEAL => $event->getAmount()], DataAction::ADDITION);
+			}
+		}
+	}
+
+	public function onPlayerExperienceChange(PlayerExperienceChangeEvent $event) : void{
+		$player = $event->getEntity();
+		if($player instanceof Player){
+			if($player->hasFiniteResources() && !$event->isCancelled()){
+				$this->plugin->getDatabase()->update($player, [DataType::XP => $event->getNewLevel()], DataAction::ADDITION);
 			}
 		}
 	}

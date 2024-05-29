@@ -44,6 +44,7 @@ final class DataType{
 	public const ITEM_PICKUP = "item-pickup";
 	public const JUMP = "jump";
 	public const KICK = "kick";
+	public const XP = "xp";
 
 	public const ALL = [
 		self::DEATH,
@@ -63,6 +64,7 @@ final class DataType{
 		self::HEAL,
 		self::ITEM_PICKUP,
 		self::JUMP,
-		self::KICK
+		self::KICK,
+		self::XP
 	];
 }

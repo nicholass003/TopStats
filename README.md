@@ -37,12 +37,12 @@
 | -- | -- |
 | Still Underdevelopmet | Simple TopStats with Floating Text |
 
-## 📊 Types
-**TopStats has 20++ types:**
+## 📊 Data Type
+**TopStats has 20++ data type:**
 
 >Other types will added soon!
 
-| Types | Description |
+| Data Type | Description |
 | -- | -- |
 | `death` | Number of Player Deaths |
 | `kill` | Number of Player Kills |
@@ -65,14 +65,17 @@
 | `online-time` | Number of Player Online Time |
 | `xp` | Number of Player XP |
 
->Upcoming Types!
+>Upcoming data type!
 > - `money`
 
 ## 📋 TODO List:
 
 - [x] Implement player models (v0.2.0)
 - [x] Save TopStats while server restart (v0.2.0)
-- [ ] Implement More Types
+- [ ] Implement more data type
+- [ ] Implement Commando libraries
+- [ ] Implement support for more database providers
+- [ ] Implement UI for improved settings
 
 ## 💡 Issues & Suggestions
 

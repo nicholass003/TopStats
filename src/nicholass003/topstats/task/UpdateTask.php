@@ -24,6 +24,8 @@ declare(strict_types=1);
 
 namespace nicholass003\topstats\task;
 
+use nicholass003\topstats\database\data\DataAction;
+use nicholass003\topstats\database\data\DataType;
 use nicholass003\topstats\TopStats;
 use nicholass003\topstats\utils\Utils;
 use pocketmine\scheduler\Task;
@@ -38,6 +40,11 @@ class UpdateTask extends Task{
 		foreach($this->plugin->getLeaderboardManager()->leaderboards() as $id => $leaderboard){
 			Utils::validatePlayerModels($leaderboard);
 			$leaderboard->update();
+		}
+		foreach($this->plugin->getServer()->getOnlinePlayers() as $player){
+			if($player->isConnected()){
+				$this->plugin->getDatabase()->update($player, [DataType::ONLINE_TIME => 1], DataAction::ADDITION);
+			}
 		}
 	}
 }

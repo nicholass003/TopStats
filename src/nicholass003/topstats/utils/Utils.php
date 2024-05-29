@@ -24,6 +24,7 @@ declare(strict_types=1);
 
 namespace nicholass003\topstats\utils;
 
+use nicholass003\topstats\database\data\DataType;
 use nicholass003\topstats\leaderboard\Leaderboard;
 use nicholass003\topstats\model\IModel;
 use nicholass003\topstats\model\player\PlayerModel;
@@ -32,6 +33,7 @@ use pocketmine\entity\Human;
 use pocketmine\entity\Skin;
 use pocketmine\Server;
 use function count;
+use function floor;
 use function str_replace;
 use function uasort;
 
@@ -54,11 +56,11 @@ class Utils{
 		foreach(self::getSortedArrayBoard($data, $model->getType()) as $xuid => $userData){
 			if($model instanceof PlayerModel){
 				if($num === $model->getTop()){
-					$result = str_replace(["{player}", "{" . $model->getType() . "}", "{rank_" . $model->getType() . "}", "{line}"], [$userData["name"], $userData[$model->getType()], $num, "\n"], $text);
+					$result = self::validateTextFormat($model->getType(), $userData, $text, $num);
 					break;
 				}
 			}else{
-				$result .= str_replace(["{player}", "{" . $model->getType() . "}", "{rank_" . $model->getType() . "}", "{line}"], [$userData["name"], $userData[$model->getType()], $num, "\n"], $text);
+				$result .= self::validateTextFormat($model->getType(), $userData, $text, $num);
 				if($num >= $max){
 					break;
 				}
@@ -121,5 +123,25 @@ class Utils{
 				}
 			}
 		}
+	}
+
+	public static function validateTextFormat(string $type, array $data, string $text, int $rank) : string{
+		$formattedData = $data[$type];
+		if($type === DataType::ONLINE_TIME){
+			$formattedData = self::timeFormat($data[$type]);
+		}
+		return str_replace(["{player}", "{" . $type . "}", "{rank_" . $type . "}", "{line}"], [$data["name"], $formattedData, $rank, "\n"], $text);
+	}
+
+	public static function timeFormat(int $time) : string{
+		$years = floor($time / (365 * 24 * 60 * 60));
+		$months = floor(($time - ($years * 365 * 24 * 60 * 60)) / (30 * 24 * 60 * 60));
+		$days = floor(($time - ($years * 365 * 24 * 60 * 60) - ($months * 30 * 24 * 60 * 60)) / (24 * 60 * 60));
+		$hours = floor(($time - ($years * 365 * 24 * 60 * 60) - ($months * 30 * 24 * 60 * 60) - ($days * 24 * 60 * 60)) / (60 * 60));
+		$minutes = floor(($time - ($years * 365 * 24 * 60 * 60) - ($months * 30 * 24 * 60 * 60) - ($days * 24 * 60 * 60) - ($hours * 60 * 60)) / 60);
+		$seconds = $time % 60;
+
+		$format = TopStats::getInstance()->getTimeFormat();
+		return str_replace(["{year}", "{month}", "{day}", "{hour}", "{minute}", "{second}"], [$years, $months, $days, $hours, $minutes, $seconds], $format);
 	}
 }

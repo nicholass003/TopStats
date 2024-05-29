@@ -47,6 +47,7 @@ class TopStats extends PluginBase{
 	use SingletonTrait;
 
 	public const MAX_LIST = 10;
+	public const TIME_FORMAT = "{year}y {month}m {day}d {hour}h {minute}m {second}s";
 
 	protected IDatabase $database;
 	protected LeaderboardManager $leaderboardManager;
@@ -121,5 +122,9 @@ class TopStats extends PluginBase{
 
 	public function getMaxList() : int{
 		return $this->getConfig()->get("max-list") ?? self::MAX_LIST;
+	}
+
+	public function getTimeFormat() : string{
+		return $this->getConfig()->get("time-format") ?? self::TIME_FORMAT;
 	}
 }

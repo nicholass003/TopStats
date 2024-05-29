@@ -6,6 +6,9 @@ database: "json"
 # TopStats Format
 # Leaderboard Max List:
 max-list: 10
+# Time Format:
+# year, month, day, hour, minute, second
+time-format: "{year}y {month}m {day}d {hour}h {minute}m {second}s"
 # Supported Models:
 # - player
 # - text
@@ -28,6 +31,7 @@ max-list: 10
 # - item-pickup
 # - jump
 # - kick
+# - online-time
 # - xp
 # Supported Tags:
 # - death -> Number of Player Deaths
@@ -48,6 +52,7 @@ max-list: 10
 # - item-pickup -> Number of Items Taken
 # - jump -> Number of Player Jumps
 # - kick -> Number of Player Kicked
+# - online-time -> Number of Player Online Time
 # - xp -> Numper of Player XP
 # - player -> Player name
 # - line -> New line
@@ -69,8 +74,9 @@ max-list: 10
 # - rank_heal -> Top Rank value of Health Recovered
 # - rank_item-pickup -> Top Rank value of Items Taken
 # - rank_jump -> Top Rank value of Player Jumps
-# - rank_kick-> Top Rank value of Player Kicked
-# - rank_xp-> Top Rank value of Player XP
+# - rank_kick -> Top Rank value of Player Kicked
+# - rank_online-time -> Top Rank value of Player Online Time
+# - rank_xp -> Top Rank value of Player XP
 models:
   player:
     death:
@@ -127,6 +133,9 @@ models:
     kick:
       title: "#{rank_kick} {player}"
       description: "With kicked {kick}"
+    online-time:
+      title: "#{rank_online-time} {player}"
+      description: "With time {online-time}"
     xp:
       title: "#{rank_xp} {player}"
       description: "With xp {xp}"
@@ -185,6 +194,9 @@ models:
     kick:
       title: ">> TOP KICKED <<"
       description: "#{rank_kick} {player} {kick}{line}"
+    online-time:
+      title: ">> TOP ONLINE TIME <<"
+      description: "#{rank_online-time} {player} {online-time}{line}"
     xp:
       title: ">> TOP XP <<"
       description: "#{rank_xp} {player} {xp}{line}"

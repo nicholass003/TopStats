@@ -38,7 +38,7 @@
 | Still Underdevelopmet | Simple TopStats with Floating Text |
 
 ## 📊 Types
-**TopStats has 2 types:**
+**TopStats has 20++ types:**
 
 >Other types will added soon!
 

@@ -6,4 +6,7 @@ projects:
   TopStats:
     path: ""
     icon: "assets/icon.png"
+    libs:
+      - src: DaPigGuy/libPiggyEconomy/libPiggyEconomy
+        version: ^3.0.3
 ...

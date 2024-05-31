@@ -24,6 +24,7 @@ declare(strict_types=1);
 
 namespace nicholass003\topstats\utils;
 
+use nicholass003\topstats\database\data\DataAction;
 use nicholass003\topstats\database\data\DataType;
 use nicholass003\topstats\leaderboard\Leaderboard;
 use nicholass003\topstats\model\IModel;
@@ -31,6 +32,7 @@ use nicholass003\topstats\model\player\PlayerModel;
 use nicholass003\topstats\TopStats;
 use pocketmine\entity\Human;
 use pocketmine\entity\Skin;
+use pocketmine\player\Player;
 use pocketmine\Server;
 use function count;
 use function floor;
@@ -143,5 +145,22 @@ class Utils{
 
 		$format = TopStats::getInstance()->getTimeFormat();
 		return str_replace(["{year}", "{month}", "{day}", "{hour}", "{minute}", "{second}"], [$years, $months, $days, $hours, $minutes, $seconds], $format);
+	}
+
+	public static function moneyTransaction(Player $player, float|int $money) : bool{
+		$moneyAmount = TopStats::getInstance()->getDatabase()->getTemporaryDataValue($player, DataType::MONEY);
+		if($moneyAmount !== false && self::validateDataAction($moneyAmount, $money) !== DataAction::NONE){
+			return true;
+		}
+		return false;
+	}
+
+	public static function validateDataAction(float|int $before, float|int $after) : int{
+		if($before < $after){
+			return DataAction::ADDITION;
+		}elseif($before > $after){
+			return DataAction::SUBTRACTION;
+		}
+		return DataAction::NONE;
 	}
 }

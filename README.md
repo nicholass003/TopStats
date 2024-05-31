@@ -62,11 +62,11 @@
 | `item-pickup` | Number of Items Taken |
 | `jump` | Number of Player Jumps |
 | `kick` | Number of Player Kicked |
+| `money` | Number of Player Money |
 | `online-time` | Number of Player Online Time |
 | `xp` | Number of Player XP |
 
 >Upcoming data type!
-> - `money`
 
 ## 📋 TODO List:
 

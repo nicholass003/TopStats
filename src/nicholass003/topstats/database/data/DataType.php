@@ -44,6 +44,7 @@ final class DataType{
 	public const ITEM_PICKUP = "item-pickup";
 	public const JUMP = "jump";
 	public const KICK = "kick";
+	public const MONEY = "money";
 	public const ONLINE_TIME = "online-time";
 	public const XP = "xp";
 
@@ -66,6 +67,7 @@ final class DataType{
 		self::ITEM_PICKUP,
 		self::JUMP,
 		self::KICK,
+		self::MONEY,
 		self::ONLINE_TIME,
 		self::XP
 	];

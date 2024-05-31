@@ -45,6 +45,17 @@ class UpdateTask extends Task{
 			if($player->isConnected() && $player->spawned){
 				$this->plugin->getDatabase()->update($player, [DataType::ONLINE_TIME => 1], DataAction::ADDITION);
 			}
+			$this->plugin->getEconomyProvider()->getMoney($player, function($money) use($player) : void{
+				if(Utils::moneyTransaction($player, $money)){
+					if($this->plugin->getDatabase()->getTemporaryDataValue($player, DataType::MONEY) !== false){
+						$this->plugin->getDatabase()->update(
+							$player,
+							[DataType::MONEY => $money],
+							DataAction::NONE
+						);
+					}
+				}
+			});
 		}
 	}
 }

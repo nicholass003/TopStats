@@ -3,6 +3,12 @@
 # - json
 database: "json"
 
+# Supported Economy:
+# - bedrockeconomy
+# - economyapi
+economy:
+  provider: bedrockeconomy
+
 # TopStats Format
 # Leaderboard Max List:
 max-list: 10
@@ -12,28 +18,7 @@ time-format: "{year}y {month}m {day}d {hour}h {minute}m {second}s"
 # Supported Models:
 # - player
 # - text
-# Supported Data Types:
-# - death
-# - kill
-# - block-break
-# - block-place
-# - change-skin
-# - chat
-# - consume
-# - crafting
-# - damage-dealt
-# - damage-received
-# - drop-item
-# - emote
-# - enchant
-# - farm
-# - heal
-# - item-pickup
-# - jump
-# - kick
-# - online-time
-# - xp
-# Supported Tags:
+# Supported Data Tags:
 # - death -> Number of Player Deaths
 # - kill -> Number of Player Kills
 # - block-break -> Number of Break Blocks
@@ -52,8 +37,10 @@ time-format: "{year}y {month}m {day}d {hour}h {minute}m {second}s"
 # - item-pickup -> Number of Items Taken
 # - jump -> Number of Player Jumps
 # - kick -> Number of Player Kicked
+# - money -> Number of Player Money
 # - online-time -> Number of Player Online Time
 # - xp -> Numper of Player XP
+# Supported Other Tags:
 # - player -> Player name
 # - line -> New line
 # Rank Tags:
@@ -75,6 +62,7 @@ time-format: "{year}y {month}m {day}d {hour}h {minute}m {second}s"
 # - rank_item-pickup -> Top Rank value of Items Taken
 # - rank_jump -> Top Rank value of Player Jumps
 # - rank_kick -> Top Rank value of Player Kicked
+# - rank_money -> Top Rank value of Player Money
 # - rank_online-time -> Top Rank value of Player Online Time
 # - rank_xp -> Top Rank value of Player XP
 models:
@@ -133,6 +121,9 @@ models:
     kick:
       title: "#{rank_kick} {player}"
       description: "With kicked {kick}"
+    money:
+      title: "#{rank_money} {player}"
+      description: "With money {money}"
     online-time:
       title: "#{rank_online-time} {player}"
       description: "With time {online-time}"
@@ -194,6 +185,9 @@ models:
     kick:
       title: ">> TOP KICKED <<"
       description: "#{rank_kick} {player} {kick}{line}"
+    money:
+      title: ">> TOP MONEY <<"
+      description: "#{rank_money} {player} {money}{line}"
     online-time:
       title: ">> TOP ONLINE TIME <<"
       description: "#{rank_online-time} {player} {online-time}{line}"

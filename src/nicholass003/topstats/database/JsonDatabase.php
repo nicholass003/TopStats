@@ -56,6 +56,10 @@ class JsonDatabase implements IDatabase{
 		return $this->data;
 	}
 
+	public function getTemporaryDataValue(Player $player, string $type) : mixed{
+		return $this->data[(int) $player->getXuid()][$type] ?? false;
+	}
+
 	public function create(Player $player) : void{
 		$xuid = (int) $player->getXuid();
 		if(!isset($this->data[$xuid])){
@@ -132,6 +136,9 @@ class JsonDatabase implements IDatabase{
 						break;
 					case DataType::KICK:
 						$this->action($xuid, DataType::KICK, $value, $action);
+						break;
+					case DataType::MONEY:
+						$this->action($xuid, DataType::MONEY, $value, $action);
 						break;
 					case DataType::ONLINE_TIME:
 						$this->action($xuid, DataType::ONLINE_TIME, $value, $action);

@@ -24,6 +24,8 @@ declare(strict_types=1);
 
 namespace nicholass003\topstats;
 
+use DaPigGuy\libPiggyEconomy\libPiggyEconomy;
+use DaPigGuy\libPiggyEconomy\providers\EconomyProvider;
 use nicholass003\topstats\command\TopStatsCommand;
 use nicholass003\topstats\database\IDatabase;
 use nicholass003\topstats\database\JsonDatabase;
@@ -50,10 +52,12 @@ class TopStats extends PluginBase{
 	public const TIME_FORMAT = "{year}y {month}m {day}d {hour}h {minute}m {second}s";
 
 	protected IDatabase $database;
+	protected ?EconomyProvider $economyProvider = null;
 	protected LeaderboardManager $leaderboardManager;
 
 	protected function onEnable() : void{
 		self::setInstance($this);
+		libPiggyEconomy::init();
 		$this->leaderboardManager = new LeaderboardManager($this);
 		$this->registerCommands();
 		$this->registerEntities();
@@ -63,6 +67,7 @@ class TopStats extends PluginBase{
 			"json" => new JsonDatabase($this),
 			default => new JsonDatabase($this)
 		};
+		$this->economyProvider = libPiggyEconomy::getProvider($this->getConfig()->get("economy"));
 		$this->database->loadData();
 		$this->leaderboardManager->loadData();
 	}
@@ -114,6 +119,10 @@ class TopStats extends PluginBase{
 
 	public function getDatabase() : IDatabase{
 		return $this->database;
+	}
+
+	public function getEconomyProvider() : EconomyProvider{
+		return $this->economyProvider;
 	}
 
 	public function getLeaderboardManager() : LeaderboardManager{

@@ -34,6 +34,8 @@ interface IDatabase{
 
 	public function getTemporaryData() : array;
 
+	public function getTemporaryDataValue(Player $player, string $type) : mixed;
+
 	public function saveData() : void;
 
 	public function create(Player $player) : void;

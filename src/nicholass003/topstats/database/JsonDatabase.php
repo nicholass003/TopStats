@@ -148,6 +148,9 @@ class JsonDatabase implements IDatabase{
 
 	private function action(int $xuid, string $key, float|int $value, int $action) : void{
 		switch($action){
+			case DataAction::NONE:
+				$this->data[$xuid][$key] = $value;
+				break;
 			case DataAction::ADDITION:
 				$this->data[$xuid][$key] += $value;
 				break;

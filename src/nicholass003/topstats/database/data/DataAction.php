@@ -26,7 +26,8 @@ namespace nicholass003\topstats\database\data;
 
 final class DataAction{
 
-	public const RESET = 0;
+	public const NONE = 0;
 	public const ADDITION = 1;
 	public const SUBTRACTION = 2;
+	public const RESET = 3;
 }

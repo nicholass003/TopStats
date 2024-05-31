@@ -72,7 +72,7 @@
 
 - [x] Implement player models (v0.2.0)
 - [x] Save TopStats while server restart (v0.2.0)
-- [ ] Implement more data type
+- [x] Implement more data type (v0.2.3)
 - [ ] Implement Commando libraries
 - [ ] Implement support for more database providers
 - [ ] Implement UI for improved settings

@@ -42,7 +42,7 @@ class UpdateTask extends Task{
 			$leaderboard->update();
 		}
 		foreach($this->plugin->getServer()->getOnlinePlayers() as $player){
-			if($player->isConnected()){
+			if($player->isConnected() && $player->spawned){
 				$this->plugin->getDatabase()->update($player, [DataType::ONLINE_TIME => 1], DataAction::ADDITION);
 			}
 		}

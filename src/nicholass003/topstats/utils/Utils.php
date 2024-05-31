@@ -99,24 +99,21 @@ class Utils{
 	public static function validatePlayerModels(Leaderboard $leaderboard) : void{
 		foreach(Server::getInstance()->getWorldManager()->getWorlds() as $world){
 			$garbageModels = [];
+			$model = $leaderboard->getModel();
 			foreach($world->getEntities() as $entity){
-				$model = $leaderboard->getModel();
-				if($entity instanceof PlayerModel && $model instanceof PlayerModel){
-					if($entity->getModelId() === $leaderboard->getId()){
-						$pos = $model->getPosition();
-						if($entity->getWorld()->getFolderName() === $pos->getWorld()->getFolderName()){
-							if($entity->getPosition()->equals($pos)){
-								$garbageModels[] = $entity;
-							}
-						}
-					}
+				if(!$model instanceof PlayerModel){
+					return;
+				}
+				if($entity instanceof PlayerModel &&
+				$entity->getModelId() === $leaderboard->getId() &&
+				$entity->getPosition()->equals($model->getPosition())){
+					$garbageModels[] = $entity;
 				}
 			}
-			$garbageTotal = count($garbageModels);
-			if($garbageTotal > 1){
+			if(count($garbageModels) > 1){
 				$num = 1;
 				foreach($garbageModels as $garbageModel){
-					if($num === $garbageTotal){
+					if($num === count($garbageModels)){
 						$leaderboard->setModel($garbageModel);
 						break;
 					}

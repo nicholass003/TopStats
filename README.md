@@ -73,6 +73,7 @@
 - [x] Implement player models (v0.2.0)
 - [x] Save TopStats while server restart (v0.2.0)
 - [x] Implement more data type (v0.2.3)
+- [ ] Make leaderboard IDs visible to admin
 - [ ] Implement Commando libraries
 - [ ] Implement support for more database providers
 - [ ] Implement UI for improved settings

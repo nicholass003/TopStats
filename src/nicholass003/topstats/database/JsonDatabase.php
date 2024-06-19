@@ -82,73 +82,10 @@ class JsonDatabase implements IDatabase{
 		$xuid = (int) $player->getXuid();
 		if(isset($this->data[$xuid])){
 			foreach($data as $key => $value){
-				switch($key){
-					case DataType::DEATH:
-						$this->action($xuid, DataType::DEATH, $value, $action);
-						break;
-					case DataType::KILL:
-						$this->action($xuid, DataType::KILL, $value, $action);
-						break;
-					case DataType::BLOCK_BREAK:
-						$this->action($xuid, DataType::BLOCK_BREAK, $value, $action);
-						break;
-					case DataType::BLOCK_PLACE:
-						$this->action($xuid, DataType::BLOCK_PLACE, $value, $action);
-						break;
-					case DataType::CHANGE_SKIN:
-						$this->action($xuid, DataType::CHANGE_SKIN, $value, $action);
-						break;
-					case DataType::CHAT:
-						$this->action($xuid, DataType::CHAT, $value, $action);
-						break;
-					case DataType::CONSUME:
-						$this->action($xuid, DataType::CONSUME, $value, $action);
-						break;
-					case DataType::CRAFTING:
-						$this->action($xuid, DataType::CRAFTING, $value, $action);
-						break;
-					case DataType::DAMAGE_DEALT:
-						$this->action($xuid, DataType::DAMAGE_DEALT, $value, $action);
-						break;
-					case DataType::DAMAGE_RECEIVED:
-						$this->action($xuid, DataType::DAMAGE_RECEIVED, $value, $action);
-						break;
-					case DataType::DROP_ITEM:
-						$this->action($xuid, DataType::DROP_ITEM, $value, $action);
-						break;
-					case DataType::EMOTE:
-						$this->action($xuid, DataType::EMOTE, $value, $action);
-						break;
-					case DataType::ENCHANT:
-						$this->action($xuid, DataType::ENCHANT, $value, $action);
-						break;
-					case DataType::FARM:
-						$this->action($xuid, DataType::FARM, $value,$action);
-						break;
-					case DataType::HEAL:
-						$this->action($xuid, DataType::HEAL, $value,$action);
-						break;
-					case DataType::ITEM_PICKUP:
-						$this->action($xuid, DataType::ITEM_PICKUP, $value, $action);
-						break;
-					case DataType::JUMP:
-						$this->action($xuid, DataType::JUMP, $value, $action);
-						break;
-					case DataType::KICK:
-						$this->action($xuid, DataType::KICK, $value, $action);
-						break;
-					case DataType::MONEY:
-						$this->action($xuid, DataType::MONEY, $value, $action);
-						break;
-					case DataType::ONLINE_TIME:
-						$this->action($xuid, DataType::ONLINE_TIME, $value, $action);
-						break;
-					case DataType::XP:
-						$this->action($xuid, DataType::XP, $value, $action);
-						break;
-					default:
-						throw new \InvalidArgumentException("Invalid DataType {$key}");
+				if(!in_array($key, DataType::ALL)){
+					throw new \InvalidArgumentException("Invalid DataType {$key}");
 				}
+				$this->action($xuid, $key, $value, $action);
 			}
 		}
 	}

@@ -7,3 +7,13 @@ website: https://github.com/nicholass003/TopStats
 permissions:
   topstats.command:
     default: op
+  topstats.command.create:
+    default: op
+  topstats.command.delete:
+    default: op
+  topstats.command.list:
+    default: op
+  topstats.command.teleport:
+    default: op
+  topstats.command.type:
+    default: op

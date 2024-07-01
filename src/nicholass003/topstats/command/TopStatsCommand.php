@@ -24,149 +24,36 @@ declare(strict_types=1);
 
 namespace nicholass003\topstats\command;
 
-use nicholass003\topstats\database\data\DataType;
-use nicholass003\topstats\leaderboard\Leaderboard;
-use nicholass003\topstats\leaderboard\LeaderboardManager;
-use nicholass003\topstats\model\IModel;
-use nicholass003\topstats\model\ModelVariant;
-use nicholass003\topstats\model\player\PlayerModel;
-use nicholass003\topstats\model\text\TextModel;
-use nicholass003\topstats\TopStats;
-use nicholass003\topstats\utils\Utils;
-use pocketmine\command\Command;
+use CortexPE\Commando\BaseCommand;
+use nicholass003\topstats\command\subcommand\CreateSubCommand;
+use nicholass003\topstats\command\subcommand\DeleteSubCommand;
+use nicholass003\topstats\command\subcommand\ListSubCommand;
+use nicholass003\topstats\command\subcommand\TeleportSubCommand;
+use nicholass003\topstats\command\subcommand\TopStatsSubCommand;
+use nicholass003\topstats\command\subcommand\TypeSubCommand;
 use pocketmine\command\CommandSender;
-use pocketmine\player\Player;
-use pocketmine\plugin\Plugin;
-use pocketmine\plugin\PluginOwned;
 use pocketmine\utils\TextFormat;
-use function array_keys;
-use function count;
-use function ctype_digit;
-use function in_array;
-use function strtolower;
+use function array_map;
+use function array_unique;
+use function array_values;
+use function implode;
 
-class TopStatsCommand extends Command implements PluginOwned{
+class TopStatsCommand extends BaseCommand{
 
-	private LeaderboardManager $leaderboardManager;
-
-	public function __construct(
-		private TopStats $plugin
-	){
-		parent::__construct("topstats", "TopStats Command", "Usage: /topstats <subcommand>");
+	protected function prepare() : void{
 		$this->setPermission("topstats.command");
-		$this->leaderboardManager = $plugin->getLeaderboardManager();
+
+		$this->registerSubCommand(new CreateSubCommand($this->plugin, "create", "Create or Spawn TopStats Leaderboard.", ["add", "make", "spawn"]));
+		$this->registerSubCommand(new DeleteSubCommand($this->plugin, "delete", "Delete or Remove TopStats Leaderboard.", ["despawn", "destroy", "remove"]));
+		$this->registerSubCommand(new ListSubCommand($this->plugin, "list", "Show TopStats Leaderboard List."));
+		$this->registerSubCommand(new TeleportSubCommand($this->plugin, "teleport", "Teleport to TopStats Leaderboard by IDs.", ["tp"]));
+		$this->registerSubCommand(new TypeSubCommand($this->plugin, "type", "Show TopStats Type List.", ["types"]));
 	}
 
-	public function execute(CommandSender $sender, string $commandLabel, array $args) : void{
-		if(!$sender instanceof Player){
-			$sender->sendMessage(TextFormat::RED . "You must login to use this command.");
-			return;
-		}
-		if(isset($args[0])){
-			switch(strtolower($args[0])){
-				case "add":
-				case "create":
-				case "make":
-				case "spawn":
-					if(isset($args[1])){
-						if(isset($args[2])){
-							if(!in_array($args[2], DataType::ALL, true)){
-								$sender->sendMessage(TextFormat::RED . "Usage: /topstats " . $args[0] . " " . $args[1] . " <type> <top>");
-								$sender->sendMessage(TextFormat::RED . "Type \"/topstats types\" to get type list");
-								return;
-							}
-							$id = Utils::getNextTopStatsIds();
-							switch(strtolower($args[1])){
-								case ModelVariant::PLAYER:
-									$leaderboard = new Leaderboard(new PlayerModel($sender->getLocation(), Utils::getTopStatsPlayerSkin($this->plugin->getDatabase()->getTemporaryData(), $args[2], (int) $args[3] ?? 1), $id, $args[2], (int) $args[3] ?? 1));
-									$leaderboard->spawn();
-									$this->leaderboardManager->add($leaderboard);
-									$sender->sendMessage(TextFormat::GREEN . "Successfully spawn TopStats with model: " . $args[1] . " type: " . $args[2] . " top: " . $args[3]);
-									break;
-								case ModelVariant::TEXT:
-									$leaderboard = new Leaderboard(new TextModel($sender->getPosition(), $id, $args[2]));
-									$leaderboard->spawn();
-									$this->leaderboardManager->add($leaderboard);
-									$sender->sendMessage(TextFormat::GREEN . "Successfully spawn TopStats with model: " . $args[1] . " type: " . $args[2]);
-									break;
-								default:
-									$sender->sendMessage(TextFormat::RED . "Usage: /topstats " . $args[0] . " <player|text>");
-									break;
-							}
-						}else{
-							$sender->sendMessage(TextFormat::RED . "Usage: /topstats " . $args[0] . " " . $args[1] . " <type>");
-						}
-					}else{
-						$sender->sendMessage(TextFormat::RED . "Usage: /topstats " . $args[0] . " <player|text>");
-					}
-					break;
-				case "delete":
-				case "despawn":
-				case "destroy":
-				case "remove":
-					$leaderboards = $this->leaderboardManager->leaderboards();
-					foreach($leaderboards as $id => $leaderboard){
-						if($id === (int) $args[1]){
-							if($leaderboard instanceof Leaderboard){
-								$this->leaderboardManager->remove($id);
-								$leaderboard->getModel()->destroy();
-								$sender->sendMessage(TextFormat::GREEN . "TopStats with id {$id} successfully removed");
-							}
-						}
-					}
-					break;
-				case "list":
-					if(count($this->leaderboardManager->leaderboards()) < 1){
-						$sender->sendMessage(TextFormat::RED . "There are no TopStats Model available.");
-					}else{
-						$sender->sendMessage(TextFormat::YELLOW . "TopStats List:");
-						foreach($this->leaderboardManager->leaderboards() as $id => $leaderboard){
-							if(!$leaderboard->getModel() instanceof IModel) continue;
-							$sender->sendMessage(TextFormat::GREEN . "- ModelID: {$id}, ModelVariant: " . $leaderboard->getModel()->getVariant() . ", DataType: " . $leaderboard->getModel()->getType());
-						}
-					}
-					break;
-				case "teleport":
-				case "tp":
-					$leaderboards = $this->leaderboardManager->leaderboards();
-					if(isset($args[1])){
-						if(ctype_digit((string) $args[1])){
-							if(in_array((int) $args[1], array_keys($leaderboards), true)){
-								foreach($leaderboards as $id => $leaderboard){
-									if($leaderboard->getModel() instanceof IModel && $id === (int) $args[1]){
-										$sender->teleport($leaderboard->getModel()->getPosition());
-										$sender->sendMessage(TextFormat::GREEN . "Success teleported to TopStats position with id: {$id}");
-										break;
-									}
-								}
-							}else{
-								$sender->sendMessage(TextFormat::RED . "Failed to teleported, there are no TopStats with id: " . $args[1]);
-							}
-						}else{
-							$sender->sendMessage(TextFormat::RED . "ModelID should be a number.");
-							$sender->sendMessage(TextFormat::RED . "To get list of TopStats data, type \"/topstats list\"");
-						}
-					}else{
-						$sender->sendMessage(TextFormat::RED . "Usage: /topstats " . $args[0] . " <id>");
-						$sender->sendMessage(TextFormat::RED . "To get list of TopStats data, type \"/topstats list\"");
-					}
-					break;
-				case "type":
-				case "types":
-					$sender->sendMessage(TextFormat::YELLOW . "DataType List:");
-					foreach(DataType::ALL as $type){
-						$sender->sendMessage(TextFormat::GREEN . " - {$type}");
-					}
-					break;
-				default:
-					$sender->sendMessage(TextFormat::RED . $this->usageMessage);
-			}
-		}else{
-			$sender->sendMessage(TextFormat::RED . $this->usageMessage);
-		}
-	}
-
-	public function getOwningPlugin() : Plugin{
-		return $this->plugin;
+	public function onRun(CommandSender $sender, string $aliasUsed, array $args) : void{
+		$subcommands = array_unique(array_values(array_map(function(TopStatsSubCommand $subCommand) : string {
+			return $subCommand->getName();
+		}, $this->getSubCommands())));
+		$sender->sendMessage(TextFormat::RED . "Usage: /topstats <" . implode("|", $subcommands) . ">");
 	}
 }

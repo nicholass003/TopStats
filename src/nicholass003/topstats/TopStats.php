@@ -24,6 +24,7 @@ declare(strict_types=1);
 
 namespace nicholass003\topstats;
 
+use CortexPE\Commando\PacketHooker;
 use DaPigGuy\libPiggyEconomy\libPiggyEconomy;
 use DaPigGuy\libPiggyEconomy\providers\EconomyProvider;
 use nicholass003\topstats\command\TopStatsCommand;
@@ -58,6 +59,9 @@ class TopStats extends PluginBase{
 	protected function onEnable() : void{
 		self::setInstance($this);
 		libPiggyEconomy::init();
+		if(!PacketHooker::isRegistered()){
+			PacketHooker::register($this);
+		}
 		$this->leaderboardManager = new LeaderboardManager($this);
 		$this->registerCommands();
 		$this->registerEntities();
@@ -79,7 +83,7 @@ class TopStats extends PluginBase{
 
 	private function registerCommands() : void{
 		$commandMap = $this->getServer()->getCommandMap();
-		$commandMap->register("topstats", new TopStatsCommand($this));
+		$commandMap->register("topstats", new TopStatsCommand($this, "topstats", "TopStats Command"));
 	}
 
 	private function registerEntities() : void{

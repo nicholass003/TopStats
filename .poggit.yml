@@ -9,4 +9,6 @@ projects:
     libs:
       - src: DaPigGuy/libPiggyEconomy/libPiggyEconomy
         version: ^3.0.3
+      - src: Paroxity/Commando/Commando
+        version: ^3.2.1
 ...

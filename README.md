@@ -40,8 +40,6 @@
 ## 📊 Data Type
 **TopStats has 20++ data type:**
 
->Other types will added soon!
-
 | Data Type | Description |
 | -- | -- |
 | `death` | Number of Player Deaths |
@@ -66,15 +64,13 @@
 | `online-time` | Number of Player Online Time |
 | `xp` | Number of Player XP |
 
->Upcoming data type!
-
 ## 📋 TODO List:
 
 - [x] Implement player models (v0.2.0)
 - [x] Save TopStats while server restart (v0.2.0)
 - [x] Implement more data type (v0.2.3)
 - [ ] Make leaderboard IDs visible to admin
-- [ ] Implement Commando libraries
+- [x] Implement Commando libraries (v0.3.0)
 - [ ] Implement support for more database providers
 - [ ] Implement UI for improved settings
 

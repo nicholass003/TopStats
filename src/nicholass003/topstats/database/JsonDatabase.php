@@ -29,6 +29,7 @@ use nicholass003\topstats\database\data\DataType;
 use nicholass003\topstats\TopStats;
 use pocketmine\player\Player;
 use pocketmine\utils\Config;
+use function in_array;
 
 class JsonDatabase implements IDatabase{
 
@@ -82,7 +83,7 @@ class JsonDatabase implements IDatabase{
 		$xuid = (int) $player->getXuid();
 		if(isset($this->data[$xuid])){
 			foreach($data as $key => $value){
-				if(!in_array($key, DataType::ALL)){
+				if(!in_array($key, DataType::ALL, true)){
 					throw new \InvalidArgumentException("Invalid DataType {$key}");
 				}
 				$this->action($xuid, $key, $value, $action);

@@ -98,5 +98,13 @@ I would like to express my heartfelt gratitude to all the individuals and organi
 
 Thank you for your continued support and encouragement!
 
+## 📸 Screenshots
+
+<div align="center">
+
+<img src="assets/screenshots/example.png">
+
+</div>
+
 ## 🎖️ Credits
 <a target="_blank" href="https://icons8.com/icon/CJOznVjwe3u5/podium">Podium</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>

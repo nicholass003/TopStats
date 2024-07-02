@@ -56,6 +56,10 @@ class TopStats extends PluginBase{
 	protected ?EconomyProvider $economyProvider = null;
 	protected LeaderboardManager $leaderboardManager;
 
+	protected function onLoad() : void{
+		$this->saveDefaultConfig();
+	}
+
 	protected function onEnable() : void{
 		self::setInstance($this);
 		libPiggyEconomy::init();

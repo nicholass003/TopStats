@@ -19,16 +19,16 @@
 ### Main Commands
 | Commands                                      | Description                                      | Permissions                 |
 | --------------------------------------------- | ------------------------------------------------ | --------------------------- |
-| `/topstats <subcommands>` | `TopStats Commands` | `topstats.command` |
+| `/topstats <subcommands>` | TopStats Commands | `topstats.command` |
 
 ### SubCommands
-| SubCommands | Description |
-|----- | --------|
-|`create` |  Spawn TopStats |
-|`delete` | Delete TopStats |
-|`list` | TopStats List |
-|`teleport` | Teleport Player to TopStats |
-|`type` | List of TopStats Type |
+| SubCommands | Description | Permissions |
+|----- | --------| ------ |
+|`create` |  Spawn TopStats | `topstats.command.create` |
+|`delete` | Delete TopStats | `topstats.command.delete` |
+|`list` | TopStats List | `topstats.command.list` |
+|`teleport` | Teleport Player to TopStats | `topstats.command.teleport` |
+|`type` | List of TopStats Type | `topstats.command.type` |
 
 ## 🖼️ Models
 

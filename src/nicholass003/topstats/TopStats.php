@@ -93,24 +93,17 @@ class TopStats extends PluginBase{
 	private function registerEntities() : void{
 		$entityFactory = EntityFactory::getInstance();
 		$entityFactory->register(PlayerModel::class, function(World $world, CompoundTag $nbt) : PlayerModel{
-			$typeTag = $nbt->getTag(PlayerModel::TAG_TYPE);
-			$modelIdTag = $nbt->getTag(PlayerModel::TAG_MODEL_ID);
-			$topTag = $nbt->getTag(PlayerModel::TAG_TOP);
-			if($typeTag instanceof StringTag){
-				$type = $typeTag->getValue();
-			}else{
-				throw new SavedDataLoadingException("Expected \"" . PlayerModel::TAG_TYPE . "\" NBT tag not found");
-			}
-			if($modelIdTag instanceof IntTag){
-				$modelID = $modelIdTag->getValue();
-			}else{
-				throw new SavedDataLoadingException("Expected \"" . PlayerModel::TAG_MODEL_ID . "\" NBT tag not found");
-			}
-			if($topTag instanceof IntTag){
-				$top = $topTag->getValue();
-			}else{
-				throw new SavedDataLoadingException("Expected \"" . PlayerModel::TAG_TOP . "\" NBT tag not found");
-			}
+			$getTagValue = function(CompoundTag $nbt, string $tagName, string $tagClass) : mixed{
+				$tag = $nbt->getTag($tagName);
+				if($tag instanceof $tagClass){
+					return $tag->getValue();
+				}else{
+					throw new SavedDataLoadingException("Expected \"" . $tagName . "\" NBT tag not found");
+				}
+			};
+			$type = $getTagValue($nbt, PlayerModel::TAG_TYPE, StringTag::class);
+			$modelID = $getTagValue($nbt, PlayerModel::TAG_MODEL_ID, IntTag::class);
+			$top = $getTagValue($nbt, PlayerModel::TAG_TOP, IntTag::class);
 			return new PlayerModel(EntityDataHelper::parseLocation($nbt, $world), Human::parseSkinNBT($nbt), $modelID, $type, $top, $nbt);
 		}, ["PlayerModel"]);
 	}

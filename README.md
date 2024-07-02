@@ -28,14 +28,14 @@
 |`delete` | Delete TopStats |
 |`list` | TopStats List |
 |`teleport` | Teleport Player to TopStats |
-|`types` | List of TopStats Type |
+|`type` | List of TopStats Type |
 
 ## 🖼️ Models
 
 **TopStats has 2 models:**
 | `player` | `text` |
 | -- | -- |
-| Still Underdevelopmet | Simple TopStats with Floating Text |
+| Simple TopStats with Human Entity | Simple TopStats with Floating Text |
 
 ## 📊 Data Type
 **TopStats has 20++ data type:**

@@ -98,7 +98,7 @@ class TopStats extends PluginBase{
 				if($tag instanceof $tagClass){
 					return $tag->getValue();
 				}else{
-					throw new SavedDataLoadingException("Expected \"" . $tagName . "\" NBT tag not found");
+					throw new SavedDataLoadingException("Expected \"{$tagName}\" NBT tag of type {$tagClass} not found");
 				}
 			};
 			$type = $getTagValue($nbt, PlayerModel::TAG_TYPE, StringTag::class);

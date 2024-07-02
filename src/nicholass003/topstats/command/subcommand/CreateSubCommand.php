@@ -24,6 +24,7 @@ declare(strict_types=1);
 
 namespace nicholass003\topstats\command\subcommand;
 
+use CortexPE\Commando\args\IntegerArgument;
 use CortexPE\Commando\args\RawStringArgument;
 use nicholass003\topstats\database\data\DataType;
 use nicholass003\topstats\leaderboard\Leaderboard;
@@ -44,7 +45,7 @@ class CreateSubCommand extends TopStatsSubCommand{
 
 		$this->registerArgument(0, new RawStringArgument("model"));
 		$this->registerArgument(1, new RawStringArgument("type"));
-		$this->registerArgument(2, new RawStringArgument("top", true));
+		$this->registerArgument(2, new IntegerArgument("top", true));
 	}
 
 	public function onRun(CommandSender $sender, string $aliasUsed, array $args) : void{

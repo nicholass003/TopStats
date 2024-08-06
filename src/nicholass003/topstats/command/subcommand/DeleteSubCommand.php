@@ -25,8 +25,8 @@ declare(strict_types=1);
 namespace nicholass003\topstats\command\subcommand;
 
 use CortexPE\Commando\args\IntegerArgument;
-use nicholass003\topstats\leaderboard\Leaderboard;
 use pocketmine\command\CommandSender;
+use pocketmine\player\Player;
 use pocketmine\utils\TextFormat;
 
 class DeleteSubCommand extends TopStatsSubCommand{
@@ -38,15 +38,18 @@ class DeleteSubCommand extends TopStatsSubCommand{
 	}
 
 	public function onRun(CommandSender $sender, string $aliasUsed, array $args) : void{
-		$leaderboards = $this->leaderboardManager->leaderboards();
-		foreach($leaderboards as $id => $leaderboard){
-			if($id === (int) $args["id"]){
-				if($leaderboard instanceof Leaderboard){
-					$this->leaderboardManager->remove($id);
-					$leaderboard->getModel()->destroy();
-					$sender->sendMessage(TextFormat::GREEN . "TopStats with id {$id} successfully removed");
-				}
-			}
+		if(!$sender instanceof Player){
+			$sender->sendMessage(TextFormat::RED . "You must login to use this command.");
+			return;
 		}
+		$id = (int) $args["id"];
+		$leaderboard = $this->leaderboardManager->get($id);
+		if($leaderboard === null){
+			$sender->sendMessage(TextFormat::RED . "TopStats with id {$id} not found");
+			return;
+		}
+		$this->leaderboardManager->remove($id);
+		$leaderboard->getModel()->destroy();
+		$sender->sendMessage(TextFormat::GREEN . "TopStats with id {$id} successfully removed");
 	}
 }

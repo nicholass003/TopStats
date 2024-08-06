@@ -26,20 +26,59 @@ namespace nicholass003\topstats\model\text;
 
 use nicholass003\topstats\model\IModel;
 use nicholass003\topstats\model\ModelVariant;
-use pocketmine\world\particle\FloatingTextParticle;
-use pocketmine\world\Position;
+use pocketmine\entity\Entity;
+use pocketmine\entity\EntitySizeInfo;
+use pocketmine\entity\Location;
+use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\nbt\tag\IntTag;
+use pocketmine\nbt\tag\StringTag;
+use pocketmine\network\mcpe\protocol\types\entity\EntityIds;
 
-class TextModel extends FloatingTextParticle implements IModel{
+class TextModel extends Entity implements IModel{
 
 	protected int $modelID;
 	protected string $type;
-	protected ?Position $position = null;
 
-	public function __construct(Position $pos, int $id, string $type, string $text = "", string $title = ""){
-		parent::__construct($text, $title);
+	public const TAG_MODEL_ID = "ModelID";
+	public const TAG_TYPE = "Type";
+
+	protected array $texts = [];
+
+	public static function getNetworkTypeId() : string{ return EntityIds::PLAYER; }
+
+	protected function getInitialDragMultiplier() : float{ return 0; }
+	protected function getInitialGravity() : float { return 0; }
+
+	protected function getInitialSizeInfo() : EntitySizeInfo{ return new EntitySizeInfo(0.01, 0.01); }
+
+	public function __construct(Location $location, int $id, string $type, string $text = "", string $title = "", ?CompoundTag $nbt = null){
+		parent::__construct($location, $nbt);
 		$this->modelID = $id;
-		$this->position = $pos;
 		$this->type = $type;
+		$this->texts["text"] = $text;
+		$this->texts["title"] = $title;
+	}
+
+	protected function initEntity(CompoundTag $nbt) : void{
+		parent::initEntity($nbt);
+		$typeTag = $nbt->getTag(self::TAG_TYPE);
+		if($typeTag instanceof StringTag){
+			$this->type = $typeTag->getValue();
+		}
+		$modelIdTag = $nbt->getTag(self::TAG_MODEL_ID);
+		if($modelIdTag instanceof IntTag){
+			$this->modelID = $modelIdTag->getValue();
+		}
+		$this->setNameTagAlwaysVisible(true);
+		$this->setHasGravity(false);
+		$this->setScale(0.00001);
+	}
+
+	public function saveNBT() : CompoundTag{
+		$nbt = parent::saveNBT();
+		$nbt->setInt(self::TAG_MODEL_ID, $this->modelID);
+		$nbt->setString(self::TAG_TYPE, $this->type);
+		return $nbt;
 	}
 
 	public function getModelId() : int{
@@ -59,28 +98,27 @@ class TextModel extends FloatingTextParticle implements IModel{
 		return $this->type;
 	}
 
-	public function getPosition() : Position{
-		return $this->position;
-	}
-
 	public function updateText(string $text) : TextModel{
-		$this->setText($text);
+		$this->texts["text"] = $text;
 		$this->update();
 		return $this;
 	}
 
 	public function updateTitle(string $title) : TextModel{
-		$this->setTitle($title);
+		$this->texts["title"] = $title;
 		$this->update();
 		return $this;
 	}
 
 	public function update() : void{
-		$this->position->getWorld()->addParticle($this->position, $this);
+		$this->setNameTag(
+			$this->texts["title"] . "\n" . $this->texts["text"]
+		);
 	}
 
 	public function destroy() : void{
-		$this->setInvisible();
-		$this->update();
+		if(!$this->closed){
+			$this->flagForDespawn();
+		}
 	}
 }

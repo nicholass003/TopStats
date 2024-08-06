@@ -78,8 +78,7 @@ class Leaderboard{
 
 	public function spawn() : void{
 		if($this->model instanceof TextModel){
-			$pos = $this->model->getPosition();
-			$pos->getWorld()->addParticle($pos, $this->model);
+			$this->model->spawnToAll();
 		}elseif($this->model instanceof PlayerModel){
 			$this->model->spawnToAll();
 		}

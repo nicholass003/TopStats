@@ -29,6 +29,7 @@ use nicholass003\topstats\database\data\DataType;
 use nicholass003\topstats\leaderboard\Leaderboard;
 use nicholass003\topstats\model\IModel;
 use nicholass003\topstats\model\player\PlayerModel;
+use nicholass003\topstats\model\text\TextModel;
 use nicholass003\topstats\TopStats;
 use pocketmine\entity\Human;
 use pocketmine\entity\Skin;
@@ -101,10 +102,7 @@ class Utils{
 			$garbageModels = [];
 			$model = $leaderboard->getModel();
 			foreach($world->getEntities() as $entity){
-				if(!$model instanceof PlayerModel){
-					return;
-				}
-				if($entity instanceof PlayerModel &&
+				if(($entity instanceof PlayerModel || $entity instanceof TextModel) &&
 				$entity->getModelId() === $leaderboard->getId() &&
 				$entity->getPosition()->equals($model->getPosition())){
 					$garbageModels[] = $entity;

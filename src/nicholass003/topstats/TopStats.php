@@ -33,6 +33,7 @@ use nicholass003\topstats\database\JsonDatabase;
 use nicholass003\topstats\leaderboard\LeaderboardManager;
 use nicholass003\topstats\listener\EventListener;
 use nicholass003\topstats\model\player\PlayerModel;
+use nicholass003\topstats\model\text\TextModel;
 use nicholass003\topstats\task\UpdateTask;
 use pocketmine\data\SavedDataLoadingException;
 use pocketmine\entity\EntityDataHelper;
@@ -106,6 +107,19 @@ class TopStats extends PluginBase{
 			$top = $getTagValue($nbt, PlayerModel::TAG_TOP, IntTag::class);
 			return new PlayerModel(EntityDataHelper::parseLocation($nbt, $world), Human::parseSkinNBT($nbt), $modelID, $type, $top, $nbt);
 		}, ["PlayerModel"]);
+		$entityFactory->register(TextModel::class, function(World $world, CompoundTag $nbt) : TextModel{
+			$getTagValue = function(CompoundTag $nbt, string $tagName, string $tagClass) : mixed{
+				$tag = $nbt->getTag($tagName);
+				if($tag instanceof $tagClass){
+					return $tag->getValue();
+				}else{
+					throw new SavedDataLoadingException("Expected \"{$tagName}\" NBT tag of type {$tagClass} not found");
+				}
+			};
+			$type = $getTagValue($nbt, TextModel::TAG_TYPE, StringTag::class);
+			$modelID = $getTagValue($nbt, TextModel::TAG_MODEL_ID, IntTag::class);
+			return new TextModel(EntityDataHelper::parseLocation($nbt, $world), $modelID, $type, "", "", $nbt);
+		}, ["TextModel"]);
 	}
 
 	private function registerListeners() : void{

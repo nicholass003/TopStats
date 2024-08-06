@@ -24,6 +24,7 @@ declare(strict_types=1);
 
 namespace nicholass003\topstats\command\subcommand;
 
+use CortexPE\Commando\args\BooleanArgument;
 use CortexPE\Commando\args\IntegerArgument;
 use CortexPE\Commando\args\RawStringArgument;
 use nicholass003\topstats\database\data\DataType;
@@ -33,6 +34,7 @@ use nicholass003\topstats\model\player\PlayerModel;
 use nicholass003\topstats\model\text\TextModel;
 use nicholass003\topstats\utils\Utils;
 use pocketmine\command\CommandSender;
+use pocketmine\entity\Location;
 use pocketmine\player\Player;
 use pocketmine\utils\TextFormat;
 use function in_array;
@@ -46,6 +48,7 @@ class CreateSubCommand extends TopStatsSubCommand{
 		$this->registerArgument(0, new RawStringArgument("model"));
 		$this->registerArgument(1, new RawStringArgument("type"));
 		$this->registerArgument(2, new IntegerArgument("top", true));
+		$this->registerArgument(3, new BooleanArgument("center", true));
 	}
 
 	public function onRun(CommandSender $sender, string $aliasUsed, array $args) : void{
@@ -61,15 +64,23 @@ class CreateSubCommand extends TopStatsSubCommand{
 					return;
 				}
 				$id = Utils::getNextTopStatsIds();
+				$center = $args["center"] ?? false;
+				$location = $sender->getLocation();
+				if($center){
+					$location = Location::fromObject($location->floor()->add(0.5, 0, 0.5), $location->getWorld());
+				}
 				switch(strtolower($args["model"])){
 					case ModelVariant::PLAYER:
-						$leaderboard = new Leaderboard(new PlayerModel($sender->getLocation(), Utils::getTopStatsPlayerSkin($this->plugin->getDatabase()->getTemporaryData(), $args["type"], (int) $args["top"] ?? 1), $id, $args["type"], (int) $args["top"] ?? 1));
+						$leaderboard = new Leaderboard(new PlayerModel($location, Utils::getTopStatsPlayerSkin($this->plugin->getDatabase()->getTemporaryData(), $args["type"], (int) $args["top"] ?? 1), $id, $args["type"], (int) $args["top"] ?? 1));
 						$leaderboard->spawn();
 						$this->leaderboardManager->add($leaderboard);
 						$sender->sendMessage(TextFormat::GREEN . "Successfully spawn TopStats with model: " . $args["model"] . " type: " . $args["type"] . " top: " . $args["top"]);
 						break;
 					case ModelVariant::TEXT:
-						$leaderboard = new Leaderboard(new TextModel($sender->getPosition(), $id, $args["type"]));
+						if($center){
+							$location = Location::fromObject($location->add(0, 0.5, 0), $location->getWorld());
+						}
+						$leaderboard = new Leaderboard(new TextModel($location, $id, $args["type"]));
 						$leaderboard->spawn();
 						$this->leaderboardManager->add($leaderboard);
 						$sender->sendMessage(TextFormat::GREEN . "Successfully spawn TopStats with model: " . $args["model"] . " type: " . $args["type"]);

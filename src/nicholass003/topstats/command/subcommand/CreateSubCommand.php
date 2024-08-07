@@ -63,6 +63,13 @@ class CreateSubCommand extends TopStatsSubCommand{
 					$sender->sendMessage(TextFormat::RED . "Type \"/topstats types\" to get type list");
 					return;
 				}
+				if($args["type"] === DataType::MONEY){
+					if($this->plugin->getEconomyProvider() === null){
+						$sender->sendMessage(TextFormat::RED . "No EconomyProvider found, you must install the Economy plugin to enable this feature.");
+						$sender->sendMessage(TextFormat::RED . "Example: \"BedrockEconomy\" or \"EconomyAPI\"");
+						return;
+					}
+				}
 				$id = Utils::getNextTopStatsIds();
 				$center = $args["center"] ?? false;
 				$location = $sender->getLocation();

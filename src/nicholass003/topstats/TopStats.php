@@ -76,7 +76,9 @@ class TopStats extends PluginBase{
 			"json" => new JsonDatabase($this),
 			default => new JsonDatabase($this)
 		};
-		$this->economyProvider = libPiggyEconomy::getProvider($this->getConfig()->get("economy"));
+		if($this->checkEconomyProvider()){
+			$this->economyProvider = libPiggyEconomy::getProvider($this->getConfig()->get("economy"));
+		}
 		$this->database->loadData();
 		$this->leaderboardManager->loadData();
 	}
@@ -84,6 +86,12 @@ class TopStats extends PluginBase{
 	protected function onDisable() : void{
 		$this->database->saveData();
 		$this->leaderboardManager->saveData();
+	}
+
+	private function checkEconomyProvider() : bool{
+		/** @var EconomyProvider $provider */
+		$provider = libPiggyEconomy::$economyProviders[strtolower($this->getConfig()->get("economy")["provider"])];
+		return $provider::checkDependencies();
 	}
 
 	private function registerCommands() : void{
@@ -136,7 +144,7 @@ class TopStats extends PluginBase{
 		return $this->database;
 	}
 
-	public function getEconomyProvider() : EconomyProvider{
+	public function getEconomyProvider() : ?EconomyProvider{
 		return $this->economyProvider;
 	}
 

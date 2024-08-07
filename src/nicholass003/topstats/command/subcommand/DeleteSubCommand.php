@@ -42,6 +42,10 @@ class DeleteSubCommand extends TopStatsSubCommand{
 			$sender->sendMessage(TextFormat::RED . "You must login to use this command.");
 			return;
 		}
+		if(!isset($args["id"])){
+			$sender->sendMessage(TextFormat::RED . "Usage: /topstats " . $aliasUsed . " <id>");
+			return;
+		}
 		$id = (int) $args["id"];
 		$leaderboard = $this->leaderboardManager->get($id);
 		if($leaderboard === null){

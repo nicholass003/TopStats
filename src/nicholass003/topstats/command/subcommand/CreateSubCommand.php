@@ -37,6 +37,7 @@ use pocketmine\command\CommandSender;
 use pocketmine\entity\Location;
 use pocketmine\player\Player;
 use pocketmine\utils\TextFormat;
+use function array_merge;
 use function in_array;
 use function strtolower;
 
@@ -58,7 +59,7 @@ class CreateSubCommand extends TopStatsSubCommand{
 		}
 		if(isset($args["model"])){
 			if(isset($args["type"])){
-				if(!in_array($args["type"], DataType::ALL, true)){
+				if(!in_array($args["type"], array_merge(DataType::ALL, $this->plugin->getConfig()->get("custom-data", [])), true)){
 					$sender->sendMessage(TextFormat::RED . "Usage: /topstats " . $aliasUsed . " " . $args["model"] . " <type> <top>");
 					$sender->sendMessage(TextFormat::RED . "Type \"/topstats types\" to get type list");
 					return;

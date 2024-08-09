@@ -27,6 +27,7 @@ namespace nicholass003\topstats\command\subcommand;
 use nicholass003\topstats\database\data\DataType;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
+use function array_merge;
 
 class TypeSubCommand extends TopStatsSubCommand{
 
@@ -36,7 +37,7 @@ class TypeSubCommand extends TopStatsSubCommand{
 
 	public function onRun(CommandSender $sender, string $aliasUsed, array $args) : void{
 		$sender->sendMessage(TextFormat::YELLOW . "TopStats DataType List:");
-		foreach(DataType::ALL as $type){
+		foreach(array_merge(DataType::ALL, $this->plugin->getConfig()->get("custom-data", [])) as $type){
 			$sender->sendMessage(TextFormat::GREEN . " - {$type}");
 		}
 	}

@@ -15,6 +15,11 @@ max-list: 10
 # Time Format:
 # year, month, day, hour, minute, second
 time-format: "{year}y {month}m {day}d {hour}h {minute}m {second}s"
+# Custom Data
+# Set custom data to initialize Leaderboard type data
+custom-data:
+- "exampledata1"
+- "exampledata2"
 # Supported Models:
 # - player
 # - text
@@ -130,6 +135,13 @@ models:
     xp:
       title: "#{rank_xp} {player}"
       description: "With xp {xp}"
+    # You need to add it like this for the Leaderboard configuration, just like everything else
+    #exampledata1:
+    #  title: "#{rank_exampledata1} {player}"
+    #  description: "With exampledata1 {exampledata1}"
+    #exampledata2:
+    #  title: "#{rank_exampledata2} {player}"
+    #  description: "With exampledata2 {exampledata2}"
   text:
     death:
       title: ">> TOP DEATHS <<"
@@ -194,3 +206,10 @@ models:
     xp:
       title: ">> TOP XP <<"
       description: "#{rank_xp} {player} {xp}{line}"
+    # You need to add it like this for the Leaderboard configuration, just like everything else
+    #exampledata1:
+    #  title: ">> TOP EXAMPLEDATA1 <<"
+    #  description: "#{rank_exampledata1} {player} {exampledata1}{line}"
+    #exampledata2:
+    #  title: ">> TOP EXAMPLEDATA2 <<"
+    #  description: "#{rank_exampledata2} {player} {exampledata2}{line}"

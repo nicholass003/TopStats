@@ -24,12 +24,14 @@ declare(strict_types=1);
 
 namespace nicholass003\topstats\leaderboard;
 
+use nicholass003\topstats\database\data\DataType;
 use nicholass003\topstats\database\IDatabase;
 use nicholass003\topstats\model\IModel;
 use nicholass003\topstats\model\player\PlayerModel;
 use nicholass003\topstats\model\text\TextModel;
 use nicholass003\topstats\TopStats;
 use nicholass003\topstats\utils\Utils;
+use function in_array;
 use function json_encode;
 
 class Leaderboard{
@@ -84,11 +86,18 @@ class Leaderboard{
 		}
 	}
 
-	public function update() : void{
-		$this->updateText(Utils::getTopStatsText($this->database->getTemporaryData(), $this->model, $this->text, self::TYPE_TEXT));
-		$this->updateTitle(Utils::getTopStatsText($this->database->getTemporaryData(), $this->model, $this->title, self::TYPE_TITLE));
+	public function isCustomDataType() : bool{
+		return !in_array($this->model->getType(), DataType::ALL, true);
+	}
+
+	public function update(array $data = []) : void{
+		if(!$this->isCustomDataType()){
+			$data = $this->database->getTemporaryData();
+		}
+		$this->updateText(Utils::getTopStatsText($data, $this->model, $this->text, self::TYPE_TEXT));
+		$this->updateTitle(Utils::getTopStatsText($data, $this->model, $this->title, self::TYPE_TITLE));
 		if($this->model instanceof PlayerModel){
-			$skin = Utils::getTopStatsPlayerSkin($this->database->getTemporaryData(), $this->model->getType(), $this->model->getTop());
+			$skin = Utils::getTopStatsPlayerSkin($data, $this->model->getType(), $this->model->getTop());
 			if($skin !== null){
 				$this->model->setSkin($skin);
 			}

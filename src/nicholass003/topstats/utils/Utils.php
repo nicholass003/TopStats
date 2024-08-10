@@ -49,14 +49,17 @@ class Utils{
 		return $data;
 	}
 
-	public static function getTopStatsText(array $data, IModel $model, string $text, string $textType) : string{
+	public static function getTopStatsText(array $data, IModel $model, string $text, string $textType, bool $customData = false) : string{
 		$result = "";
 		$num = 1;
 		$max = TopStats::getInstance()->getMaxList();
 		if($textType === Leaderboard::TYPE_TITLE){
 			$max = 1;
 		}
-		foreach(self::getSortedArrayBoard($data, $model->getType()) as $xuid => $userData){
+		if(!$customData){
+			$data = self::getSortedArrayBoard($data, $model->getType());
+		}
+		foreach($data as $xuid => $userData){
 			if($model instanceof PlayerModel){
 				if($num === $model->getTop()){
 					$result = self::validateTextFormat($model->getType(), $userData, $text, $num);

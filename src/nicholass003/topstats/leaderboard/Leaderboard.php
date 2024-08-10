@@ -91,11 +91,11 @@ class Leaderboard{
 	}
 
 	public function update(array $data = []) : void{
-		if(!$this->isCustomDataType()){
+		if(!($customData = $this->isCustomDataType())){
 			$data = $this->database->getTemporaryData();
 		}
-		$this->updateText(Utils::getTopStatsText($data, $this->model, $this->text, self::TYPE_TEXT));
-		$this->updateTitle(Utils::getTopStatsText($data, $this->model, $this->title, self::TYPE_TITLE));
+		$this->updateText(Utils::getTopStatsText($data, $this->model, $this->text, self::TYPE_TEXT, $customData));
+		$this->updateTitle(Utils::getTopStatsText($data, $this->model, $this->title, self::TYPE_TITLE, $customData));
 		if($this->model instanceof PlayerModel){
 			$skin = Utils::getTopStatsPlayerSkin($data, $this->model->getType(), $this->model->getTop());
 			if($skin !== null){

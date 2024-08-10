@@ -44,6 +44,8 @@ class Leaderboard{
 	public const TYPE_TEXT = "text";
 	public const TYPE_TITLE = "title";
 
+	private bool $forceSorting = false;
+
 	protected int $id;
 
 	public function __construct(
@@ -86,16 +88,24 @@ class Leaderboard{
 		}
 	}
 
+	public function isForceSorting() : bool{
+		return $this->forceSorting;
+	}
+
+	public function setForceSorting(bool $value = true) : void{
+		$this->forceSorting = $value;
+	}
+
 	public function isCustomDataType() : bool{
 		return !in_array($this->model->getType(), DataType::ALL, true);
 	}
 
 	public function update(array $data = []) : void{
-		if(!($customData = $this->isCustomDataType())){
+		if(!$this->isCustomDataType()){
 			$data = $this->database->getTemporaryData();
 		}
-		$this->updateText(Utils::getTopStatsText($data, $this->model, $this->text, self::TYPE_TEXT, $customData));
-		$this->updateTitle(Utils::getTopStatsText($data, $this->model, $this->title, self::TYPE_TITLE, $customData));
+		$this->updateText(Utils::getTopStatsText($data, $this->model, $this->text, self::TYPE_TEXT, $this->forceSorting));
+		$this->updateTitle(Utils::getTopStatsText($data, $this->model, $this->title, self::TYPE_TITLE, $this->forceSorting));
 		if($this->model instanceof PlayerModel){
 			$skin = Utils::getTopStatsPlayerSkin($data, $this->model->getType(), $this->model->getTop());
 			if($skin !== null){

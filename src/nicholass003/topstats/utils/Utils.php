@@ -49,14 +49,14 @@ class Utils{
 		return $data;
 	}
 
-	public static function getTopStatsText(array $data, IModel $model, string $text, string $textType, bool $customData = false) : string{
+	public static function getTopStatsText(array $data, IModel $model, string $text, string $textType, bool $forceSorting = false) : string{
 		$result = "";
 		$num = 1;
 		$max = TopStats::getInstance()->getMaxList();
 		if($textType === Leaderboard::TYPE_TITLE){
 			$max = 1;
 		}
-		if(!$customData){
+		if(!$forceSorting){
 			$data = self::getSortedArrayBoard($data, $model->getType());
 		}
 		foreach($data as $xuid => $userData){

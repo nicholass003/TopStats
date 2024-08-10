@@ -73,7 +73,7 @@
 - [x] Implement Commando libraries (v0.3.0)
 - [ ] Implement support for more database providers
 - [ ] Implement UI for improved settings
-- [x] Implement custom data support from other plugins
+- [x] Implement custom data support from other plugins (v0.3.2)
 
 ## 💡 Issues & Suggestions
 

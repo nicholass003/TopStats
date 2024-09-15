@@ -13,8 +13,8 @@ economy:
 # Leaderboard Max List:
 max-list: 10
 # Time Format:
-# year, month, day, hour, minute, second
-time-format: "{year}y {month}m {day}d {hour}h {minute}m {second}s"
+# year, month, week, day, hour, minute, second
+time-format: "{year}y {month}m {week}w {day}d {hour}h {minute}m {second}s"
 # Custom Data
 # Set custom data to initialize Leaderboard type data
 custom-data:

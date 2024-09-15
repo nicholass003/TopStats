@@ -136,13 +136,14 @@ class Utils{
 	public static function timeFormat(int $time) : string{
 		$years = floor($time / (365 * 24 * 60 * 60));
 		$months = floor(($time - ($years * 365 * 24 * 60 * 60)) / (30 * 24 * 60 * 60));
-		$days = floor(($time - ($years * 365 * 24 * 60 * 60) - ($months * 30 * 24 * 60 * 60)) / (24 * 60 * 60));
-		$hours = floor(($time - ($years * 365 * 24 * 60 * 60) - ($months * 30 * 24 * 60 * 60) - ($days * 24 * 60 * 60)) / (60 * 60));
-		$minutes = floor(($time - ($years * 365 * 24 * 60 * 60) - ($months * 30 * 24 * 60 * 60) - ($days * 24 * 60 * 60) - ($hours * 60 * 60)) / 60);
+		$weeks = floor(($time - ($years * 365 * 24 * 60 * 60) - ($months * 30 * 24 * 60 * 60)) / (7 * 24 * 60 * 60));
+		$days = floor(($time - ($years * 365 * 24 * 60 * 60) - ($months * 30 * 24 * 60 * 60) - ($weeks * 7 * 24 * 60 * 60)) / (24 * 60 * 60));
+		$hours = floor(($time - ($years * 365 * 24 * 60 * 60) - ($months * 30 * 24 * 60 * 60) - ($weeks * 7 * 24 * 60 * 60) - ($days * 24 * 60 * 60)) / (60 * 60));
+		$minutes = floor(($time - ($years * 365 * 24 * 60 * 60) - ($months * 30 * 24 * 60 * 60) - ($weeks * 7 * 24 * 60 * 60) - ($days * 24 * 60 * 60) - ($hours * 60 * 60)) / 60);
 		$seconds = $time % 60;
 
 		$format = TopStats::getInstance()->getTimeFormat();
-		return str_replace(["{year}", "{month}", "{day}", "{hour}", "{minute}", "{second}"], [$years, $months, $days, $hours, $minutes, $seconds], $format);
+		return str_replace(["{year}", "{month}", "{week}", "{day}", "{hour}", "{minute}", "{second}"], [$years, $months, $weeks, $days, $hours, $minutes, $seconds], $format);
 	}
 
 	public static function moneyTransaction(Player $player, float|int $money) : bool{

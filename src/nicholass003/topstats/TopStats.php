@@ -51,7 +51,7 @@ class TopStats extends PluginBase{
 	use SingletonTrait;
 
 	public const MAX_LIST = 10;
-	public const TIME_FORMAT = "{year}y {month}m {day}d {hour}h {minute}m {second}s";
+	public const TIME_FORMAT = "{year}y {month}m {week}w {day}d {hour}h {minute}m {second}s";
 
 	protected IDatabase $database;
 	protected ?EconomyProvider $economyProvider = null;

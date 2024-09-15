@@ -1,6 +1,6 @@
 name: TopStats
 api: 5.3.0
-version: 0.3.2
+version: 0.3.3
 main: nicholass003\topstats\TopStats
 author: nicholass003
 website: https://github.com/nicholass003/TopStats

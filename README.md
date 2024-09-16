@@ -107,5 +107,11 @@ Thank you for your continued support and encouragement!
 
 </div>
 
+## 📹 Videos
+
+https://github.com/user-attachments/assets/ad7adc62-495f-4722-8563-475d3e08cdc8
+
+https://github.com/user-attachments/assets/0d43d091-bc6e-4fa1-88df-d7d1b53385ce
+
 ## 🎖️ Credits
 <a target="_blank" href="https://icons8.com/icon/CJOznVjwe3u5/podium">Podium</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>

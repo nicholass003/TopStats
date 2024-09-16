@@ -27,6 +27,7 @@ namespace nicholass003\topstats;
 use CortexPE\Commando\PacketHooker;
 use DaPigGuy\libPiggyEconomy\libPiggyEconomy;
 use DaPigGuy\libPiggyEconomy\providers\EconomyProvider;
+use JackMD\UpdateNotifier\UpdateNotifier;
 use nicholass003\topstats\command\TopStatsCommand;
 use nicholass003\topstats\database\IDatabase;
 use nicholass003\topstats\database\JsonDatabase;
@@ -63,6 +64,7 @@ class TopStats extends PluginBase{
 
 	protected function onEnable() : void{
 		self::setInstance($this);
+		UpdateNotifier::checkUpdate($this->getDescription()->getName(), $this->getDescription()->getVersion());
 		libPiggyEconomy::init();
 		if(!PacketHooker::isRegistered()){
 			PacketHooker::register($this);

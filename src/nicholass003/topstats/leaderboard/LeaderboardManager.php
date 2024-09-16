@@ -95,7 +95,13 @@ class LeaderboardManager{
 	}
 
 	public function validateModel(array $data) : IModel{
-		$pos = new Position($data["position"]["x"], $data["position"]["y"], $data["position"]["z"], $this->plugin->getServer()->getWorldManager()->getWorldByName($data["position"]["world"]));
+		$worldManager = $this->plugin->getServer()->getWorldManager();
+		$world = $worldManager->getWorldByName($data["position"]["world"]);
+		if($world === null){
+			$worldManager->loadWorld($data["position"]["world"]);
+			$world = $worldManager->getWorldByName($data["position"]["world"]);
+		}
+		$pos = new Position($data["position"]["x"], $data["position"]["y"], $data["position"]["z"], $world);
 		switch($data["model"]){
 			case ModelVariant::PLAYER:
 				$playerModel = new PlayerModel(Location::fromObject($pos, $pos->getWorld()), Utils::getTopStatsPlayerSkin($this->plugin->getDatabase()->getTemporaryData(), $data["type"], $data["top"]), $data["id"], $data["type"], $data["top"]);

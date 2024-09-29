@@ -1,0 +1,27 @@
+{
+    "name": "nicholass003/topstats",
+    "description": "A TopStats plugin for PocketMine-MP.",
+    "type": "project",
+    "require": {
+        "pocketmine/pocketmine-mp": "^5.0.0",
+        "dapigguy/libpiggyeconomy": "^3.0.3",
+        "ifera-mc/update-notifier": "dev-master",
+        "paroxity/commando": "^3.2.1",
+        "sof3/infoapi": "dev-master"
+    },
+    "require-dev": {
+        "sof3/pharynx": "^0.3.6"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/ifera-mc/UpdateNotifier"
+        }
+    ],
+    "autoload": {
+        "classmap": ["src"]
+    },
+    "scripts": {
+        "build": "php -dphar.readonly=0 vendor/bin/pharynx -i=. -c -p=TopStats.phar"
+    }
+}

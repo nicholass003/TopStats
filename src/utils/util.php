@@ -35,9 +35,9 @@ use pocketmine\entity\Human;
 use pocketmine\entity\Skin;
 use pocketmine\player\Player;
 use pocketmine\Server;
+use SOFe\InfoAPI\InfoAPI;
 use function count;
 use function floor;
-use function str_replace;
 use function uasort;
 
 class Utils{
@@ -130,7 +130,12 @@ class Utils{
 		if($type === DataType::ONLINE_TIME){
 			$formattedData = self::timeFormat($data[$type]);
 		}
-		return str_replace(["{player}", "{" . $type . "}", "{rank_" . $type . "}", "{line}"], [$data["name"], $formattedData, $rank, "\n"], $text);
+		return InfoAPI::render(TopStats::getInstance(), $text, [
+			"player" => $data["name"],
+			$type => $formattedData,
+			"rank_" . $type => $rank,
+			"line" => "\n"
+		]);
 	}
 
 	public static function timeFormat(int $time) : string{
@@ -143,7 +148,15 @@ class Utils{
 		$seconds = $time % 60;
 
 		$format = TopStats::getInstance()->getTimeFormat();
-		return str_replace(["{year}", "{month}", "{week}", "{day}", "{hour}", "{minute}", "{second}"], [$years, $months, $weeks, $days, $hours, $minutes, $seconds], $format);
+		return InfoAPI::render(TopStats::getInstance(), $format, [
+			"year" => $years,
+			"month" => $months,
+			"week" => $weeks,
+			"day" => $days,
+			"hour" => $hours,
+			"minute" => $minutes,
+			"second" => $seconds
+		]);
 	}
 
 	public static function moneyTransaction(Player $player, float|int $money) : bool{

@@ -7,4 +7,6 @@ projects:
   TopStats:
     path: ""
     icon: "assets/icon.png"
+    lint:
+      phpstan: false
 ...

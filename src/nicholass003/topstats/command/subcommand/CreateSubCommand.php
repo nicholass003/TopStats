@@ -68,6 +68,18 @@ class CreateSubCommand extends TopStatsSubCommand{
 					if($this->plugin->getEconomyProvider() === null){
 						$sender->sendMessage(TextFormat::RED . "No EconomyProvider found, you must install the Economy plugin to enable this feature.");
 						$sender->sendMessage(TextFormat::RED . "Example: \"BedrockEconomy\" or \"EconomyAPI\"");
+						switch($this->plugin->getConfig()->get("economy")["provider"]){
+							case "bedrockeconomy":
+								if($this->plugin->getServer()->getPluginManager()->getPlugin("EconomyAPI") !== null){
+									$sender->sendMessage(TextFormat::RED . "You should install BedrockEconomy instead of EconomyAPI or you can change it in config.yml and adapt it to your installed plugins.");
+								}
+								break;
+							case "economyapi":
+								if($this->plugin->getServer()->getPluginManager()->getPlugin("BedrockEconomy") !== null){
+									$sender->sendMessage(TextFormat::RED . "You should install EconomyAPI instead of BedrockEconomy or you can change it in config.yml and adapt it to your installed plugins.");
+								}
+								break;
+						}
 						return;
 					}
 				}

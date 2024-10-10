@@ -35,7 +35,7 @@ use pocketmine\entity\Human;
 use pocketmine\entity\Skin;
 use pocketmine\player\Player;
 use pocketmine\Server;
-use nicholass003\topstats\libs\_49be177cdacfd2f0\SOFe\InfoAPI\InfoAPI;
+use nicholass003\topstats\libs\_8d917a7f9d1fddb3\SOFe\InfoAPI\InfoAPI;
 use function count;
 use function floor;
 use function uasort;

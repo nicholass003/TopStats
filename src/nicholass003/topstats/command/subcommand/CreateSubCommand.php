@@ -24,9 +24,9 @@ declare(strict_types=1);
 
 namespace nicholass003\topstats\command\subcommand;
 
-use nicholass003\topstats\libs\_49be177cdacfd2f0\CortexPE\Commando\args\BooleanArgument;
-use nicholass003\topstats\libs\_49be177cdacfd2f0\CortexPE\Commando\args\IntegerArgument;
-use nicholass003\topstats\libs\_49be177cdacfd2f0\CortexPE\Commando\args\RawStringArgument;
+use nicholass003\topstats\libs\_8d917a7f9d1fddb3\CortexPE\Commando\args\BooleanArgument;
+use nicholass003\topstats\libs\_8d917a7f9d1fddb3\CortexPE\Commando\args\IntegerArgument;
+use nicholass003\topstats\libs\_8d917a7f9d1fddb3\CortexPE\Commando\args\RawStringArgument;
 use nicholass003\topstats\database\data\DataType;
 use nicholass003\topstats\leaderboard\Leaderboard;
 use nicholass003\topstats\model\ModelVariant;

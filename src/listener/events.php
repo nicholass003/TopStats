@@ -232,6 +232,10 @@ class EventListener implements Listener{
 	}
 
 	public function onPlayerMove(PlayerMoveEvent $event) : void{
+		if(!$this->plugin->getConfig()->get("rotate", true)){
+			return;
+		}
+
 		$player = $event->getPlayer();
 		$from = $event->getFrom();
 		$to = $event->getTo();

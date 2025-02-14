@@ -2,6 +2,9 @@
 # Supported Databases:
 # - json
 database: "json"
+# TopStats Rotate
+# Set 'true' to enable Rotation, set 'false' to disable Rotation
+rotate: true
 
 # Supported Economy:
 # - bedrockeconomy

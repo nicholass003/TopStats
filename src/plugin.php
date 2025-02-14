@@ -103,29 +103,21 @@ class TopStats extends PluginBase{
 
 	private function registerEntities() : void{
 		$entityFactory = EntityFactory::getInstance();
-		$entityFactory->register(PlayerModel::class, function(World $world, CompoundTag $nbt) : PlayerModel{
-			$getTagValue = function(CompoundTag $nbt, string $tagName, string $tagClass) : mixed{
-				$tag = $nbt->getTag($tagName);
-				if($tag instanceof $tagClass){
-					return $tag->getValue();
-				}else{
-					throw new SavedDataLoadingException("Expected \"{$tagName}\" NBT tag of type {$tagClass} not found");
-				}
-			};
+		$getTagValue = function(CompoundTag $nbt, string $tagName, string $tagClass) : mixed{
+			$tag = $nbt->getTag($tagName);
+			if($tag instanceof $tagClass){
+				return $tag->getValue();
+			}else{
+				throw new SavedDataLoadingException("Expected \"{$tagName}\" NBT tag of type {$tagClass} not found");
+			}
+		};
+		$entityFactory->register(PlayerModel::class, function(World $world, CompoundTag $nbt) use($getTagValue) : PlayerModel{
 			$type = $getTagValue($nbt, PlayerModel::TAG_TYPE, StringTag::class);
 			$modelID = $getTagValue($nbt, PlayerModel::TAG_MODEL_ID, IntTag::class);
 			$top = $getTagValue($nbt, PlayerModel::TAG_TOP, IntTag::class);
 			return new PlayerModel(EntityDataHelper::parseLocation($nbt, $world), Human::parseSkinNBT($nbt), $modelID, $type, $top, $nbt);
 		}, ["PlayerModel"]);
-		$entityFactory->register(TextModel::class, function(World $world, CompoundTag $nbt) : TextModel{
-			$getTagValue = function(CompoundTag $nbt, string $tagName, string $tagClass) : mixed{
-				$tag = $nbt->getTag($tagName);
-				if($tag instanceof $tagClass){
-					return $tag->getValue();
-				}else{
-					throw new SavedDataLoadingException("Expected \"{$tagName}\" NBT tag of type {$tagClass} not found");
-				}
-			};
+		$entityFactory->register(TextModel::class, function(World $world, CompoundTag $nbt) use($getTagValue) : TextModel{
 			$type = $getTagValue($nbt, TextModel::TAG_TYPE, StringTag::class);
 			$modelID = $getTagValue($nbt, TextModel::TAG_MODEL_ID, IntTag::class);
 			return new TextModel(EntityDataHelper::parseLocation($nbt, $world), $modelID, $type, "", "", $nbt);

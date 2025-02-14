@@ -9,7 +9,7 @@ jobs:
       contents: write
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
@@ -20,7 +20,7 @@ jobs:
         with:
           additional-assets: |
             assets/icon.png
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: TopStats.phar
           path: ${{steps.pharynx.outputs.output-phar}}

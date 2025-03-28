@@ -24,10 +24,10 @@ declare(strict_types=1);
 
 namespace nicholass003\topstats;
 
-use nicholass003\topstats\libs\_3d81ca143018a941\CortexPE\Commando\PacketHooker;
-use nicholass003\topstats\libs\_3d81ca143018a941\DaPigGuy\libPiggyEconomy\libPiggyEconomy;
-use nicholass003\topstats\libs\_3d81ca143018a941\DaPigGuy\libPiggyEconomy\providers\EconomyProvider;
-use nicholass003\topstats\libs\_3d81ca143018a941\JackMD\UpdateNotifier\UpdateNotifier;
+use nicholass003\topstats\libs\_f1a390cef2276fbb\CortexPE\Commando\PacketHooker;
+use nicholass003\topstats\libs\_f1a390cef2276fbb\DaPigGuy\libPiggyEconomy\libPiggyEconomy;
+use nicholass003\topstats\libs\_f1a390cef2276fbb\DaPigGuy\libPiggyEconomy\providers\EconomyProvider;
+use nicholass003\topstats\libs\_f1a390cef2276fbb\JackMD\UpdateNotifier\UpdateNotifier;
 use nicholass003\topstats\command\TopStatsCommand;
 use nicholass003\topstats\database\IDatabase;
 use nicholass003\topstats\database\JsonDatabase;

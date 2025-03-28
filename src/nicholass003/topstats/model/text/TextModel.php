@@ -72,6 +72,7 @@ class TextModel extends Entity implements IModel{
 		$this->setNameTagAlwaysVisible(true);
 		$this->setHasGravity(false);
 		$this->setScale(0.00001);
+		$this->setCanSaveWithChunk(false);
 	}
 
 	public function saveNBT() : CompoundTag{

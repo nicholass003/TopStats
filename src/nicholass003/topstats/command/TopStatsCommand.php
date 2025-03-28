@@ -24,7 +24,7 @@ declare(strict_types=1);
 
 namespace nicholass003\topstats\command;
 
-use nicholass003\topstats\libs\_3d81ca143018a941\CortexPE\Commando\BaseCommand;
+use nicholass003\topstats\libs\_f1a390cef2276fbb\CortexPE\Commando\BaseCommand;
 use nicholass003\topstats\command\subcommand\CreateSubCommand;
 use nicholass003\topstats\command\subcommand\DeleteSubCommand;
 use nicholass003\topstats\command\subcommand\ListSubCommand;

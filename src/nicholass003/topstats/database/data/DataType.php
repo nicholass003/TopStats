@@ -24,7 +24,12 @@ declare(strict_types=1);
 
 namespace nicholass003\topstats\database\data;
 
+use function str_replace;
+
 final class DataType{
+
+	/** @var string[] */
+	private static array $types = [];
 
 	public const DEATH = "death";
 	public const KILL = "kill";
@@ -71,4 +76,14 @@ final class DataType{
 		self::ONLINE_TIME,
 		self::XP
 	];
+
+	public static function setup() : void{
+		foreach(self::ALL as $type){
+			self::$types[$type] = str_replace("-", "_", $type);
+		}
+	}
+
+	public static function get(string $type) : false|string{
+		return self::$types[$type] ?? false;
+	}
 }

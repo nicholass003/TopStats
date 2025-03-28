@@ -24,13 +24,15 @@ declare(strict_types=1);
 
 namespace nicholass003\topstats;
 
-use nicholass003\topstats\libs\_f1a390cef2276fbb\CortexPE\Commando\PacketHooker;
-use nicholass003\topstats\libs\_f1a390cef2276fbb\DaPigGuy\libPiggyEconomy\libPiggyEconomy;
-use nicholass003\topstats\libs\_f1a390cef2276fbb\DaPigGuy\libPiggyEconomy\providers\EconomyProvider;
-use nicholass003\topstats\libs\_f1a390cef2276fbb\JackMD\UpdateNotifier\UpdateNotifier;
+use nicholass003\topstats\libs\_7c9473bb1f574cab\CortexPE\Commando\PacketHooker;
+use nicholass003\topstats\libs\_7c9473bb1f574cab\DaPigGuy\libPiggyEconomy\libPiggyEconomy;
+use nicholass003\topstats\libs\_7c9473bb1f574cab\DaPigGuy\libPiggyEconomy\providers\EconomyProvider;
+use nicholass003\topstats\libs\_7c9473bb1f574cab\JackMD\UpdateNotifier\UpdateNotifier;
 use nicholass003\topstats\command\TopStatsCommand;
+use nicholass003\topstats\database\data\DataType;
 use nicholass003\topstats\database\IDatabase;
 use nicholass003\topstats\database\JsonDatabase;
+use nicholass003\topstats\database\MySQLDatabase;
 use nicholass003\topstats\leaderboard\LeaderboardManager;
 use nicholass003\topstats\listener\EventListener;
 use nicholass003\topstats\model\player\PlayerModel;
@@ -44,6 +46,7 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\plugin\PluginBase;
+use pocketmine\utils\Config;
 use pocketmine\utils\SingletonTrait;
 use pocketmine\world\World;
 use function strtolower;
@@ -58,8 +61,18 @@ class TopStats extends PluginBase{
 	protected ?EconomyProvider $economyProvider = null;
 	protected LeaderboardManager $leaderboardManager;
 
+	private Config $db;
+
 	protected function onLoad() : void{
 		$this->saveDefaultConfig();
+		$this->saveAllResources();
+
+		DataType::setup();
+	}
+
+	private function saveAllResources() : void{
+		$this->saveResource($this->getDataFolder() . "database.yml");
+		$this->db = new Config($this->getDataFolder() . "database.yml", Config::YAML);
 	}
 
 	protected function onEnable() : void{
@@ -76,6 +89,7 @@ class TopStats extends PluginBase{
 		$this->registerTasks();
 		$this->database = match(strtolower($this->getConfig()->get("database"))){
 			"json" => new JsonDatabase($this),
+			"mysql" => new MySQLDatabase($this),
 			default => new JsonDatabase($this)
 		};
 		if($this->checkEconomyProvider()){
@@ -136,6 +150,10 @@ class TopStats extends PluginBase{
 
 	public function getDatabase() : IDatabase{
 		return $this->database;
+	}
+
+	public function getDatabaseConfig() : Config{
+		return $this->db;
 	}
 
 	public function getEconomyProvider() : ?EconomyProvider{

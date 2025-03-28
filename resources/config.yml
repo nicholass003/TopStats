@@ -1,7 +1,10 @@
 # TopStats Configuration #
 # Supported Databases:
 # - json
+# - mysql
 database: "json"
+# AutoSave for SQL Databases
+auto-save: true
 # TopStats Rotate
 # Set 'true' to enable Rotation, set 'false' to disable Rotation
 rotate: true

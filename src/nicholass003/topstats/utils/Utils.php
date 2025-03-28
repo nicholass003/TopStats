@@ -35,7 +35,7 @@ use pocketmine\entity\Human;
 use pocketmine\entity\Skin;
 use pocketmine\player\Player;
 use pocketmine\Server;
-use nicholass003\topstats\libs\_f1a390cef2276fbb\SOFe\InfoAPI\InfoAPI;
+use nicholass003\topstats\libs\_7c9473bb1f574cab\SOFe\InfoAPI\InfoAPI;
 use function count;
 use function floor;
 use function uasort;
@@ -87,7 +87,7 @@ class Utils{
 			++$num;
 		}
 
-		$player = TopStats::getInstance()->getServer()->getPlayerByPrefix($playerName);
+		$player = TopStats::getInstance()->getServer()->getPlayerExact($playerName);
 		if($player !== null){
 			return Human::parseSkinNBT($player->getSaveData());
 		}else{

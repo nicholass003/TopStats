@@ -87,7 +87,7 @@ class Utils{
 			++$num;
 		}
 
-		$player = TopStats::getInstance()->getServer()->getPlayerByPrefix($playerName);
+		$player = TopStats::getInstance()->getServer()->getPlayerExact($playerName);
 		if($player !== null){
 			return Human::parseSkinNBT($player->getSaveData());
 		}else{

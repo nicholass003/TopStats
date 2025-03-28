@@ -74,7 +74,7 @@ class LeaderboardManager{
 
 	public function loadData() : void{
 		foreach($this->leaderboardData->getAll() as $sid => $data){
-			$id = (int) substr($sid, 3);
+			$id = (int) substr((string) $sid, 3);
 			$leaderboard = new Leaderboard($this->validateModel(json_decode($data, true)));
 			$this->leaderboards[$id] = $leaderboard;
 		}

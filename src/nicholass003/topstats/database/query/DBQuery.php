@@ -31,6 +31,6 @@ final class DBQuery{
 	public const INSERT_OR_UPDATE_PLAYER_STATS = "insert_or_update_stats";
 	public const UPDATE_PLAYER_STATS = "update_stats";
 	public const SELECT_PLAYER_STATS = "select_stats";
-    public const SELECT_ALL_STATS = "select_all_stats";
+	public const SELECT_ALL_STATS = "select_all_stats";
 	public const SELECT_TOP_STATS = "select_top";
 }

@@ -8,6 +8,8 @@ softdepend: ["BedrockEconomy", "EconomyAPI"]
 permissions:
   topstats.command:
     default: op
+  topstats.command.autosave:
+    default: op
   topstats.command.create:
     default: op
   topstats.command.delete:

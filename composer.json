@@ -7,6 +7,7 @@
         "dapigguy/libpiggyeconomy": "^3.0.3",
         "ifera-mc/update-notifier": "dev-master",
         "paroxity/commando": "^3.2.1",
+        "sof3/libasynql": "^4.2.3",
         "sof3/infoapi": "dev-master"
     },
     "require-dev": {

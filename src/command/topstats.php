@@ -25,6 +25,7 @@ declare(strict_types=1);
 namespace nicholass003\topstats\command;
 
 use CortexPE\Commando\BaseCommand;
+use nicholass003\topstats\command\subcommand\AutoSaveSubCommand;
 use nicholass003\topstats\command\subcommand\CreateSubCommand;
 use nicholass003\topstats\command\subcommand\DeleteSubCommand;
 use nicholass003\topstats\command\subcommand\ListSubCommand;
@@ -43,6 +44,7 @@ class TopStatsCommand extends BaseCommand{
 	protected function prepare() : void{
 		$this->setPermission("topstats.command");
 
+		$this->registerSubCommand(new AutoSaveSubCommand($this->plugin, "autosave", "AutoSave TopStats Database"));
 		$this->registerSubCommand(new CreateSubCommand($this->plugin, "create", "Create or Spawn TopStats Leaderboard.", ["add", "make", "spawn"]));
 		$this->registerSubCommand(new DeleteSubCommand($this->plugin, "delete", "Delete or Remove TopStats Leaderboard.", ["despawn", "destroy", "remove"]));
 		$this->registerSubCommand(new ListSubCommand($this->plugin, "list", "Show TopStats Leaderboard List."));

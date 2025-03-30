@@ -44,6 +44,8 @@ class Leaderboard{
 	public const TYPE_TEXT = "text";
 	public const TYPE_TITLE = "title";
 
+	public const NO_DATA_FOUND = "No records found-looks like the battlefield is yours to conquer!{line}Are you ready to rise to the top?";
+
 	private bool $forceSorting = false;
 
 	protected int $id;
@@ -108,9 +110,7 @@ class Leaderboard{
 		$this->updateTitle(Utils::getTopStatsText($data, $this->model, $this->title, self::TYPE_TITLE, $this->forceSorting));
 		if($this->model instanceof PlayerModel){
 			$skin = Utils::getTopStatsPlayerSkin($data, $this->model->getType(), $this->model->getTop());
-			if($skin !== null){
-				$this->model->setSkin($skin);
-			}
+			$this->model->setSkin($skin);
 		}
 	}
 

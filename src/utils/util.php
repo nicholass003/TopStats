@@ -76,7 +76,7 @@ class Utils{
 			}
 			++$num;
 		}
-		if(strlen($result) === 0){
+		if(strlen($result) === 0 && $model instanceof PlayerModel){
 			$result .= match($textType){
 				Leaderboard::TYPE_TITLE => self::validateTextFormat($model->getType(), ["name" => "Unknown", $model->getType() => 0], $text, $num),
 				Leaderboard::TYPE_TEXT => InfoAPI::render(TopStats::getInstance(), TopStats::getInstance()->getConfig()->get("no-data-found-text", Leaderboard::NO_DATA_FOUND), [

@@ -49,10 +49,26 @@ use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
 use pocketmine\utils\SingletonTrait;
 use pocketmine\world\World;
+use function array_column;
+use function array_pop;
+use function array_unshift;
+use function end;
+use function explode;
+use function file_exists;
+use function file_get_contents;
+use function file_put_contents;
+use function implode;
+use function ltrim;
+use function str_repeat;
+use function strlen;
+use function strpos;
 use function strtolower;
+use function trim;
 
 class TopStats extends PluginBase{
 	use SingletonTrait;
+
+	private const CONFIG_VERSION = "1.0.0";
 
 	public const MAX_LIST = 10;
 	public const TIME_FORMAT = "{year}y {month}m {week}w {day}d {hour}h {minute}m {second}s";
@@ -64,7 +80,7 @@ class TopStats extends PluginBase{
 	private Config $db;
 
 	protected function onLoad() : void{
-		$this->saveDefaultConfig();
+		$this->loadConfig();
 		$this->saveAllResources();
 
 		DataType::setup();
@@ -73,6 +89,110 @@ class TopStats extends PluginBase{
 	private function saveAllResources() : void{
 		$this->saveResource($this->getDataFolder() . "database.yml");
 		$this->db = new Config($this->getDataFolder() . "database.yml", Config::YAML);
+	}
+
+	private function loadConfig() : void{
+		$configPath = $this->getDataFolder() . "config.yml";
+		$defaultConfigPath = $this->getFile() . "resources/config.yml";
+
+		if(!file_exists($configPath)){
+			$this->getLogger()->warning("⚠️ No config found! Generating default config...");
+			$this->saveDefaultConfig();
+			return;
+		}
+
+		try{
+			$userConfigContent = file_get_contents($configPath);
+			$defaultConfigContent = file_get_contents($defaultConfigPath);
+			if($userConfigContent === false || $defaultConfigContent === false){
+				throw new \Exception("Failed to read config file.");
+			}
+		}catch(\Exception $e){
+			$this->getLogger()->error("❌ {$e->getMessage()}");
+			return;
+		}
+
+		$userConfigLines = explode("\n", $userConfigContent);
+		$defaultConfigLines = explode("\n", $defaultConfigContent);
+
+		$userConfigMap = [];
+		$configVersionKey = "config-version";
+		$configVersionFound = false;
+		$needUpdate = false;
+
+		$context = [];
+
+		foreach($userConfigLines as $line){
+			$trimmedLine = ltrim($line);
+			$indent = strlen($line) - strlen($trimmedLine);
+
+			if(strpos($trimmedLine, ":") !== false){
+				[$key] = explode(":", $trimmedLine, 2);
+				$key = trim($key);
+
+				while(!empty($context) && end($context)['indent'] >= $indent){
+					array_pop($context);
+				}
+
+				$fullKey = implode("->", array_column($context, 'key')) . "->" . $key;
+				$fullKey = ltrim($fullKey, "->");
+
+				$userConfigMap[$fullKey] = $line;
+				$context[] = ['key' => $key, 'indent' => $indent];
+
+				if($key === $configVersionKey){
+					$configVersionFound = true;
+					$value = trim(explode(":", $trimmedLine, 2)[1]);
+					if($value !== '"' . self::CONFIG_VERSION . '"'){
+						$needUpdate = true;
+						$userConfigMap[$fullKey] = "$configVersionKey: \"" . self::CONFIG_VERSION . "\"";
+					}
+				}
+			}
+		}
+
+		if(!$configVersionFound){
+			$needUpdate = true;
+			array_unshift($userConfigLines, "$configVersionKey: \"" . self::CONFIG_VERSION . "\"");
+		}
+
+		$updatedConfigLines = [];
+		$context = [];
+
+		foreach($defaultConfigLines as $line){
+			$trimmedLine = ltrim($line);
+			$indent = strlen($line) - strlen($trimmedLine);
+
+			if(strpos($trimmedLine, ":") !== false){
+				[$key] = explode(":", $trimmedLine, 2);
+				$key = trim($key);
+
+				while(!empty($context) && end($context)['indent'] >= $indent){
+					array_pop($context);
+				}
+
+				$fullKey = implode("->", array_column($context, 'key')) . "->" . $key;
+				$fullKey = ltrim($fullKey, "->");
+
+				if(isset($userConfigMap[$fullKey])){
+					$updatedConfigLines[] = str_repeat(" ", $indent) . ltrim($userConfigMap[$fullKey]);
+				}else{
+					$updatedConfigLines[] = $line;
+					$needUpdate = true;
+				}
+
+				$context[] = ['key' => $key, 'indent' => $indent];
+			}else{
+				$updatedConfigLines[] = $line;
+			}
+		}
+
+		if($needUpdate){
+			file_put_contents($configPath, implode("\n", $updatedConfigLines));
+			$this->getLogger()->notice("🚀 Config updated successfully!");
+		}else{
+			$this->getLogger()->notice("✅ Config is already up to date.");
+		}
 	}
 
 	protected function onEnable() : void{

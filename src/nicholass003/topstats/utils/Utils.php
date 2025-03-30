@@ -35,9 +35,12 @@ use pocketmine\entity\Human;
 use pocketmine\entity\Skin;
 use pocketmine\player\Player;
 use pocketmine\Server;
-use nicholass003\topstats\libs\_84622ff2cf681b8b\SOFe\InfoAPI\InfoAPI;
+use nicholass003\topstats\libs\_b78b06481ef52e04\SOFe\InfoAPI\InfoAPI;
 use function count;
 use function floor;
+use function random_bytes;
+use function str_repeat;
+use function strlen;
 use function uasort;
 
 class Utils{
@@ -73,10 +76,18 @@ class Utils{
 			}
 			++$num;
 		}
+		if(strlen($result) === 0){
+			$result .= match($textType){
+				Leaderboard::TYPE_TITLE => self::validateTextFormat($model->getType(), ["name" => "Unknown", $model->getType() => 0], $text, $num),
+				Leaderboard::TYPE_TEXT => InfoAPI::render(TopStats::getInstance(), TopStats::getInstance()->getConfig()->get("no-data-found-text", Leaderboard::NO_DATA_FOUND), [
+					"line" => "\n"
+				])
+			};
+		}
 		return $result;
 	}
 
-	public static function getTopStatsPlayerSkin(array $data, string $type, int $top) : ?Skin{
+	public static function getTopStatsPlayerSkin(array $data, string $type, int $top) : Skin{
 		$playerName = "";
 		$num = 1;
 		foreach(self::getSortedArrayBoard($data, $type) as $xuid => $userData){
@@ -92,7 +103,8 @@ class Utils{
 			return Human::parseSkinNBT($player->getSaveData());
 		}else{
 			$playerData = TopStats::getInstance()->getServer()->getOfflinePlayerData($playerName);
-			return $playerData !== null ? Human::parseSkinNBT($playerData) : null;
+			$standard = new Skin("Standard_Custom", str_repeat(random_bytes(3) . "\xff", 4096)); //If player data is not found, use a default solid color skin
+			return $playerData !== null ? Human::parseSkinNBT($playerData) : $standard;
 		}
 	}
 

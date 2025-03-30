@@ -1,4 +1,7 @@
 # TopStats Configuration #
+# WARNING: Do NOT change the config-version manually!
+# This version is managed by the plugin and changing it may cause issues.
+config-version: "1.0.0"
 # Supported Databases:
 # - json
 # - mysql
@@ -8,6 +11,8 @@ auto-save: true
 # TopStats Rotate
 # Set 'true' to enable Rotation, set 'false' to disable Rotation
 rotate: true
+# Set No Data Found Text
+no-data-found-text: "No records found-looks like the battlefield is yours to conquer!{line}Are you ready to rise to the top?"
 
 # Supported Economy:
 # - bedrockeconomy
@@ -24,8 +29,8 @@ time-format: "{year}y {month}m {week}w {day}d {hour}h {minute}m {second}s"
 # Custom Data
 # Set custom data to initialize Leaderboard type data
 custom-data:
-- "exampledata1"
-- "exampledata2"
+  - "exampledata1"
+  - "exampledata2"
 # Supported Models:
 # - player
 # - text

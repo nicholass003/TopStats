@@ -35,7 +35,7 @@ use pocketmine\entity\Human;
 use pocketmine\entity\Skin;
 use pocketmine\player\Player;
 use pocketmine\Server;
-use nicholass003\topstats\libs\_b78b06481ef52e04\SOFe\InfoAPI\InfoAPI;
+use nicholass003\topstats\libs\_c03f4f8bb544f3e7\SOFe\InfoAPI\InfoAPI;
 use function count;
 use function floor;
 use function random_bytes;
@@ -76,7 +76,7 @@ class Utils{
 			}
 			++$num;
 		}
-		if(strlen($result) === 0){
+		if(strlen($result) === 0 && $model instanceof PlayerModel){
 			$result .= match($textType){
 				Leaderboard::TYPE_TITLE => self::validateTextFormat($model->getType(), ["name" => "Unknown", $model->getType() => 0], $text, $num),
 				Leaderboard::TYPE_TEXT => InfoAPI::render(TopStats::getInstance(), TopStats::getInstance()->getConfig()->get("no-data-found-text", Leaderboard::NO_DATA_FOUND), [

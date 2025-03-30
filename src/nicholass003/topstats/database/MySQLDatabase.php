@@ -31,9 +31,9 @@ use nicholass003\topstats\database\query\DBQuery;
 use nicholass003\topstats\TopStats;
 use pocketmine\player\Player;
 use pocketmine\scheduler\Task;
-use nicholass003\topstats\libs\_b78b06481ef52e04\poggit\libasynql\DataConnector;
-use nicholass003\topstats\libs\_b78b06481ef52e04\poggit\libasynql\libasynql;
-use nicholass003\topstats\libs\_b78b06481ef52e04\poggit\libasynql\SqlError;
+use nicholass003\topstats\libs\_c03f4f8bb544f3e7\poggit\libasynql\DataConnector;
+use nicholass003\topstats\libs\_c03f4f8bb544f3e7\poggit\libasynql\libasynql;
+use nicholass003\topstats\libs\_c03f4f8bb544f3e7\poggit\libasynql\SqlError;
 use function in_array;
 use function json_encode;
 

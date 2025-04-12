@@ -31,6 +31,7 @@ use nicholass003\topstats\model\player\PlayerModel;
 use nicholass003\topstats\model\text\TextModel;
 use nicholass003\topstats\TopStats;
 use nicholass003\topstats\utils\Utils;
+use function count;
 use function in_array;
 use function json_encode;
 
@@ -106,6 +107,11 @@ class Leaderboard{
 		if(!$this->isCustomDataType()){
 			$data = $this->database->getTemporaryData();
 		}
+
+		if(count($data) === 0){
+			return;
+		}
+
 		$this->updateText(Utils::getTopStatsText($data, $this->model, $this->text, self::TYPE_TEXT, $this->forceSorting));
 		$this->updateTitle(Utils::getTopStatsText($data, $this->model, $this->title, self::TYPE_TITLE, $this->forceSorting));
 		if($this->model instanceof PlayerModel){

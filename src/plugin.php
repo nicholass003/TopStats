@@ -33,6 +33,7 @@ use nicholass003\topstats\database\data\DataType;
 use nicholass003\topstats\database\IDatabase;
 use nicholass003\topstats\database\JsonDatabase;
 use nicholass003\topstats\database\MySQLDatabase;
+use nicholass003\topstats\database\SQLInterface;
 use nicholass003\topstats\leaderboard\LeaderboardManager;
 use nicholass003\topstats\listener\EventListener;
 use nicholass003\topstats\model\player\PlayerModel;
@@ -46,6 +47,7 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\plugin\PluginBase;
+use pocketmine\scheduler\Task;
 use pocketmine\utils\Config;
 use pocketmine\utils\SingletonTrait;
 use pocketmine\world\World;
@@ -266,6 +268,21 @@ class TopStats extends PluginBase{
 	private function registerTasks() : void{
 		$scheduler = $this->getScheduler();
 		$scheduler->scheduleRepeatingTask(new UpdateTask($this), 20);
+
+		$scheduler->scheduleRepeatingTask(new class($this->getDatabase()) extends Task{
+			public function __construct(
+				private readonly IDatabase $database
+			){}
+
+			public function onRun() : void{
+				if(($database = $this->database) instanceof SQLInterface){
+					if(!$database->isAutoSaveActive()){
+						return;
+					}
+					$database->saveData();
+				}
+			}
+		}, SQLInterface::AUTO_SAVE_INTERVAL);
 	}
 
 	public function getDatabase() : IDatabase{

@@ -26,6 +26,8 @@ namespace nicholass003\topstats\database;
 
 interface SQLInterface extends IDatabase{
 
+	public const AUTO_SAVE_INTERVAL = 20 * 60 * 5; //5 minutes
+
 	public function toggleAutoSave(bool $value) : void;
 
 	public function isAutoSaveActive() : bool;

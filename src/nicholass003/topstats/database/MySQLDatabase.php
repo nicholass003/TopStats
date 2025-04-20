@@ -30,16 +30,13 @@ use nicholass003\topstats\database\query\DBAction;
 use nicholass003\topstats\database\query\DBQuery;
 use nicholass003\topstats\TopStats;
 use pocketmine\player\Player;
-use pocketmine\scheduler\Task;
-use nicholass003\topstats\libs\_95ef3006793f2228\poggit\libasynql\DataConnector;
-use nicholass003\topstats\libs\_95ef3006793f2228\poggit\libasynql\libasynql;
-use nicholass003\topstats\libs\_95ef3006793f2228\poggit\libasynql\SqlError;
+use nicholass003\topstats\libs\_86bb3d02f898879c\poggit\libasynql\DataConnector;
+use nicholass003\topstats\libs\_86bb3d02f898879c\poggit\libasynql\libasynql;
+use nicholass003\topstats\libs\_86bb3d02f898879c\poggit\libasynql\SqlError;
 use function in_array;
 use function json_encode;
 
 class MySQLDatabase implements SQLInterface{
-
-	private const AUTO_SAVE_INTERVAL = 20 * 60 * 5; //5 minutes
 
 	protected DataConnector $database;
 
@@ -56,22 +53,6 @@ class MySQLDatabase implements SQLInterface{
 		]);
 
 		$this->autoSaveEnabled = $plugin->getConfig()->get("auto-save", true);
-		if($this->autoSaveEnabled){
-			$plugin->getScheduler()->scheduleRepeatingTask(new class($plugin) extends Task{
-				public function __construct(
-					private readonly TopStats $plugin
-				){}
-
-				public function onRun() : void{
-					if(($database = $this->plugin->getDatabase()) instanceof SQLInterface){
-						if(!$database->isAutoSaveActive()){
-							return;
-						}
-						$database->saveData();
-					}
-				}
-			}, self::AUTO_SAVE_INTERVAL);
-		}
 	}
 
 	public function getName() : string{

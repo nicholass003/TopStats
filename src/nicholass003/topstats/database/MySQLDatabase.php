@@ -30,9 +30,10 @@ use nicholass003\topstats\database\query\DBAction;
 use nicholass003\topstats\database\query\DBQuery;
 use nicholass003\topstats\TopStats;
 use pocketmine\player\Player;
-use nicholass003\topstats\libs\_86bb3d02f898879c\poggit\libasynql\DataConnector;
-use nicholass003\topstats\libs\_86bb3d02f898879c\poggit\libasynql\libasynql;
-use nicholass003\topstats\libs\_86bb3d02f898879c\poggit\libasynql\SqlError;
+use nicholass003\topstats\libs\_3c674594dd7e90b7\poggit\libasynql\DataConnector;
+use nicholass003\topstats\libs\_3c674594dd7e90b7\poggit\libasynql\libasynql;
+use nicholass003\topstats\libs\_3c674594dd7e90b7\poggit\libasynql\SqlError;
+use function count;
 use function in_array;
 use function json_encode;
 
@@ -74,6 +75,7 @@ class MySQLDatabase implements SQLInterface{
 				if(!isset($data["xuid"])){
 					continue;
 				}
+				$this->data[$data["xuid"]]["name"] = $data["name"];
 				foreach(DataType::ALL as $type){
 					$this->data[$data["xuid"]][$type] = $data[DataType::get($type)] ?? 0;
 				}
@@ -149,8 +151,11 @@ class MySQLDatabase implements SQLInterface{
 	}
 
 	public function saveData() : void{
+		if(count($this->data) === 0){
+			return;
+		}
 		foreach($this->data as $xuid => $stats){
-			$args = ["xuid" => $xuid];
+			$args = ["xuid" => (string) $xuid, "name" => $stats["name"]];
 			foreach(DataType::ALL as $type){
 				$args[DataType::get($type)] = $stats[$type] ?? 0;
 			}

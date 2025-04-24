@@ -24,6 +24,7 @@ declare(strict_types=1);
 
 namespace nicholass003\topstats\leaderboard;
 
+use nicholass003\topstats\event\TopStatsUpdateEvent;
 use nicholass003\topstats\model\IModel;
 use nicholass003\topstats\model\ModelVariant;
 use nicholass003\topstats\model\player\PlayerModel;
@@ -33,6 +34,8 @@ use nicholass003\topstats\utils\Utils;
 use pocketmine\entity\Location;
 use pocketmine\utils\Config;
 use pocketmine\world\Position;
+use function array_filter;
+use function count;
 use function json_decode;
 use function substr;
 
@@ -72,10 +75,53 @@ class LeaderboardManager{
 		return $this->leaderboards;
 	}
 
+	/**
+	 * @return array<int, Leaderboard>
+	 */
+	public function getLeaderboardFromType(string $type) : array{
+		return array_filter(
+			$this->leaderboards,
+			fn($leaderboard) => $leaderboard->getModel()->getType() === $type
+		);
+	}
+
+	/**
+	 * Dispatches a leaderboard update event for the specified type.
+	 *
+	 * This function retrieves all leaderboards that match the provided type,
+	 * fires a {@see TopStatsUpdateEvent}, and updates each leaderboard unless
+	 * the event is cancelled.
+	 *
+	 * @param string $type The leaderboard type identifier (e.g., "block_break", "kills").
+	 *
+	 * @return bool
+	 */
+	public function dispatchLeaderboardUpdate(string $type) : bool{
+		$leaderboards = $this->getLeaderboardFromType($type);
+
+		if(count($leaderboards) === 0){
+			return false;
+		}
+
+		$ev = new TopStatsUpdateEvent($type, $leaderboards);
+		$ev->call();
+		if($ev->isCancelled()){
+			return false;
+		}
+
+		foreach($leaderboards as $id => $leaderboard){
+			$leaderboard->update();
+		}
+		return true;
+	}
+
 	public function loadData() : void{
 		foreach($this->leaderboardData->getAll() as $sid => $data){
 			$id = (int) substr((string) $sid, 3);
 			$leaderboard = new Leaderboard($this->validateModel(json_decode($data, true)));
+			if($leaderboard->getModel()->getPosition()->getWorld()->isLoaded()){
+				$leaderboard->update();
+			}
 			$this->leaderboards[$id] = $leaderboard;
 		}
 	}

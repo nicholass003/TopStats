@@ -1,6 +1,7 @@
 # Database Configuration #
 # Supported Databases:
 # - mysql
+# - sqlite
 database:
   type: mysql
   sqlite:

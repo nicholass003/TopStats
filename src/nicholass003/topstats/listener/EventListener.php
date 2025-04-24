@@ -26,6 +26,7 @@ namespace nicholass003\topstats\listener;
 
 use nicholass003\topstats\database\data\DataAction;
 use nicholass003\topstats\database\data\DataType;
+use nicholass003\topstats\leaderboard\LeaderboardManager;
 use nicholass003\topstats\model\player\PlayerModel;
 use nicholass003\topstats\TopStats;
 use pocketmine\entity\projectile\Projectile;
@@ -60,9 +61,13 @@ use const M_PI;
 
 class EventListener implements Listener{
 
+	private LeaderboardManager $leaderboardManager;
+
 	public function __construct(
 		protected TopStats $plugin
-	){}
+	){
+		$this->leaderboardManager = $plugin->getLeaderboardManager();
+	}
 
 	public function onPlayerJoin(PlayerJoinEvent $event) : void{
 		$player = $event->getPlayer();
@@ -72,11 +77,13 @@ class EventListener implements Listener{
 	public function onPlayerDeath(PlayerDeathEvent $event) : void{
 		$player = $event->getPlayer();
 		$this->plugin->getDatabase()->update($player, [DataType::DEATH => 1], DataAction::ADDITION);
+		$this->leaderboardManager->dispatchLeaderboardUpdate(DataType::DEATH);
 		$source = $player->getLastDamageCause();
 		if($source instanceof EntityDamageByEntityEvent){
 			$attacker = $source->getDamager() ;
 			if($attacker instanceof Player){
 				$this->plugin->getDatabase()->update($attacker, [DataType::KILL => 1], DataAction::ADDITION);
+				$this->leaderboardManager->dispatchLeaderboardUpdate(DataType::KILL);
 			}
 		}
 	}
@@ -85,6 +92,7 @@ class EventListener implements Listener{
 		$player = $event->getPlayer();
 		if($player->hasFiniteResources() && !$event->isCancelled()){
 			$this->plugin->getDatabase()->update($player, [DataType::BLOCK_BREAK => 1], DataAction::ADDITION);
+			$this->leaderboardManager->dispatchLeaderboardUpdate(DataType::BLOCK_BREAK);
 		}
 	}
 
@@ -92,6 +100,7 @@ class EventListener implements Listener{
 		$player = $event->getPlayer();
 		if($player->hasFiniteResources() && !$event->isCancelled()){
 			$this->plugin->getDatabase()->update($player, [DataType::BLOCK_PLACE => 1], DataAction::ADDITION);
+			$this->leaderboardManager->dispatchLeaderboardUpdate(DataType::BLOCK_PLACE);
 			if(in_array($event->getItem(), [
 				VanillaItems::BEETROOT_SEEDS(),
 				VanillaItems::CARROT(),
@@ -104,6 +113,7 @@ class EventListener implements Listener{
 				VanillaItems::WHEAT_SEEDS()
 			], true)){
 				$this->plugin->getDatabase()->update($player, [DataType::FARM => 1], DataAction::ADDITION);
+				$this->leaderboardManager->dispatchLeaderboardUpdate(DataType::FARM);
 			}
 		}
 	}
@@ -112,6 +122,7 @@ class EventListener implements Listener{
 		$player = $event->getPlayer();
 		if(!$event->isCancelled()){
 			$this->plugin->getDatabase()->update($player, [DataType::CHANGE_SKIN => 1], DataAction::ADDITION);
+			$this->leaderboardManager->dispatchLeaderboardUpdate(DataType::CHANGE_SKIN);
 		}
 	}
 
@@ -119,6 +130,7 @@ class EventListener implements Listener{
 		$player = $event->getPlayer();
 		if(!$event->isCancelled()){
 			$this->plugin->getDatabase()->update($player, [DataType::CHAT => 1], DataAction::ADDITION);
+			$this->leaderboardManager->dispatchLeaderboardUpdate(DataType::CHAT);
 		}
 	}
 
@@ -126,6 +138,7 @@ class EventListener implements Listener{
 		$player = $event->getPlayer();
 		if($player->hasFiniteResources() && !$event->isCancelled()){
 			$this->plugin->getDatabase()->update($player, [DataType::CONSUME => 1], DataAction::ADDITION);
+			$this->leaderboardManager->dispatchLeaderboardUpdate(DataType::CONSUME);
 		}
 	}
 
@@ -133,6 +146,7 @@ class EventListener implements Listener{
 		$player = $event->getPlayer();
 		if($player->hasFiniteResources() && !$event->isCancelled()){
 			$this->plugin->getDatabase()->update($player, [DataType::CRAFTING => 1], DataAction::ADDITION);
+			$this->leaderboardManager->dispatchLeaderboardUpdate(DataType::CRAFTING);
 		}
 	}
 
@@ -140,6 +154,7 @@ class EventListener implements Listener{
 		$player = $event->getPlayer();
 		if($player->hasFiniteResources() && !$event->isCancelled()){
 			$this->plugin->getDatabase()->update($player, [DataType::DROP_ITEM => 1], DataAction::ADDITION);
+			$this->leaderboardManager->dispatchLeaderboardUpdate(DataType::DROP_ITEM);
 		}
 	}
 
@@ -147,6 +162,7 @@ class EventListener implements Listener{
 		$player = $event->getPlayer();
 		if(!$event->isCancelled()){
 			$this->plugin->getDatabase()->update($player, [DataType::EMOTE => 1], DataAction::ADDITION);
+			$this->leaderboardManager->dispatchLeaderboardUpdate(DataType::EMOTE);
 		}
 	}
 
@@ -154,6 +170,7 @@ class EventListener implements Listener{
 		$player = $event->getPlayer();
 		if($player->hasFiniteResources() && !$event->isCancelled()){
 			$this->plugin->getDatabase()->update($player, [DataType::ENCHANT => 1], DataAction::ADDITION);
+			$this->leaderboardManager->dispatchLeaderboardUpdate(DataType::ENCHANT);
 		}
 	}
 
@@ -162,6 +179,7 @@ class EventListener implements Listener{
 		if($player instanceof Player){
 			if($player->hasFiniteResources() && !$event->isCancelled()){
 				$this->plugin->getDatabase()->update($player, [DataType::ITEM_PICKUP => 1], DataAction::ADDITION);
+				$this->leaderboardManager->dispatchLeaderboardUpdate(DataType::ITEM_PICKUP);
 			}
 		}
 	}
@@ -170,6 +188,7 @@ class EventListener implements Listener{
 		$player = $event->getPlayer();
 		if($player->hasFiniteResources()){
 			$this->plugin->getDatabase()->update($player, [DataType::JUMP => 1], DataAction::ADDITION);
+			$this->leaderboardManager->dispatchLeaderboardUpdate(DataType::JUMP);
 		}
 	}
 
@@ -177,6 +196,7 @@ class EventListener implements Listener{
 		$player = $event->getPlayer();
 		if(!$event->isCancelled()){
 			$this->plugin->getDatabase()->update($player, [DataType::KICK => 1], DataAction::ADDITION);
+			$this->leaderboardManager->dispatchLeaderboardUpdate(DataType::KICK);
 		}
 	}
 
@@ -185,6 +205,7 @@ class EventListener implements Listener{
 		if($player instanceof Player){
 			if($player->hasFiniteResources() && !$event->isCancelled()){
 				$this->plugin->getDatabase()->update($player, [DataType::HEAL => $event->getAmount()], DataAction::ADDITION);
+				$this->leaderboardManager->dispatchLeaderboardUpdate(DataType::HEAL);
 			}
 		}
 	}
@@ -194,6 +215,7 @@ class EventListener implements Listener{
 		if($player instanceof Player){
 			if($player->hasFiniteResources() && !$event->isCancelled()){
 				$this->plugin->getDatabase()->update($player, [DataType::XP => $event->getNewLevel()], DataAction::ADDITION);
+				$this->leaderboardManager->dispatchLeaderboardUpdate(DataType::XP);
 			}
 		}
 	}
@@ -210,7 +232,9 @@ class EventListener implements Listener{
 				if($attacker instanceof Player){
 					if($victim->hasFiniteResources() && $attacker->hasFiniteResources() && !$event->isCancelled()){
 						$this->plugin->getDatabase()->update($attacker, [DataType::DAMAGE_DEALT => $event->getOriginalBaseDamage()], DataAction::ADDITION);
+						$this->leaderboardManager->dispatchLeaderboardUpdate(DataType::DAMAGE_DEALT);
 						$this->plugin->getDatabase()->update($victim, [DataType::DAMAGE_RECEIVED => $event->getFinalDamage()], DataAction::ADDITION);
+						$this->leaderboardManager->dispatchLeaderboardUpdate(DataType::DAMAGE_RECEIVED);
 					}
 				}
 			}
@@ -223,7 +247,9 @@ class EventListener implements Listener{
 					if($child instanceof Projectile){
 						if($victim->hasFiniteResources() && $attacker->hasFiniteResources() && !$event->isCancelled()){
 							$this->plugin->getDatabase()->update($attacker, [DataType::DAMAGE_DEALT => $event->getOriginalBaseDamage()], DataAction::ADDITION);
+							$this->leaderboardManager->dispatchLeaderboardUpdate(DataType::DAMAGE_DEALT);
 							$this->plugin->getDatabase()->update($victim, [DataType::DAMAGE_RECEIVED => $event->getFinalDamage()], DataAction::ADDITION);
+							$this->leaderboardManager->dispatchLeaderboardUpdate(DataType::DAMAGE_RECEIVED);
 						}
 					}
 				}

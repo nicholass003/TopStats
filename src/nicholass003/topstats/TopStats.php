@@ -24,16 +24,17 @@ declare(strict_types=1);
 
 namespace nicholass003\topstats;
 
-use nicholass003\topstats\libs\_86bb3d02f898879c\CortexPE\Commando\PacketHooker;
-use nicholass003\topstats\libs\_86bb3d02f898879c\DaPigGuy\libPiggyEconomy\libPiggyEconomy;
-use nicholass003\topstats\libs\_86bb3d02f898879c\DaPigGuy\libPiggyEconomy\providers\EconomyProvider;
-use nicholass003\topstats\libs\_86bb3d02f898879c\JackMD\UpdateNotifier\UpdateNotifier;
+use nicholass003\topstats\libs\_3c674594dd7e90b7\CortexPE\Commando\PacketHooker;
+use nicholass003\topstats\libs\_3c674594dd7e90b7\DaPigGuy\libPiggyEconomy\libPiggyEconomy;
+use nicholass003\topstats\libs\_3c674594dd7e90b7\DaPigGuy\libPiggyEconomy\providers\EconomyProvider;
+use nicholass003\topstats\libs\_3c674594dd7e90b7\JackMD\UpdateNotifier\UpdateNotifier;
 use nicholass003\topstats\command\TopStatsCommand;
 use nicholass003\topstats\database\data\DataType;
 use nicholass003\topstats\database\IDatabase;
 use nicholass003\topstats\database\JsonDatabase;
 use nicholass003\topstats\database\MySQLDatabase;
 use nicholass003\topstats\database\SQLInterface;
+use nicholass003\topstats\database\SQLiteDatabase;
 use nicholass003\topstats\leaderboard\LeaderboardManager;
 use nicholass003\topstats\listener\EventListener;
 use nicholass003\topstats\model\player\PlayerModel;
@@ -70,7 +71,7 @@ use function trim;
 class TopStats extends PluginBase{
 	use SingletonTrait;
 
-	private const CONFIG_VERSION = "1.0.0";
+	private const CONFIG_VERSION = "1.0.1";
 
 	public const MAX_LIST = 10;
 	public const TIME_FORMAT = "{year}y {month}m {week}w {day}d {hour}h {minute}m {second}s";
@@ -81,6 +82,8 @@ class TopStats extends PluginBase{
 
 	private Config $db;
 
+	private bool $disabledDueToInternalError = false;
+
 	protected function onLoad() : void{
 		$this->loadConfig();
 		$this->saveAllResources();
@@ -89,7 +92,7 @@ class TopStats extends PluginBase{
 	}
 
 	private function saveAllResources() : void{
-		$this->saveResource($this->getDataFolder() . "database.yml");
+		$this->saveResource("database.yml");
 		$this->db = new Config($this->getDataFolder() . "database.yml", Config::YAML);
 	}
 
@@ -208,10 +211,19 @@ class TopStats extends PluginBase{
 		$this->registerCommands();
 		$this->registerEntities();
 		$this->registerListeners();
-		$this->registerTasks();
-		$this->database = match(strtolower($this->getConfig()->get("database"))){
+		$databaseType = strtolower($this->getConfig()->get("database"));
+		if($databaseType !== "json"){
+			if(strtolower($this->db->get("database")["type"]) !== $databaseType){
+				$this->disabledDueToInternalError = true;
+				$this->getLogger()->error("Database type mismatch, disable plugin.");
+				$this->getServer()->getPluginManager()->disablePlugin($this);
+				return;
+			}
+		}
+		$this->database = match($databaseType){
 			"json" => new JsonDatabase($this),
 			"mysql" => new MySQLDatabase($this),
+			"sqlite" => new SQLiteDatabase($this),
 			default => new JsonDatabase($this)
 		};
 		if($this->checkEconomyProvider()){
@@ -219,11 +231,14 @@ class TopStats extends PluginBase{
 		}
 		$this->database->loadData();
 		$this->leaderboardManager->loadData();
+		$this->registerTasks();
 	}
 
 	protected function onDisable() : void{
-		$this->database->saveData();
-		$this->leaderboardManager->saveData();
+		if(!$this->disabledDueToInternalError){
+			$this->database->saveData();
+			$this->leaderboardManager->saveData();
+		}
 	}
 
 	private function checkEconomyProvider() : bool{

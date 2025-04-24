@@ -35,7 +35,7 @@ use pocketmine\entity\Human;
 use pocketmine\entity\Skin;
 use pocketmine\player\Player;
 use pocketmine\Server;
-use nicholass003\topstats\libs\_3c674594dd7e90b7\SOFe\InfoAPI\InfoAPI;
+use nicholass003\topstats\libs\_420c485a2dc8f6a2\SOFe\InfoAPI\InfoAPI;
 use function count;
 use function floor;
 use function random_bytes;

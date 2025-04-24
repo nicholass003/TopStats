@@ -1,10 +1,11 @@
 # TopStats Configuration #
 # WARNING: Do NOT change the config-version manually!
 # This version is managed by the plugin and changing it may cause issues.
-config-version: "1.0.0"
+config-version: "1.0.1"
 # Supported Databases:
 # - json
 # - mysql
+# - sqlite
 database: "json"
 # AutoSave for SQL Databases
 auto-save: true

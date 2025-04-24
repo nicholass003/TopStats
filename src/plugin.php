@@ -34,6 +34,7 @@ use nicholass003\topstats\database\IDatabase;
 use nicholass003\topstats\database\JsonDatabase;
 use nicholass003\topstats\database\MySQLDatabase;
 use nicholass003\topstats\database\SQLInterface;
+use nicholass003\topstats\database\SQLiteDatabase;
 use nicholass003\topstats\leaderboard\LeaderboardManager;
 use nicholass003\topstats\listener\EventListener;
 use nicholass003\topstats\model\player\PlayerModel;
@@ -70,7 +71,7 @@ use function trim;
 class TopStats extends PluginBase{
 	use SingletonTrait;
 
-	private const CONFIG_VERSION = "1.0.0";
+	private const CONFIG_VERSION = "1.0.1";
 
 	public const MAX_LIST = 10;
 	public const TIME_FORMAT = "{year}y {month}m {week}w {day}d {hour}h {minute}m {second}s";
@@ -80,6 +81,8 @@ class TopStats extends PluginBase{
 	protected LeaderboardManager $leaderboardManager;
 
 	private Config $db;
+
+	private bool $disabledDueToInternalError = false;
 
 	protected function onLoad() : void{
 		$this->loadConfig();
@@ -208,9 +211,19 @@ class TopStats extends PluginBase{
 		$this->registerCommands();
 		$this->registerEntities();
 		$this->registerListeners();
-		$this->database = match(strtolower($this->getConfig()->get("database"))){
+		$databaseType = strtolower($this->getConfig()->get("database"));
+		if($databaseType !== "json"){
+			if(strtolower($this->db->get("database")["type"]) !== $databaseType){
+				$this->disabledDueToInternalError = true;
+				$this->getLogger()->error("Database type mismatch, disable plugin.");
+				$this->getServer()->getPluginManager()->disablePlugin($this);
+				return;
+			}
+		}
+		$this->database = match($databaseType){
 			"json" => new JsonDatabase($this),
 			"mysql" => new MySQLDatabase($this),
+			"sqlite" => new SQLiteDatabase($this),
 			default => new JsonDatabase($this)
 		};
 		if($this->checkEconomyProvider()){
@@ -222,8 +235,10 @@ class TopStats extends PluginBase{
 	}
 
 	protected function onDisable() : void{
-		$this->database->saveData();
-		$this->leaderboardManager->saveData();
+		if(!$this->disabledDueToInternalError){
+			$this->database->saveData();
+			$this->leaderboardManager->saveData();
+		}
 	}
 
 	private function checkEconomyProvider() : bool{

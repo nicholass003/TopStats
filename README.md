@@ -71,7 +71,7 @@
 - [x] Implement more data type (v0.2.3)
 - [ ] Make leaderboard IDs visible to admin
 - [x] Implement Commando libraries (v0.3.0)
-- [ ] Implement support for more database providers
+- [x] Implement support for more database providers (v0.3.4)
 - [ ] Implement UI for improved settings
 - [x] Implement custom data support from other plugins (v0.3.2)
 

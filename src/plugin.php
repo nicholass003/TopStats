@@ -208,7 +208,6 @@ class TopStats extends PluginBase{
 		$this->registerCommands();
 		$this->registerEntities();
 		$this->registerListeners();
-		$this->registerTasks();
 		$this->database = match(strtolower($this->getConfig()->get("database"))){
 			"json" => new JsonDatabase($this),
 			"mysql" => new MySQLDatabase($this),
@@ -219,6 +218,7 @@ class TopStats extends PluginBase{
 		}
 		$this->database->loadData();
 		$this->leaderboardManager->loadData();
+		$this->registerTasks();
 	}
 
 	protected function onDisable() : void{

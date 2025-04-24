@@ -89,7 +89,7 @@ class TopStats extends PluginBase{
 	}
 
 	private function saveAllResources() : void{
-		$this->saveResource($this->getDataFolder() . "database.yml");
+		$this->saveResource("database.yml");
 		$this->db = new Config($this->getDataFolder() . "database.yml", Config::YAML);
 	}
 

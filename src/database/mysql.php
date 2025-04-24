@@ -33,6 +33,7 @@ use pocketmine\player\Player;
 use poggit\libasynql\DataConnector;
 use poggit\libasynql\libasynql;
 use poggit\libasynql\SqlError;
+use function count;
 use function in_array;
 use function json_encode;
 
@@ -74,6 +75,7 @@ class MySQLDatabase implements SQLInterface{
 				if(!isset($data["xuid"])){
 					continue;
 				}
+				$this->data[$data["xuid"]]["name"] = $data["name"];
 				foreach(DataType::ALL as $type){
 					$this->data[$data["xuid"]][$type] = $data[DataType::get($type)] ?? 0;
 				}
@@ -149,8 +151,11 @@ class MySQLDatabase implements SQLInterface{
 	}
 
 	public function saveData() : void{
+		if(count($this->data) === 0){
+			return;
+		}
 		foreach($this->data as $xuid => $stats){
-			$args = ["xuid" => $xuid];
+			$args = ["xuid" => (string) $xuid, "name" => $stats["name"]];
 			foreach(DataType::ALL as $type){
 				$args[DataType::get($type)] = $stats[$type] ?? 0;
 			}

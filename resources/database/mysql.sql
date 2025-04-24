@@ -141,9 +141,3 @@ SELECT * FROM topstats WHERE xuid = :xuid;
 -- #{ select_all_stats
 SELECT * FROM topstats;
 -- #}
--- #{ select_top
--- #    :column string
-SELECT * FROM topstats
-ORDER BY {column} DESC
-LIMIT 10;
--- #}

@@ -38,7 +38,9 @@ use pocketmine\Server;
 use SOFe\InfoAPI\InfoAPI;
 use function count;
 use function floor;
+use function is_numeric;
 use function random_bytes;
+use function round;
 use function str_repeat;
 use function strlen;
 use function uasort;
@@ -141,6 +143,8 @@ class Utils{
 		$formattedData = $data[$type];
 		if($type === DataType::ONLINE_TIME){
 			$formattedData = self::timeFormat($data[$type]);
+		}elseif(is_numeric($formattedData)){
+			$formattedData = NumberFormatter::short($formattedData);
 		}
 		return InfoAPI::render(TopStats::getInstance(), $text, [
 			"player" => $data["name"],
@@ -186,5 +190,30 @@ class Utils{
 			return DataAction::SUBTRACTION;
 		}
 		return DataAction::NONE;
+	}
+}
+
+class NumberFormatter{
+
+	public static function short(float|int $number, int $precision = 1) : string{
+		if($number < 1000){
+			return (string) $number;
+		}
+
+		$units = [
+			12 => "T",
+			9 => "B",
+			6 => "M",
+			3 => "K",
+		];
+
+		foreach($units as $power => $suffix){
+			$value = $number / (10 ** $power);
+			if($value >= 1){
+				return round($value, $precision) . $suffix;
+			}
+		}
+
+		return (string) $number;
 	}
 }

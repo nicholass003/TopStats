@@ -35,10 +35,12 @@ use pocketmine\entity\Human;
 use pocketmine\entity\Skin;
 use pocketmine\player\Player;
 use pocketmine\Server;
-use nicholass003\topstats\libs\_5d0cf7a60b86570e\SOFe\InfoAPI\InfoAPI;
+use nicholass003\topstats\libs\_f3f59fe202917385\SOFe\InfoAPI\InfoAPI;
 use function count;
 use function floor;
+use function is_numeric;
 use function random_bytes;
+use function round;
 use function str_repeat;
 use function strlen;
 use function uasort;
@@ -141,6 +143,8 @@ class Utils{
 		$formattedData = $data[$type];
 		if($type === DataType::ONLINE_TIME){
 			$formattedData = self::timeFormat($data[$type]);
+		}elseif(is_numeric($formattedData)){
+			$formattedData = NumberFormatter::short($formattedData);
 		}
 		return InfoAPI::render(TopStats::getInstance(), $text, [
 			"player" => $data["name"],

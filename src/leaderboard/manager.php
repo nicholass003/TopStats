@@ -93,10 +93,11 @@ class LeaderboardManager{
 	 * the event is cancelled.
 	 *
 	 * @param string $type The leaderboard type identifier (e.g., "block_break", "kills").
+	 * @param array  $data Optional external data used from other plugins.
 	 *
 	 * @return bool
 	 */
-	public function dispatchLeaderboardUpdate(string $type) : bool{
+	public function dispatchLeaderboardUpdate(string $type, array $data = []) : bool{
 		$leaderboards = $this->getLeaderboardFromType($type);
 
 		if(count($leaderboards) === 0){
@@ -110,7 +111,7 @@ class LeaderboardManager{
 		}
 
 		foreach($leaderboards as $id => $leaderboard){
-			$leaderboard->update();
+			$leaderboard->update($data);
 		}
 		return true;
 	}

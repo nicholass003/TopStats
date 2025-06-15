@@ -24,20 +24,18 @@ declare(strict_types=1);
 
 namespace nicholass003\topstats\leaderboard;
 
+use Exception;
+use nicholass003\Textify\Lib\TextifyFactory;
 use nicholass003\topstats\event\TopStatsUpdateEvent;
-use nicholass003\topstats\model\IModel;
-use nicholass003\topstats\model\ModelVariant;
-use nicholass003\topstats\model\player\PlayerModel;
-use nicholass003\topstats\model\text\TextModel;
 use nicholass003\topstats\TopStats;
-use nicholass003\topstats\utils\Utils;
-use pocketmine\entity\Location;
 use pocketmine\utils\Config;
-use pocketmine\world\Position;
 use function array_filter;
 use function count;
+use function is_array;
 use function json_decode;
+use function json_encode;
 use function substr;
+use const JSON_PRETTY_PRINT;
 
 class LeaderboardManager{
 
@@ -81,7 +79,7 @@ class LeaderboardManager{
 	public function getLeaderboardFromType(string $type) : array{
 		return array_filter(
 			$this->leaderboards,
-			fn($leaderboard) => $leaderboard->getModel()->getType() === $type
+			fn($leaderboard) => $leaderboard->getModel()->getCompoundTag()->getString("TopStatsType") === $type
 		);
 	}
 
@@ -117,12 +115,24 @@ class LeaderboardManager{
 	}
 
 	public function loadData() : void{
-		foreach($this->leaderboardData->getAll() as $sid => $data){
+		foreach($this->leaderboardData->getAll() as $sid => $raw){
 			$id = (int) substr((string) $sid, 3);
-			$leaderboard = new Leaderboard($this->validateModel(json_decode($data, true)));
-			if($leaderboard->getModel()->getPosition()->getWorld()->isLoaded()){
+
+			$data = json_decode($raw, true);
+			if(!is_array($data)){
+				throw new Exception("Invalid leaderboard data format for ID: $id");
+			}
+
+			$model = TextifyFactory::getInstance()->get($data["id"] ?? null);
+			if($model === null){
+				throw new Exception("Model not found for leaderboard ID: $id");
+			}
+
+			$leaderboard = new Leaderboard($model);
+			if($leaderboard->getModel()->getModelPosition()->getWorld()->isLoaded()){
 				$leaderboard->update();
 			}
+
 			$this->leaderboards[$id] = $leaderboard;
 		}
 	}
@@ -134,30 +144,10 @@ class LeaderboardManager{
 	public function saveData() : void{
 		$data = [];
 		foreach($this->leaderboards() as $id => $leaderboard){
-			$data["ID:{$id}"] = $leaderboard->toJSON();
+			$data["ID:{$id}"] = json_encode($leaderboard);
 			$leaderboard->getModel()->destroy();
 		}
 		$this->leaderboardData->setAll($data);
 		$this->leaderboardData->save();
-	}
-
-	public function validateModel(array $data) : IModel{
-		$worldManager = $this->plugin->getServer()->getWorldManager();
-		$world = $worldManager->getWorldByName($data["position"]["world"]);
-		if($world === null){
-			$worldManager->loadWorld($data["position"]["world"]);
-			$world = $worldManager->getWorldByName($data["position"]["world"]);
-		}
-		$pos = new Position($data["position"]["x"], $data["position"]["y"], $data["position"]["z"], $world);
-		switch($data["model"]){
-			case ModelVariant::PLAYER:
-				$playerModel = new PlayerModel(Location::fromObject($pos, $pos->getWorld()), Utils::getTopStatsPlayerSkin($this->plugin->getDatabase()->getTemporaryData(), $data["type"], $data["top"]), $data["id"], $data["type"], $data["top"]);
-				return $playerModel;
-			case ModelVariant::TEXT:
-				$textModel = new TextModel(Location::fromObject($pos, $pos->getWorld()), $data["id"], $data["type"]);
-				return $textModel;
-			default:
-				throw new \InvalidArgumentException("Invalid IModel: " . $data["model"]);
-		}
 	}
 }

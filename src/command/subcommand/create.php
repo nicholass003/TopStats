@@ -27,19 +27,19 @@ namespace nicholass003\topstats\command\subcommand;
 use CortexPE\Commando\args\BooleanArgument;
 use CortexPE\Commando\args\IntegerArgument;
 use CortexPE\Commando\args\RawStringArgument;
+use nicholass003\Textify\Lib\Model\Model;
+use nicholass003\Textify\Lib\Model\Variant;
+use nicholass003\Textify\Lib\Textify;
 use nicholass003\topstats\database\data\DataType;
 use nicholass003\topstats\leaderboard\Leaderboard;
-use nicholass003\topstats\model\ModelVariant;
-use nicholass003\topstats\model\player\PlayerModel;
-use nicholass003\topstats\model\text\TextModel;
 use nicholass003\topstats\utils\Utils;
 use pocketmine\command\CommandSender;
 use pocketmine\entity\Location;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\player\Player;
 use pocketmine\utils\TextFormat;
 use function array_merge;
 use function in_array;
-use function strtolower;
 
 class CreateSubCommand extends TopStatsSubCommand{
 
@@ -83,32 +83,33 @@ class CreateSubCommand extends TopStatsSubCommand{
 						return;
 					}
 				}
-				$id = Utils::getNextTopStatsIds();
 				$center = $args["center"] ?? false;
 				$location = $sender->getLocation();
 				if($center){
 					$location = Location::fromObject($location->floor()->add(0.5, 0, 0.5), $location->getWorld());
 				}
-				switch(strtolower($args["model"])){
-					case ModelVariant::PLAYER:
-						$leaderboard = new Leaderboard(new PlayerModel($location, Utils::getTopStatsPlayerSkin($this->plugin->getDatabase()->getTemporaryData(), $args["type"], (int) $args["top"] ?? 1), $id, $args["type"], (int) $args["top"] ?? 1));
-						$leaderboard->spawn();
-						$this->leaderboardManager->add($leaderboard);
-						$sender->sendMessage(TextFormat::GREEN . "Successfully spawn TopStats with model: " . $args["model"] . " type: " . $args["type"] . " top: " . $args["top"]);
-						break;
-					case ModelVariant::TEXT:
-						if($center){
-							$location = Location::fromObject($location->add(0, 0.5, 0), $location->getWorld());
-						}
-						$leaderboard = new Leaderboard(new TextModel($location, $id, $args["type"]));
-						$leaderboard->spawn();
-						$this->leaderboardManager->add($leaderboard);
-						$sender->sendMessage(TextFormat::GREEN . "Successfully spawn TopStats with model: " . $args["model"] . " type: " . $args["type"]);
-						break;
-					default:
-						$sender->sendMessage(TextFormat::RED . "Usage: /topstats " . $aliasUsed . " <player|text> <type> <top>");
-						break;
+
+				$variant = Variant::fromString($args["model"]);
+				if($variant === null){
+					$sender->sendMessage(TextFormat::RED . "Usage: /topstats " . $aliasUsed . " <player|text> <type> [top]" . isset($args["top"]) && $variant !== Variant::TEXT ? " top: " . $args["top"] : "");
+					return;
 				}
+
+				$extraData = [
+					Textify::TAG_COMPOUND => CompoundTag::create()->setTag(Model::TAG_MODEL, CompoundTag::create()->setString(Leaderboard::TAG_TYPE, $args["type"])->setByte(Leaderboard::TAG_TOP, $args["top"] ?? 0))
+				];
+
+				if($variant === Variant::PLAYER){
+					$extraData[Textify::TAG_SKIN] = Utils::getTopStatsPlayerSkin($this->plugin->getDatabase()->getTemporaryData(), $args["type"], (int) $args["top"] ?? 1);
+				}elseif($variant === Variant::TEXT && $center){
+					$location = Location::fromObject($location->add(0, 0.5, 0), $location->getWorld());
+				}
+
+				$leaderboard = new Leaderboard(Textify::create($variant, $location, "", "", null, $extraData));
+				$this->leaderboardManager->add($leaderboard);
+				$leaderboard->spawn();
+
+				$sender->sendMessage(TextFormat::GREEN . "Successfully spawn TopStats with model: " . $args["model"] . " type: " . $args["type"]);
 			}else{
 				$sender->sendMessage(TextFormat::RED . "Usage: /topstats " . $aliasUsed . " " . $args["model"] . " <type> <top>");
 			}

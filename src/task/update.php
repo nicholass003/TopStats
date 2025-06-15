@@ -37,9 +37,6 @@ class UpdateTask extends Task{
 	){}
 
 	public function onRun() : void{
-		foreach($this->plugin->getLeaderboardManager()->leaderboards() as $id => $leaderboard){
-			Utils::validatePlayerModels($leaderboard); //TODO: deprecate this, we shouldn't need to use this anymore.
-		}
 		foreach($this->plugin->getServer()->getOnlinePlayers() as $player){
 			if($player->isConnected() && $player->spawned){
 				$this->plugin->getDatabase()->update($player, [DataType::ONLINE_TIME => 1], DataAction::ADDITION);

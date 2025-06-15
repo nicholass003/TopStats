@@ -24,10 +24,10 @@ declare(strict_types=1);
 
 namespace nicholass003\topstats\listener;
 
+use nicholass003\Textify\Lib\Model\NonPlayerCharacter;
 use nicholass003\topstats\database\data\DataAction;
 use nicholass003\topstats\database\data\DataType;
 use nicholass003\topstats\leaderboard\LeaderboardManager;
-use nicholass003\topstats\model\player\PlayerModel;
 use nicholass003\topstats\TopStats;
 use pocketmine\entity\projectile\Projectile;
 use pocketmine\event\block\BlockBreakEvent;
@@ -222,7 +222,7 @@ class EventListener implements Listener{
 
 	public function onEntityDamage(EntityDamageEvent $event) : void{
 		$entity = $event->getEntity();
-		if($entity instanceof PlayerModel){
+		if($entity instanceof NonPlayerCharacter){
 			$event->cancel();
 		}
 		if($event instanceof EntityDamageByEntityEvent){
@@ -286,7 +286,7 @@ class EventListener implements Listener{
 			$angle = atan2($dist, $ydiff);
 			$pitch = (($angle * 180) / M_PI) - 90;
 
-			if($entity instanceof PlayerModel){
+			if($entity instanceof NonPlayerCharacter){
 				$pk = MovePlayerPacket::create($entity->getId(), $entity->getPosition()->add(0, $entity->getEyeHeight(), 0), $pitch, $yaw, $yaw, MovePlayerPacket::MODE_NORMAL, $entity->onGround, 0, 0, 0, 0);
 				$player->getNetworkSession()->sendDataPacket($pk);
 			}

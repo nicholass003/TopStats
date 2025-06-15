@@ -8,6 +8,7 @@
         "ifera-mc/update-notifier": "dev-master",
         "paroxity/commando": "^3.2.1",
         "sof3/libasynql": "^4.2.3",
+        "nicholass003/textify": "dev-main",
         "sof3/infoapi": "dev-master"
     },
     "require-dev": {
@@ -17,6 +18,10 @@
         {
             "type": "vcs",
             "url": "https://github.com/ifera-mc/UpdateNotifier"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/nicholass003/Textify"
         }
     ],
     "autoload": {

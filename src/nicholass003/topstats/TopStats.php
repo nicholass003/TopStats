@@ -24,10 +24,11 @@ declare(strict_types=1);
 
 namespace nicholass003\topstats;
 
-use nicholass003\topstats\libs\_f3f59fe202917385\CortexPE\Commando\PacketHooker;
-use nicholass003\topstats\libs\_f3f59fe202917385\DaPigGuy\libPiggyEconomy\libPiggyEconomy;
-use nicholass003\topstats\libs\_f3f59fe202917385\DaPigGuy\libPiggyEconomy\providers\EconomyProvider;
-use nicholass003\topstats\libs\_f3f59fe202917385\JackMD\UpdateNotifier\UpdateNotifier;
+use nicholass003\topstats\libs\_949d26e1f7364fbc\CortexPE\Commando\PacketHooker;
+use nicholass003\topstats\libs\_949d26e1f7364fbc\DaPigGuy\libPiggyEconomy\libPiggyEconomy;
+use nicholass003\topstats\libs\_949d26e1f7364fbc\DaPigGuy\libPiggyEconomy\providers\EconomyProvider;
+use nicholass003\topstats\libs\_949d26e1f7364fbc\JackMD\UpdateNotifier\UpdateNotifier;
+use nicholass003\topstats\libs\_949d26e1f7364fbc\nicholass003\Textify\Lib\TextifyFactory;
 use nicholass003\topstats\command\TopStatsCommand;
 use nicholass003\topstats\database\data\DataType;
 use nicholass003\topstats\database\IDatabase;
@@ -37,21 +38,11 @@ use nicholass003\topstats\database\SQLInterface;
 use nicholass003\topstats\database\SQLiteDatabase;
 use nicholass003\topstats\leaderboard\LeaderboardManager;
 use nicholass003\topstats\listener\EventListener;
-use nicholass003\topstats\model\player\PlayerModel;
-use nicholass003\topstats\model\text\TextModel;
 use nicholass003\topstats\task\UpdateTask;
-use pocketmine\data\SavedDataLoadingException;
-use pocketmine\entity\EntityDataHelper;
-use pocketmine\entity\EntityFactory;
-use pocketmine\entity\Human;
-use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\nbt\tag\IntTag;
-use pocketmine\nbt\tag\StringTag;
 use pocketmine\plugin\PluginBase;
 use pocketmine\scheduler\Task;
 use pocketmine\utils\Config;
 use pocketmine\utils\SingletonTrait;
-use pocketmine\world\World;
 use function array_column;
 use function array_pop;
 use function array_unshift;
@@ -207,9 +198,11 @@ class TopStats extends PluginBase{
 		if(!PacketHooker::isRegistered()){
 			PacketHooker::register($this);
 		}
+		if(!TextifyFactory::isRegistered()){
+			TextifyFactory::register($this);
+		}
 		$this->leaderboardManager = new LeaderboardManager($this);
 		$this->registerCommands();
-		$this->registerEntities();
 		$this->registerListeners();
 		$databaseType = strtolower($this->getConfig()->get("database"));
 		if($databaseType !== "json"){
@@ -237,6 +230,7 @@ class TopStats extends PluginBase{
 	protected function onDisable() : void{
 		if(!$this->disabledDueToInternalError){
 			$this->database->saveData();
+			TextifyFactory::getInstance()->save();
 			$this->leaderboardManager->saveData();
 		}
 	}
@@ -250,29 +244,6 @@ class TopStats extends PluginBase{
 	private function registerCommands() : void{
 		$commandMap = $this->getServer()->getCommandMap();
 		$commandMap->register("topstats", new TopStatsCommand($this, "topstats", "TopStats Command"));
-	}
-
-	private function registerEntities() : void{
-		$entityFactory = EntityFactory::getInstance();
-		$getTagValue = function(CompoundTag $nbt, string $tagName, string $tagClass) : mixed{
-			$tag = $nbt->getTag($tagName);
-			if($tag instanceof $tagClass){
-				return $tag->getValue();
-			}else{
-				throw new SavedDataLoadingException("Expected \"{$tagName}\" NBT tag of type {$tagClass} not found");
-			}
-		};
-		$entityFactory->register(PlayerModel::class, function(World $world, CompoundTag $nbt) use($getTagValue) : PlayerModel{
-			$type = $getTagValue($nbt, PlayerModel::TAG_TYPE, StringTag::class);
-			$modelID = $getTagValue($nbt, PlayerModel::TAG_MODEL_ID, IntTag::class);
-			$top = $getTagValue($nbt, PlayerModel::TAG_TOP, IntTag::class);
-			return new PlayerModel(EntityDataHelper::parseLocation($nbt, $world), Human::parseSkinNBT($nbt), $modelID, $type, $top, $nbt);
-		}, ["PlayerModel"]);
-		$entityFactory->register(TextModel::class, function(World $world, CompoundTag $nbt) use($getTagValue) : TextModel{
-			$type = $getTagValue($nbt, TextModel::TAG_TYPE, StringTag::class);
-			$modelID = $getTagValue($nbt, TextModel::TAG_MODEL_ID, IntTag::class);
-			return new TextModel(EntityDataHelper::parseLocation($nbt, $world), $modelID, $type, "", "", $nbt);
-		}, ["TextModel"]);
 	}
 
 	private function registerListeners() : void{

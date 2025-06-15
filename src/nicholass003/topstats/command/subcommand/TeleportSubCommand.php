@@ -24,8 +24,8 @@ declare(strict_types=1);
 
 namespace nicholass003\topstats\command\subcommand;
 
-use nicholass003\topstats\libs\_f3f59fe202917385\CortexPE\Commando\args\IntegerArgument;
-use nicholass003\topstats\model\IModel;
+use nicholass003\topstats\libs\_949d26e1f7364fbc\CortexPE\Commando\args\IntegerArgument;
+use nicholass003\topstats\libs\_949d26e1f7364fbc\nicholass003\Textify\Lib\Model\Model;
 use pocketmine\command\CommandSender;
 use pocketmine\player\Player;
 use pocketmine\utils\TextFormat;
@@ -51,8 +51,8 @@ class TeleportSubCommand extends TopStatsSubCommand{
 			if(ctype_digit((string) $args["id"])){
 				if(in_array((int) $args["id"], array_keys($leaderboards), true)){
 					foreach($leaderboards as $id => $leaderboard){
-						if($leaderboard->getModel() instanceof IModel && $id === (int) $args["id"]){
-							$sender->teleport($leaderboard->getModel()->getPosition());
+						if($leaderboard->getModel() instanceof Model && $id === (int) $args["id"]){
+							$sender->teleport($leaderboard->getModel()->getModelPosition());
 							$sender->sendMessage(TextFormat::GREEN . "Success teleported to TopStats position with id: {$id}");
 							break;
 						}

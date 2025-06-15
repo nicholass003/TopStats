@@ -24,18 +24,17 @@ declare(strict_types=1);
 
 namespace nicholass003\topstats\leaderboard;
 
+use nicholass003\topstats\libs\_949d26e1f7364fbc\nicholass003\Textify\Lib\Model\Action;
+use nicholass003\topstats\libs\_949d26e1f7364fbc\nicholass003\Textify\Lib\Model\Model;
+use nicholass003\topstats\libs\_949d26e1f7364fbc\nicholass003\Textify\Lib\Model\NonPlayerCharacter;
 use nicholass003\topstats\database\data\DataType;
 use nicholass003\topstats\database\IDatabase;
-use nicholass003\topstats\model\IModel;
-use nicholass003\topstats\model\player\PlayerModel;
-use nicholass003\topstats\model\text\TextModel;
 use nicholass003\topstats\TopStats;
 use nicholass003\topstats\utils\Utils;
 use function count;
 use function in_array;
-use function json_encode;
 
-class Leaderboard{
+class Leaderboard implements \JsonSerializable{
 
 	protected IDatabase $database;
 
@@ -45,6 +44,9 @@ class Leaderboard{
 	public const TYPE_TEXT = "text";
 	public const TYPE_TITLE = "title";
 
+	public const TAG_TYPE = "TopStatsType"; //TAG_String
+	public const TAG_TOP = "TopStatsTop"; //TAG_Byte
+
 	public const NO_DATA_FOUND = "No records found-looks like the battlefield is yours to conquer!{line}Are you ready to rise to the top?";
 
 	private bool $forceSorting = false;
@@ -52,42 +54,43 @@ class Leaderboard{
 	protected int $id;
 
 	public function __construct(
-		protected IModel $model
+		protected Model $model
 	){
 		$this->database = TopStats::getInstance()->getDatabase();
-		$this->text = TopStats::getInstance()->getConfig()->getNested("models." . $model->getVariant() . "." . $model->getType() . ".description");
-		$this->title = TopStats::getInstance()->getConfig()->getNested("models." . $model->getVariant() . "." . $model->getType() . ".title");
-		$this->id = $model->getModelId();
+		$this->text = TopStats::getInstance()->getConfig()->getNested("models." . $model->getVariant()->value . "." . $model->getCompoundTag()->getString(self::TAG_TYPE) . ".description");
+		$this->title = TopStats::getInstance()->getConfig()->getNested("models." . $model->getVariant()->value . "." . $model->getCompoundTag()->getString(self::TAG_TYPE) . ".title");
+		$this->id = Utils::getNextTopStatsIds();
 	}
 
 	public function getId() : int{
 		return $this->id;
 	}
 
-	public function getModel() : IModel{
+	public function getModel() : Model{
 		return $this->model;
 	}
 
-	public function setModel(IModel $model) : Leaderboard{
+	public function setModel(Model $model) : Leaderboard{
 		$this->model = $model;
 		return $this;
 	}
 
 	public function updateText(string $text) : Leaderboard{
-		$this->model->updateText($text);
+		$this->model->setText($text);
+		$this->model->update(Action::EDIT);
 		return $this;
 	}
 
 	public function updateTitle(string $title) : Leaderboard{
-		$this->model->updateTitle($title);
+		$this->model->setTitle($title);
+		$this->model->update(Action::EDIT);
 		return $this;
 	}
 
 	public function spawn() : void{
-		if($this->model instanceof TextModel){
-			$this->model->spawnToAll();
-		}elseif($this->model instanceof PlayerModel){
-			$this->model->spawnToAll();
+		foreach($this->model->getViewers() as $player){
+			$this->model->send($player, Action::ADD);
+			$this->update();
 		}
 	}
 
@@ -100,7 +103,7 @@ class Leaderboard{
 	}
 
 	public function isCustomDataType() : bool{
-		return !in_array($this->model->getType(), DataType::ALL, true);
+		return !in_array($this->model->getCompoundTag()->getString(self::TAG_TYPE), DataType::ALL, true);
 	}
 
 	public function update(array $data = []) : void{
@@ -114,24 +117,15 @@ class Leaderboard{
 
 		$this->updateText(Utils::getTopStatsText($data, $this->model, $this->text, self::TYPE_TEXT, $this->forceSorting));
 		$this->updateTitle(Utils::getTopStatsText($data, $this->model, $this->title, self::TYPE_TITLE, $this->forceSorting));
-		if($this->model instanceof PlayerModel){
-			$skin = Utils::getTopStatsPlayerSkin($data, $this->model->getType(), $this->model->getTop());
+		if($this->model instanceof NonPlayerCharacter){
+			$skin = Utils::getTopStatsPlayerSkin($data, $this->model->getCompoundTag()->getString(self::TAG_TYPE), $this->model->getCompoundTag()->getByte(self::TAG_TOP));
 			$this->model->setSkin($skin);
 		}
 	}
 
-	public function toJSON() : string{
-		return json_encode([
-			"id" => $this->model->getModelId(),
-			"model" => $this->model->getVariant(),
-			"type" => $this->model->getType(),
-			"top" => $this->model instanceof PlayerModel ? $this->model->getTop() : "none",
-			"position" => [
-				"x" => $this->model->getPosition()->getX(),
-				"y" => $this->model->getPosition()->getY(),
-				"z" => $this->model->getPosition()->getZ(),
-				"world" => $this->model->getPosition()->getWorld()->getFolderName()
-			]
-		]);
+	public function jsonSerialize() : array{
+		return [
+			"id" => $this->model->getActorId()
+		];
 	}
 }

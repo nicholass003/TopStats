@@ -24,18 +24,18 @@ declare(strict_types=1);
 
 namespace nicholass003\topstats\utils;
 
+use nicholass003\topstats\libs\_949d26e1f7364fbc\nicholass003\Textify\Lib\Model\Model;
+use nicholass003\topstats\libs\_949d26e1f7364fbc\nicholass003\Textify\Lib\Model\NonPlayerCharacter;
+use nicholass003\topstats\libs\_949d26e1f7364fbc\nicholass003\Textify\Lib\Model\Text;
 use nicholass003\topstats\database\data\DataAction;
 use nicholass003\topstats\database\data\DataType;
 use nicholass003\topstats\leaderboard\Leaderboard;
-use nicholass003\topstats\model\IModel;
-use nicholass003\topstats\model\player\PlayerModel;
-use nicholass003\topstats\model\text\TextModel;
 use nicholass003\topstats\TopStats;
 use pocketmine\entity\Human;
 use pocketmine\entity\Skin;
 use pocketmine\player\Player;
 use pocketmine\Server;
-use nicholass003\topstats\libs\_f3f59fe202917385\SOFe\InfoAPI\InfoAPI;
+use nicholass003\topstats\libs\_949d26e1f7364fbc\SOFe\InfoAPI\InfoAPI;
 use function count;
 use function floor;
 use function is_numeric;
@@ -54,7 +54,7 @@ class Utils{
 		return $data;
 	}
 
-	public static function getTopStatsText(array $data, IModel $model, string $text, string $textType, bool $forceSorting = false) : string{
+	public static function getTopStatsText(array $data, Model $model, string $text, string $textType, bool $forceSorting = false) : string{
 		$result = "";
 		$num = 1;
 		$max = TopStats::getInstance()->getMaxList();
@@ -62,25 +62,25 @@ class Utils{
 			$max = 1;
 		}
 		if(!$forceSorting){
-			$data = self::getSortedArrayBoard($data, $model->getType());
+			$data = self::getSortedArrayBoard($data, $model->getCompoundTag()->getString(Leaderboard::TAG_TYPE));
 		}
 		foreach($data as $xuid => $userData){
-			if($model instanceof PlayerModel){
-				if($num === $model->getTop()){
-					$result = self::validateTextFormat($model->getType(), $userData, $text, $num);
+			if($model instanceof NonPlayerCharacter){
+				if($num === $model->getCompoundTag()->getByte(Leaderboard::TAG_TOP)){
+					$result = self::validateTextFormat($model->getCompoundTag()->getString(Leaderboard::TAG_TYPE), $userData, $text, $num);
 					break;
 				}
 			}else{
-				$result .= self::validateTextFormat($model->getType(), $userData, $text, $num);
+				$result .= self::validateTextFormat($model->getCompoundTag()->getString(Leaderboard::TAG_TYPE), $userData, $text, $num);
 				if($num >= $max){
 					break;
 				}
 			}
 			++$num;
 		}
-		if(strlen($result) === 0 && $model instanceof PlayerModel){
+		if(strlen($result) === 0 && $model instanceof NonPlayerCharacter){
 			$result .= match($textType){
-				Leaderboard::TYPE_TITLE => self::validateTextFormat($model->getType(), ["name" => "Unknown", $model->getType() => 0], $text, $num),
+				Leaderboard::TYPE_TITLE => self::validateTextFormat($model->getCompoundTag()->getString(Leaderboard::TAG_TYPE), ["name" => "Unknown", $model->getCompoundTag()->getString(Leaderboard::TAG_TYPE) => 0], $text, $num),
 				Leaderboard::TYPE_TEXT => InfoAPI::render(TopStats::getInstance(), TopStats::getInstance()->getConfig()->get("no-data-found-text", Leaderboard::NO_DATA_FOUND), [
 					"line" => "\n"
 				])
@@ -112,31 +112,6 @@ class Utils{
 
 	public static function getNextTopStatsIds() : int{
 		return count(TopStats::getInstance()->getLeaderboardManager()->leaderboards());
-	}
-
-	public static function validatePlayerModels(Leaderboard $leaderboard) : void{
-		foreach(Server::getInstance()->getWorldManager()->getWorlds() as $world){
-			$garbageModels = [];
-			$model = $leaderboard->getModel();
-			foreach($world->getEntities() as $entity){
-				if(($entity instanceof PlayerModel || $entity instanceof TextModel) &&
-				$entity->getModelId() === $leaderboard->getId() &&
-				$entity->getPosition()->equals($model->getPosition())){
-					$garbageModels[] = $entity;
-				}
-			}
-			if(count($garbageModels) > 1){
-				$num = 1;
-				foreach($garbageModels as $garbageModel){
-					if($num === count($garbageModels)){
-						$leaderboard->setModel($garbageModel);
-						break;
-					}
-					$garbageModel->flagForDespawn();
-					++$num;
-				}
-			}
-		}
 	}
 
 	public static function validateTextFormat(string $type, array $data, string $text, int $rank) : string{

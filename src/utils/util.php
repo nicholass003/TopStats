@@ -114,31 +114,6 @@ class Utils{
 		return count(TopStats::getInstance()->getLeaderboardManager()->leaderboards());
 	}
 
-	public static function validatePlayerModels(Leaderboard $leaderboard) : void{
-		foreach(Server::getInstance()->getWorldManager()->getWorlds() as $world){
-			$garbageModels = [];
-			$model = $leaderboard->getModel();
-			foreach($world->getEntities() as $entity){
-				if(($entity instanceof NonPlayerCharacter || $entity instanceof Text) &&
-				$entity->getId() === $leaderboard->getId() &&
-				$entity->getPosition()->equals($model->getModelPosition())){
-					$garbageModels[] = $entity;
-				}
-			}
-			if(count($garbageModels) > 1){
-				$num = 1;
-				foreach($garbageModels as $garbageModel){
-					if($num === count($garbageModels)){
-						$leaderboard->setModel($garbageModel);
-						break;
-					}
-					$garbageModel->flagForDespawn();
-					++$num;
-				}
-			}
-		}
-	}
-
 	public static function validateTextFormat(string $type, array $data, string $text, int $rank) : string{
 		$formattedData = $data[$type];
 		if($type === DataType::ONLINE_TIME){

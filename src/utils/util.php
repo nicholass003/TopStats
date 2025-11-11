@@ -22,19 +22,17 @@
 
 declare(strict_types=1);
 
-namespace nicholass003\topstats\utils;
+namespace Nicholass003\TopStats\Utils;
 
 use Nicholass003\Textify\Lib\Model\Model;
 use Nicholass003\Textify\Lib\Model\NonPlayerCharacter;
-use Nicholass003\Textify\Lib\Model\Text;
-use nicholass003\topstats\database\data\DataAction;
-use nicholass003\topstats\database\data\DataType;
-use nicholass003\topstats\leaderboard\Leaderboard;
-use nicholass003\topstats\TopStats;
+use Nicholass003\TopStats\Database\Data\DataAction;
+use Nicholass003\TopStats\Database\Data\DataType;
+use Nicholass003\TopStats\Leaderboard\Leaderboard;
+use Nicholass003\TopStats\TopStats;
 use pocketmine\entity\Human;
 use pocketmine\entity\Skin;
 use pocketmine\player\Player;
-use pocketmine\Server;
 use SOFe\InfoAPI\InfoAPI;
 use function count;
 use function floor;

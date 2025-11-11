@@ -22,7 +22,7 @@
 
 declare(strict_types=1);
 
-namespace nicholass003\topstats\event;
+namespace Nicholass003\TopStats\Event;
 
 use pocketmine\event\Event;
 

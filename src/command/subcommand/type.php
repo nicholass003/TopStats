@@ -22,9 +22,9 @@
 
 declare(strict_types=1);
 
-namespace nicholass003\topstats\command\subcommand;
+namespace Nicholass003\TopStats\Command\SubCommand;
 
-use nicholass003\topstats\database\data\DataType;
+use Nicholass003\TopStats\Database\Data\DataType;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
 use function array_merge;

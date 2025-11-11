@@ -22,23 +22,23 @@
 
 declare(strict_types=1);
 
-namespace nicholass003\topstats;
+namespace Nicholass003\TopStats;
 
 use CortexPE\Commando\PacketHooker;
 use DaPigGuy\libPiggyEconomy\libPiggyEconomy;
 use DaPigGuy\libPiggyEconomy\providers\EconomyProvider;
 use JackMD\UpdateNotifier\UpdateNotifier;
 use Nicholass003\Textify\Lib\TextifyFactory;
-use nicholass003\topstats\command\TopStatsCommand;
-use nicholass003\topstats\database\data\DataType;
-use nicholass003\topstats\database\IDatabase;
-use nicholass003\topstats\database\JsonDatabase;
-use nicholass003\topstats\database\MySQLDatabase;
-use nicholass003\topstats\database\SQLInterface;
-use nicholass003\topstats\database\SQLiteDatabase;
-use nicholass003\topstats\leaderboard\LeaderboardManager;
-use nicholass003\topstats\listener\EventListener;
-use nicholass003\topstats\task\UpdateTask;
+use Nicholass003\TopStats\Command\TopStatsCommand;
+use Nicholass003\TopStats\Database\Data\DataType;
+use Nicholass003\TopStats\Database\IDatabase;
+use Nicholass003\TopStats\Database\JsonDatabase;
+use Nicholass003\TopStats\Database\MySQLDatabase;
+use Nicholass003\TopStats\Database\SQLInterface;
+use Nicholass003\TopStats\Database\SQLiteDatabase;
+use Nicholass003\TopStats\Leaderboard\LeaderboardManager;
+use Nicholass003\TopStats\Listener\EventListener;
+use Nicholass003\TopStats\Task\UpdateTask;
 use pocketmine\plugin\PluginBase;
 use pocketmine\scheduler\Task;
 use pocketmine\utils\Config;

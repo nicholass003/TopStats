@@ -22,7 +22,7 @@
 
 declare(strict_types=1);
 
-namespace nicholass003\topstats\command\subcommand;
+namespace Nicholass003\TopStats\Command\SubCommand;
 
 use CortexPE\Commando\args\IntegerArgument;
 use Nicholass003\Textify\Lib\Model\Model;

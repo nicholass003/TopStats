@@ -22,11 +22,11 @@
 
 declare(strict_types=1);
 
-namespace nicholass003\topstats\command\subcommand;
+namespace Nicholass003\TopStats\Command\SubCommand;
 
 use CortexPE\Commando\BaseSubCommand;
-use nicholass003\topstats\leaderboard\LeaderboardManager;
-use nicholass003\topstats\TopStats;
+use Nicholass003\TopStats\Leaderboard\LeaderboardManager;
+use Nicholass003\TopStats\TopStats;
 use pocketmine\plugin\Plugin;
 
 abstract class TopStatsSubCommand extends BaseSubCommand{

@@ -22,13 +22,13 @@
 
 declare(strict_types=1);
 
-namespace nicholass003\topstats\database;
+namespace Nicholass003\TopStats\Database;
 
-use nicholass003\topstats\database\data\DataAction;
-use nicholass003\topstats\database\data\DataType;
-use nicholass003\topstats\database\query\DBAction;
-use nicholass003\topstats\database\query\DBQuery;
-use nicholass003\topstats\TopStats;
+use Nicholass003\TopStats\Database\Data\DataAction;
+use Nicholass003\TopStats\Database\Data\DataType;
+use Nicholass003\TopStats\Database\Query\DBAction;
+use Nicholass003\TopStats\Database\Query\DBQuery;
+use Nicholass003\TopStats\TopStats;
 use pocketmine\player\Player;
 use poggit\libasynql\DataConnector;
 use poggit\libasynql\libasynql;

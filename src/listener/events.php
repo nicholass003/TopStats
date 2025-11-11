@@ -22,13 +22,13 @@
 
 declare(strict_types=1);
 
-namespace nicholass003\topstats\listener;
+namespace Nicholass003\TopStats\Listener;
 
 use Nicholass003\Textify\Lib\Model\NonPlayerCharacter;
-use nicholass003\topstats\database\data\DataAction;
-use nicholass003\topstats\database\data\DataType;
-use nicholass003\topstats\leaderboard\LeaderboardManager;
-use nicholass003\topstats\TopStats;
+use Nicholass003\TopStats\Database\Data\DataAction;
+use Nicholass003\TopStats\Database\Data\DataType;
+use Nicholass003\TopStats\Leaderboard\LeaderboardManager;
+use Nicholass003\TopStats\TopStats;
 use pocketmine\entity\projectile\Projectile;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\block\BlockPlaceEvent;

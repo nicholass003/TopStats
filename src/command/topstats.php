@@ -22,16 +22,16 @@
 
 declare(strict_types=1);
 
-namespace nicholass003\topstats\command;
+namespace Nicholass003\TopStats\Command;
 
 use CortexPE\Commando\BaseCommand;
-use nicholass003\topstats\command\subcommand\AutoSaveSubCommand;
-use nicholass003\topstats\command\subcommand\CreateSubCommand;
-use nicholass003\topstats\command\subcommand\DeleteSubCommand;
-use nicholass003\topstats\command\subcommand\ListSubCommand;
-use nicholass003\topstats\command\subcommand\TeleportSubCommand;
-use nicholass003\topstats\command\subcommand\TopStatsSubCommand;
-use nicholass003\topstats\command\subcommand\TypeSubCommand;
+use Nicholass003\TopStats\Command\SubCommand\AutoSaveSubCommand;
+use Nicholass003\TopStats\Command\SubCommand\CreateSubCommand;
+use Nicholass003\TopStats\Command\SubCommand\DeleteSubCommand;
+use Nicholass003\TopStats\Command\SubCommand\ListSubCommand;
+use Nicholass003\TopStats\Command\SubCommand\TeleportSubCommand;
+use Nicholass003\TopStats\Command\SubCommand\TopStatsSubCommand;
+use Nicholass003\TopStats\Command\SubCommand\TypeSubCommand;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
 use function array_map;

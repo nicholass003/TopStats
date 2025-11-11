@@ -22,15 +22,15 @@
 
 declare(strict_types=1);
 
-namespace nicholass003\topstats\leaderboard;
+namespace Nicholass003\TopStats\Leaderboard;
 
 use Nicholass003\Textify\Lib\Model\Action;
 use Nicholass003\Textify\Lib\Model\Model;
 use Nicholass003\Textify\Lib\Model\NonPlayerCharacter;
-use nicholass003\topstats\database\data\DataType;
-use nicholass003\topstats\database\IDatabase;
-use nicholass003\topstats\TopStats;
-use nicholass003\topstats\utils\Utils;
+use Nicholass003\TopStats\Database\Data\DataType;
+use Nicholass003\TopStats\Database\IDatabase;
+use Nicholass003\TopStats\TopStats;
+use Nicholass003\TopStats\Utils\Utils;
 use function count;
 use function in_array;
 

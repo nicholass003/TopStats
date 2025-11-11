@@ -22,11 +22,11 @@
 
 declare(strict_types=1);
 
-namespace nicholass003\topstats\command\subcommand;
+namespace Nicholass003\TopStats\Command\SubCommand;
 
 use Nicholass003\Textify\Lib\Model\Model;
-use nicholass003\topstats\leaderboard\Leaderboard;
-use nicholass003\topstats\TopStats;
+use Nicholass003\TopStats\Leaderboard\Leaderboard;
+use Nicholass003\TopStats\TopStats;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
 use function count;

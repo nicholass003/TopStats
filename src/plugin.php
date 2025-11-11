@@ -28,7 +28,7 @@ use CortexPE\Commando\PacketHooker;
 use DaPigGuy\libPiggyEconomy\libPiggyEconomy;
 use DaPigGuy\libPiggyEconomy\providers\EconomyProvider;
 use JackMD\UpdateNotifier\UpdateNotifier;
-use nicholass003\Textify\Lib\TextifyFactory;
+use Nicholass003\Textify\Lib\TextifyFactory;
 use nicholass003\topstats\command\TopStatsCommand;
 use nicholass003\topstats\database\data\DataType;
 use nicholass003\topstats\database\IDatabase;

@@ -24,9 +24,9 @@ declare(strict_types=1);
 
 namespace nicholass003\topstats\utils;
 
-use nicholass003\Textify\Lib\Model\Model;
-use nicholass003\Textify\Lib\Model\NonPlayerCharacter;
-use nicholass003\Textify\Lib\Model\Text;
+use Nicholass003\Textify\Lib\Model\Model;
+use Nicholass003\Textify\Lib\Model\NonPlayerCharacter;
+use Nicholass003\Textify\Lib\Model\Text;
 use nicholass003\topstats\database\data\DataAction;
 use nicholass003\topstats\database\data\DataType;
 use nicholass003\topstats\leaderboard\Leaderboard;

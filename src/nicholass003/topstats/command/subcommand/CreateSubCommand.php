@@ -24,12 +24,12 @@ declare(strict_types=1);
 
 namespace nicholass003\topstats\command\subcommand;
 
-use nicholass003\topstats\libs\_949d26e1f7364fbc\CortexPE\Commando\args\BooleanArgument;
-use nicholass003\topstats\libs\_949d26e1f7364fbc\CortexPE\Commando\args\IntegerArgument;
-use nicholass003\topstats\libs\_949d26e1f7364fbc\CortexPE\Commando\args\RawStringArgument;
-use nicholass003\topstats\libs\_949d26e1f7364fbc\nicholass003\Textify\Lib\Model\Model;
-use nicholass003\topstats\libs\_949d26e1f7364fbc\nicholass003\Textify\Lib\Model\Variant;
-use nicholass003\topstats\libs\_949d26e1f7364fbc\nicholass003\Textify\Lib\Textify;
+use nicholass003\topstats\libs\_2f2e26b52fbe84a5\CortexPE\Commando\args\BooleanArgument;
+use nicholass003\topstats\libs\_2f2e26b52fbe84a5\CortexPE\Commando\args\IntegerArgument;
+use nicholass003\topstats\libs\_2f2e26b52fbe84a5\CortexPE\Commando\args\RawStringArgument;
+use nicholass003\topstats\libs\_2f2e26b52fbe84a5\Nicholass003\Textify\Lib\Model\Model;
+use nicholass003\topstats\libs\_2f2e26b52fbe84a5\Nicholass003\Textify\Lib\Model\Variant;
+use nicholass003\topstats\libs\_2f2e26b52fbe84a5\Nicholass003\Textify\Lib\Textify;
 use nicholass003\topstats\database\data\DataType;
 use nicholass003\topstats\leaderboard\Leaderboard;
 use nicholass003\topstats\utils\Utils;

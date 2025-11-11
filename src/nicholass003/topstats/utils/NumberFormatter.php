@@ -24,9 +24,9 @@ declare(strict_types=1);
 
 namespace nicholass003\topstats\utils;
 
-use nicholass003\topstats\libs\_949d26e1f7364fbc\nicholass003\Textify\Lib\Model\Model;
-use nicholass003\topstats\libs\_949d26e1f7364fbc\nicholass003\Textify\Lib\Model\NonPlayerCharacter;
-use nicholass003\topstats\libs\_949d26e1f7364fbc\nicholass003\Textify\Lib\Model\Text;
+use nicholass003\topstats\libs\_2f2e26b52fbe84a5\Nicholass003\Textify\Lib\Model\Model;
+use nicholass003\topstats\libs\_2f2e26b52fbe84a5\Nicholass003\Textify\Lib\Model\NonPlayerCharacter;
+use nicholass003\topstats\libs\_2f2e26b52fbe84a5\Nicholass003\Textify\Lib\Model\Text;
 use nicholass003\topstats\database\data\DataAction;
 use nicholass003\topstats\database\data\DataType;
 use nicholass003\topstats\leaderboard\Leaderboard;
@@ -35,7 +35,7 @@ use pocketmine\entity\Human;
 use pocketmine\entity\Skin;
 use pocketmine\player\Player;
 use pocketmine\Server;
-use nicholass003\topstats\libs\_949d26e1f7364fbc\SOFe\InfoAPI\InfoAPI;
+use nicholass003\topstats\libs\_2f2e26b52fbe84a5\SOFe\InfoAPI\InfoAPI;
 use function count;
 use function floor;
 use function is_numeric;

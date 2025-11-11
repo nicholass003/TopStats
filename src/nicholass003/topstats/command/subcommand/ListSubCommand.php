@@ -24,7 +24,7 @@ declare(strict_types=1);
 
 namespace nicholass003\topstats\command\subcommand;
 
-use nicholass003\topstats\libs\_949d26e1f7364fbc\nicholass003\Textify\Lib\Model\Model;
+use nicholass003\topstats\libs\_2f2e26b52fbe84a5\Nicholass003\Textify\Lib\Model\Model;
 use nicholass003\topstats\leaderboard\Leaderboard;
 use nicholass003\topstats\TopStats;
 use pocketmine\command\CommandSender;

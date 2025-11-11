@@ -22,12 +22,12 @@
 
 declare(strict_types=1);
 
-namespace nicholass003\topstats\leaderboard;
+namespace Nicholass003\TopStats\Leaderboard;
 
 use Exception;
 use Nicholass003\Textify\Lib\TextifyFactory;
-use nicholass003\topstats\event\TopStatsUpdateEvent;
-use nicholass003\topstats\TopStats;
+use Nicholass003\TopStats\Event\TopStatsUpdateEvent;
+use Nicholass003\TopStats\TopStats;
 use pocketmine\utils\Config;
 use function array_filter;
 use function count;

@@ -22,9 +22,9 @@
 
 declare(strict_types=1);
 
-namespace nicholass003\topstats\event;
+namespace Nicholass003\TopStats\Event;
 
-use nicholass003\topstats\leaderboard\Leaderboard;
+use Nicholass003\TopStats\Leaderboard\Leaderboard;
 use pocketmine\event\Cancellable;
 use pocketmine\event\CancellableTrait;
 

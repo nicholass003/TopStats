@@ -22,7 +22,7 @@
 
 declare(strict_types=1);
 
-namespace nicholass003\topstats\command\subcommand;
+namespace Nicholass003\TopStats\Command\SubCommand;
 
 use CortexPE\Commando\args\BooleanArgument;
 use CortexPE\Commando\args\IntegerArgument;
@@ -30,9 +30,9 @@ use CortexPE\Commando\args\RawStringArgument;
 use Nicholass003\Textify\Lib\Model\Model;
 use Nicholass003\Textify\Lib\Model\Variant;
 use Nicholass003\Textify\Lib\Textify;
-use nicholass003\topstats\database\data\DataType;
-use nicholass003\topstats\leaderboard\Leaderboard;
-use nicholass003\topstats\utils\Utils;
+use Nicholass003\TopStats\Database\Data\DataType;
+use Nicholass003\TopStats\Leaderboard\Leaderboard;
+use Nicholass003\TopStats\Utils\Utils;
 use pocketmine\command\CommandSender;
 use pocketmine\entity\Location;
 use pocketmine\nbt\tag\CompoundTag;

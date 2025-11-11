@@ -22,10 +22,10 @@
 
 declare(strict_types=1);
 
-namespace nicholass003\topstats\command\subcommand;
+namespace Nicholass003\TopStats\Command\SubCommand;
 
 use CortexPE\Commando\args\RawStringArgument;
-use nicholass003\topstats\database\SQLInterface;
+use Nicholass003\TopStats\Database\SQLInterface;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
 

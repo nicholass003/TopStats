@@ -22,7 +22,7 @@
 
 declare(strict_types=1);
 
-namespace nicholass003\topstats\database\data;
+namespace Nicholass003\TopStats\Database\Data;
 
 final class DataAction{
 

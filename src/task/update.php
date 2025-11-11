@@ -22,12 +22,12 @@
 
 declare(strict_types=1);
 
-namespace nicholass003\topstats\task;
+namespace Nicholass003\TopStats\Task;
 
-use nicholass003\topstats\database\data\DataAction;
-use nicholass003\topstats\database\data\DataType;
-use nicholass003\topstats\TopStats;
-use nicholass003\topstats\utils\Utils;
+use Nicholass003\TopStats\Database\Data\DataAction;
+use Nicholass003\TopStats\Database\Data\DataType;
+use Nicholass003\TopStats\TopStats;
+use Nicholass003\TopStats\Utils\Utils;
 use pocketmine\scheduler\Task;
 
 class UpdateTask extends Task{

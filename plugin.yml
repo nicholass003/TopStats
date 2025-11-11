@@ -1,7 +1,7 @@
 name: TopStats
 api: 5.3.0
 version: 0.3.4
-main: nicholass003\topstats\TopStats
+main: Nicholass003\TopStats\TopStats
 author: nicholass003
 website: https://github.com/nicholass003/TopStats
 softdepend: ["BedrockEconomy", "EconomyAPI"]

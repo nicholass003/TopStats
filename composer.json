@@ -6,7 +6,7 @@
         "pocketmine/pocketmine-mp": "^5.0.0",
         "dapigguy/libpiggyeconomy": "^3.0.3",
         "ifera-mc/update-notifier": "dev-master",
-        "paroxity/commando": "^3.2.1",
+        "paroxity/commando": "dev-master",
         "sof3/libasynql": "^4.2.3",
         "nicholass003/textify": "dev-main",
         "sof3/infoapi": "dev-master"
@@ -22,6 +22,10 @@
         {
             "type": "vcs",
             "url": "https://github.com/nicholass003/Textify"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/Paroxity/Commando"
         }
     ],
     "autoload": {

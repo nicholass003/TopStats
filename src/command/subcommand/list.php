@@ -25,7 +25,6 @@ declare(strict_types=1);
 namespace Nicholass003\TopStats\Command\SubCommand;
 
 use Nicholass003\Textify\Lib\Model\Model;
-use Nicholass003\TopStats\Leaderboard\Leaderboard;
 use Nicholass003\TopStats\TopStats;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
@@ -45,7 +44,7 @@ class ListSubCommand extends TopStatsSubCommand{
 			$sender->sendMessage(TextFormat::YELLOW . "TopStats List:");
 			foreach($leaderboardManager->leaderboards() as $id => $leaderboard){
 				if(!$leaderboard->getModel() instanceof Model) continue;
-				$sender->sendMessage(TextFormat::GREEN . "- ModelID: {$id}, ModelVariant: " . $leaderboard->getModel()->getVariant()->value . ", DataType: " . $leaderboard->getModel()->getCompoundTag()->getString(Leaderboard::TAG_TYPE));
+				$sender->sendMessage(TextFormat::GREEN . "- ModelID: {$id}, ModelVariant: " . $leaderboard->getModel()->getVariant()->value . ", DataType: " . $leaderboard->getType());
 			}
 		}
 	}

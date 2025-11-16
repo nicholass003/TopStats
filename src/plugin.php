@@ -36,6 +36,8 @@ use Nicholass003\TopStats\Database\JsonDatabase;
 use Nicholass003\TopStats\Database\MySQLDatabase;
 use Nicholass003\TopStats\Database\SQLInterface;
 use Nicholass003\TopStats\Database\SQLiteDatabase;
+use Nicholass003\TopStats\External\ExternalIntegrationRegistry;
+use Nicholass003\TopStats\External\Support\TopVoterIntegration;
 use Nicholass003\TopStats\Leaderboard\LeaderboardManager;
 use Nicholass003\TopStats\Listener\EventListener;
 use Nicholass003\TopStats\Task\UpdateTask;
@@ -223,6 +225,7 @@ class TopStats extends PluginBase{
 			$this->economyProvider = libPiggyEconomy::getProvider($this->getConfig()->get("economy"));
 		}
 		$this->database->loadData();
+		$this->registerExternalIntegrations();
 		$this->leaderboardManager->loadData();
 		$this->registerTasks();
 	}
@@ -244,6 +247,28 @@ class TopStats extends PluginBase{
 	private function registerCommands() : void{
 		$commandMap = $this->getServer()->getCommandMap();
 		$commandMap->register("topstats", new TopStatsCommand($this, "topstats", "TopStats Command"));
+	}
+
+	private function registerExternalIntegrations() : void{
+		$pluginManager = $this->getServer()->getPluginManager();
+		$configIntegrations = $this->getConfig()->get("external-integrations", []);
+		$registry = ExternalIntegrationRegistry::getInstance();
+
+		$availableIntegrations = [
+			"TopVoter" => TopVoterIntegration::class,
+		];
+
+		foreach($configIntegrations as $pluginName => $isActive){
+			if(!$isActive || !$pluginManager->getPlugin($pluginName)){
+				continue;
+			}
+
+			if(!isset($availableIntegrations[$pluginName])){
+				continue;
+			}
+
+			$registry->register(new $availableIntegrations[$pluginName]());
+		}
 	}
 
 	private function registerListeners() : void{

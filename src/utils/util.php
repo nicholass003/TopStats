@@ -87,10 +87,13 @@ class Utils{
 		return $result;
 	}
 
-	public static function getTopStatsPlayerSkin(array $data, string $type, int $top) : Skin{
+	public static function getTopStatsPlayerSkin(array $data, string $type, int $top, bool $forceSorting = false) : Skin{
 		$playerName = "";
 		$num = 1;
-		foreach(self::getSortedArrayBoard($data, $type) as $xuid => $userData){
+		if(!$forceSorting){
+			$data = self::getSortedArrayBoard($data, $type);
+		}
+		foreach($data as $xuid => $userData){
 			if($num === $top){
 				$playerName = $userData["name"];
 				break;

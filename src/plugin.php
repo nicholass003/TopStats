@@ -64,7 +64,7 @@ use function trim;
 class TopStats extends PluginBase{
 	use SingletonTrait;
 
-	private const CONFIG_VERSION = "1.0.1";
+	private const CONFIG_VERSION = "1.0.2";
 
 	public const MAX_LIST = 10;
 	public const TIME_FORMAT = "{year}y {month}m {week}w {day}d {hour}h {minute}m {second}s";

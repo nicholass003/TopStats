@@ -24,13 +24,14 @@ declare(strict_types=1);
 
 namespace Nicholass003\TopStats\Command\SubCommand;
 
-use Nicholass003\TopStats\libs\_c6f4970f9d0e02e4\CortexPE\Commando\args\BooleanArgument;
-use Nicholass003\TopStats\libs\_c6f4970f9d0e02e4\CortexPE\Commando\args\IntegerArgument;
-use Nicholass003\TopStats\libs\_c6f4970f9d0e02e4\CortexPE\Commando\args\RawStringArgument;
-use Nicholass003\TopStats\libs\_c6f4970f9d0e02e4\Nicholass003\Textify\Lib\Model\Model;
-use Nicholass003\TopStats\libs\_c6f4970f9d0e02e4\Nicholass003\Textify\Lib\Model\Variant;
-use Nicholass003\TopStats\libs\_c6f4970f9d0e02e4\Nicholass003\Textify\Lib\Textify;
+use Nicholass003\TopStats\libs\_89e24be3cd2201cf\CortexPE\Commando\args\BooleanArgument;
+use Nicholass003\TopStats\libs\_89e24be3cd2201cf\CortexPE\Commando\args\IntegerArgument;
+use Nicholass003\TopStats\libs\_89e24be3cd2201cf\CortexPE\Commando\args\RawStringArgument;
+use Nicholass003\TopStats\libs\_89e24be3cd2201cf\Nicholass003\Textify\Lib\Model\Model;
+use Nicholass003\TopStats\libs\_89e24be3cd2201cf\Nicholass003\Textify\Lib\Model\Variant;
+use Nicholass003\TopStats\libs\_89e24be3cd2201cf\Nicholass003\Textify\Lib\Textify;
 use Nicholass003\TopStats\Database\Data\DataType;
+use Nicholass003\TopStats\External\ExternalIntegrationRegistry;
 use Nicholass003\TopStats\Leaderboard\Leaderboard;
 use Nicholass003\TopStats\Utils\Utils;
 use pocketmine\command\CommandSender;
@@ -38,8 +39,9 @@ use pocketmine\entity\Location;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\player\Player;
 use pocketmine\utils\TextFormat;
-use function array_merge;
+use function array_unique;
 use function in_array;
+use const SORT_STRING;
 
 class CreateSubCommand extends TopStatsSubCommand{
 
@@ -59,7 +61,16 @@ class CreateSubCommand extends TopStatsSubCommand{
 		}
 		if(isset($args["model"])){
 			if(isset($args["type"])){
-				if(!in_array($args["type"], array_merge(DataType::ALL, $this->plugin->getConfig()->get("custom-data", [])), true)){
+				$builtInTypes = DataType::ALL;
+
+				$externalTypes = ExternalIntegrationRegistry::getInstance()->getActiveTypes();
+
+				$allowedTypes = array_unique([
+					...$builtInTypes,
+					...$externalTypes
+				], SORT_STRING);
+
+				if(!in_array($args["type"], $allowedTypes, true)){
 					$sender->sendMessage(TextFormat::RED . "Usage: /topstats " . $aliasUsed . " " . $args["model"] . " <type> <top>");
 					$sender->sendMessage(TextFormat::RED . "Type \"/topstats types\" to get type list");
 					return;
@@ -99,14 +110,18 @@ class CreateSubCommand extends TopStatsSubCommand{
 					Textify::TAG_COMPOUND => CompoundTag::create()->setTag(Model::TAG_MODEL, CompoundTag::create()->setString(Leaderboard::TAG_TYPE, $args["type"])->setByte(Leaderboard::TAG_TOP, $args["top"] ?? 0))
 				];
 
+				$source = ExternalIntegrationRegistry::getInstance()->getSource($args["type"]);
+				$entries = $source !== null ? $source->getEntries() : [];
+				$forceSorting = $source !== null ? $source->getIntegration()->isForceSorting() : false;
 				if($variant === Variant::PLAYER){
-					$extraData[Textify::TAG_SKIN] = Utils::getTopStatsPlayerSkin($this->plugin->getDatabase()->getTemporaryData(), $args["type"], (int) $args["top"] ?? 1);
+					$extraData[Textify::TAG_SKIN] = Utils::getTopStatsPlayerSkin(DataType::get($args["type"]) !== false ? $this->plugin->getDatabase()->getTemporaryData() : $entries, $args["type"], (int) $args["top"] ?? 1);
 				}elseif($variant === Variant::TEXT && $center){
 					$location = Location::fromObject($location->add(0, 0.5, 0), $location->getWorld());
 				}
 
 				$leaderboard = new Leaderboard(Textify::create($variant, $location, "", "", null, $extraData));
 				$this->leaderboardManager->add($leaderboard);
+				$leaderboard->setForceSorting($forceSorting);
 				$leaderboard->spawn();
 
 				$sender->sendMessage(TextFormat::GREEN . "Successfully spawn TopStats with model: " . $args["model"] . " type: " . $args["type"]);

@@ -79,11 +79,16 @@ final class DataType{
 
 	public static function setup() : void{
 		foreach(self::ALL as $type){
-			self::$types[$type] = str_replace("-", "_", $type);
+			self::$types[$type] = self::reprocess($type);
 		}
 	}
 
 	public static function get(string $type) : false|string{
+		$type = self::reprocess($type);
 		return self::$types[$type] ?? false;
+	}
+
+	private static function reprocess(string $value) : string{
+		return str_replace("-", "_", $value);
 	}
 }

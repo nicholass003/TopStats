@@ -24,8 +24,8 @@ declare(strict_types=1);
 
 namespace Nicholass003\TopStats\Utils;
 
-use Nicholass003\TopStats\libs\_c6f4970f9d0e02e4\Nicholass003\Textify\Lib\Model\Model;
-use Nicholass003\TopStats\libs\_c6f4970f9d0e02e4\Nicholass003\Textify\Lib\Model\NonPlayerCharacter;
+use Nicholass003\TopStats\libs\_89e24be3cd2201cf\Nicholass003\Textify\Lib\Model\Model;
+use Nicholass003\TopStats\libs\_89e24be3cd2201cf\Nicholass003\Textify\Lib\Model\NonPlayerCharacter;
 use Nicholass003\TopStats\Database\Data\DataAction;
 use Nicholass003\TopStats\Database\Data\DataType;
 use Nicholass003\TopStats\Leaderboard\Leaderboard;
@@ -33,7 +33,7 @@ use Nicholass003\TopStats\TopStats;
 use pocketmine\entity\Human;
 use pocketmine\entity\Skin;
 use pocketmine\player\Player;
-use Nicholass003\TopStats\libs\_c6f4970f9d0e02e4\SOFe\InfoAPI\InfoAPI;
+use Nicholass003\TopStats\libs\_89e24be3cd2201cf\SOFe\InfoAPI\InfoAPI;
 use function count;
 use function floor;
 use function is_numeric;
@@ -87,10 +87,13 @@ class Utils{
 		return $result;
 	}
 
-	public static function getTopStatsPlayerSkin(array $data, string $type, int $top) : Skin{
+	public static function getTopStatsPlayerSkin(array $data, string $type, int $top, bool $forceSorting = false) : Skin{
 		$playerName = "";
 		$num = 1;
-		foreach(self::getSortedArrayBoard($data, $type) as $xuid => $userData){
+		if(!$forceSorting){
+			$data = self::getSortedArrayBoard($data, $type);
+		}
+		foreach($data as $xuid => $userData){
 			if($num === $top){
 				$playerName = $userData["name"];
 				break;

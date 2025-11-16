@@ -24,11 +24,11 @@ declare(strict_types=1);
 
 namespace Nicholass003\TopStats;
 
-use Nicholass003\TopStats\libs\_c6f4970f9d0e02e4\CortexPE\Commando\PacketHooker;
-use Nicholass003\TopStats\libs\_c6f4970f9d0e02e4\DaPigGuy\libPiggyEconomy\libPiggyEconomy;
-use Nicholass003\TopStats\libs\_c6f4970f9d0e02e4\DaPigGuy\libPiggyEconomy\providers\EconomyProvider;
-use Nicholass003\TopStats\libs\_c6f4970f9d0e02e4\JackMD\UpdateNotifier\UpdateNotifier;
-use Nicholass003\TopStats\libs\_c6f4970f9d0e02e4\Nicholass003\Textify\Lib\TextifyFactory;
+use Nicholass003\TopStats\libs\_89e24be3cd2201cf\CortexPE\Commando\PacketHooker;
+use Nicholass003\TopStats\libs\_89e24be3cd2201cf\DaPigGuy\libPiggyEconomy\libPiggyEconomy;
+use Nicholass003\TopStats\libs\_89e24be3cd2201cf\DaPigGuy\libPiggyEconomy\providers\EconomyProvider;
+use Nicholass003\TopStats\libs\_89e24be3cd2201cf\JackMD\UpdateNotifier\UpdateNotifier;
+use Nicholass003\TopStats\libs\_89e24be3cd2201cf\Nicholass003\Textify\Lib\TextifyFactory;
 use Nicholass003\TopStats\Command\TopStatsCommand;
 use Nicholass003\TopStats\Database\Data\DataType;
 use Nicholass003\TopStats\Database\IDatabase;
@@ -36,6 +36,8 @@ use Nicholass003\TopStats\Database\JsonDatabase;
 use Nicholass003\TopStats\Database\MySQLDatabase;
 use Nicholass003\TopStats\Database\SQLInterface;
 use Nicholass003\TopStats\Database\SQLiteDatabase;
+use Nicholass003\TopStats\External\ExternalIntegrationRegistry;
+use Nicholass003\TopStats\External\Support\TopVoterIntegration;
 use Nicholass003\TopStats\Leaderboard\LeaderboardManager;
 use Nicholass003\TopStats\Listener\EventListener;
 use Nicholass003\TopStats\Task\UpdateTask;
@@ -223,6 +225,7 @@ class TopStats extends PluginBase{
 			$this->economyProvider = libPiggyEconomy::getProvider($this->getConfig()->get("economy"));
 		}
 		$this->database->loadData();
+		$this->registerExternalIntegrations();
 		$this->leaderboardManager->loadData();
 		$this->registerTasks();
 	}
@@ -244,6 +247,28 @@ class TopStats extends PluginBase{
 	private function registerCommands() : void{
 		$commandMap = $this->getServer()->getCommandMap();
 		$commandMap->register("topstats", new TopStatsCommand($this, "topstats", "TopStats Command"));
+	}
+
+	private function registerExternalIntegrations() : void{
+		$pluginManager = $this->getServer()->getPluginManager();
+		$configIntegrations = $this->getConfig()->get("external-integrations", []);
+		$registry = ExternalIntegrationRegistry::getInstance();
+
+		$availableIntegrations = [
+			"TopVoter" => TopVoterIntegration::class,
+		];
+
+		foreach($configIntegrations as $pluginName => $isActive){
+			if(!$isActive || !$pluginManager->getPlugin($pluginName)){
+				continue;
+			}
+
+			if(!isset($availableIntegrations[$pluginName])){
+				continue;
+			}
+
+			$registry->register(new $availableIntegrations[$pluginName]());
+		}
 	}
 
 	private function registerListeners() : void{

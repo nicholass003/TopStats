@@ -25,8 +25,9 @@ declare(strict_types=1);
 namespace Nicholass003\TopStats\Leaderboard;
 
 use Exception;
-use Nicholass003\TopStats\libs\_c6f4970f9d0e02e4\Nicholass003\Textify\Lib\TextifyFactory;
+use Nicholass003\TopStats\libs\_89e24be3cd2201cf\Nicholass003\Textify\Lib\TextifyFactory;
 use Nicholass003\TopStats\Event\TopStatsUpdateEvent;
+use Nicholass003\TopStats\External\ExternalIntegrationRegistry;
 use Nicholass003\TopStats\TopStats;
 use pocketmine\utils\Config;
 use function array_filter;
@@ -35,7 +36,6 @@ use function is_array;
 use function json_decode;
 use function json_encode;
 use function substr;
-use const JSON_PRETTY_PRINT;
 
 class LeaderboardManager{
 
@@ -79,7 +79,7 @@ class LeaderboardManager{
 	public function getLeaderboardFromType(string $type) : array{
 		return array_filter(
 			$this->leaderboards,
-			fn($leaderboard) => $leaderboard->getModel()->getCompoundTag()->getString("TopStatsType") === $type
+			fn($leaderboard) => $leaderboard->getType() === $type
 		);
 	}
 
@@ -130,7 +130,8 @@ class LeaderboardManager{
 
 			$leaderboard = new Leaderboard($model);
 			if($leaderboard->getModel()->getModelPosition()->getWorld()->isLoaded()){
-				$leaderboard->update();
+				$source = ExternalIntegrationRegistry::getInstance()->getSource($leaderboard->getType());
+				$leaderboard->update($source !== null ? $source->getEntries() : []);
 			}
 
 			$this->leaderboards[$id] = $leaderboard;

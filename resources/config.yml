@@ -1,7 +1,7 @@
 # TopStats Configuration #
 # WARNING: Do NOT change the config-version manually!
 # This version is managed by the plugin and changing it may cause issues.
-config-version: "1.0.1"
+config-version: "1.0.2"
 # Supported Databases:
 # - json
 # - mysql
@@ -27,9 +27,19 @@ max-list: 10
 # Time Format:
 # year, month, week, day, hour, minute, second
 time-format: "{year}y {month}m {week}w {day}d {hour}h {minute}m {second}s"
+
+# External Integrations
+# Set external integrations to activate custom data from external plugins
+# Example: `TopVoter` with Custom Data `vote`
+# Supported External Integrations:
+# - TopVoter
+external-integrations:
+  TopVoter: true
+
 # Custom Data
 # Set custom data to initialize Leaderboard type data
 custom-data:
+  - "vote"
   - "exampledata1"
   - "exampledata2"
 # Supported Models:
@@ -144,6 +154,9 @@ models:
     online-time:
       title: "#{rank_online-time} {player}"
       description: "With time {online-time}"
+    vote:
+      title: "#{rank_vote} {player}"
+      description: "With vote {vote}"
     xp:
       title: "#{rank_xp} {player}"
       description: "With xp {xp}"
@@ -215,6 +228,9 @@ models:
     online-time:
       title: ">> TOP ONLINE TIME <<"
       description: "#{rank_online-time} {player} {online-time}{line}"
+    vote:
+      title: ">> TOP VOTE <<"
+      description: "#{rank_vote} {player} {vote}{line}"
     xp:
       title: ">> TOP XP <<"
       description: "#{rank_xp} {player} {xp}{line}"

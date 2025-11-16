@@ -29,6 +29,7 @@ use Nicholass003\Textify\Lib\Model\Model;
 use Nicholass003\Textify\Lib\Model\NonPlayerCharacter;
 use Nicholass003\TopStats\Database\Data\DataType;
 use Nicholass003\TopStats\Database\IDatabase;
+use Nicholass003\TopStats\External\ExternalIntegrationRegistry;
 use Nicholass003\TopStats\TopStats;
 use Nicholass003\TopStats\Utils\Utils;
 use function count;
@@ -57,13 +58,17 @@ class Leaderboard implements \JsonSerializable{
 		protected Model $model
 	){
 		$this->database = TopStats::getInstance()->getDatabase();
-		$this->text = TopStats::getInstance()->getConfig()->getNested("models." . $model->getVariant()->value . "." . $model->getCompoundTag()->getString(self::TAG_TYPE) . ".description");
-		$this->title = TopStats::getInstance()->getConfig()->getNested("models." . $model->getVariant()->value . "." . $model->getCompoundTag()->getString(self::TAG_TYPE) . ".title");
+		$this->text = TopStats::getInstance()->getConfig()->getNested("models." . $model->getVariant()->value . "." . $this->getType() . ".description");
+		$this->title = TopStats::getInstance()->getConfig()->getNested("models." . $model->getVariant()->value . "." . $this->getType() . ".title");
 		$this->id = Utils::getNextTopStatsIds();
 	}
 
 	public function getId() : int{
 		return $this->id;
+	}
+
+	public function getType() : string{
+		return $this->model->getCompoundTag()->getString(self::TAG_TYPE);
 	}
 
 	public function getModel() : Model{
@@ -88,9 +93,10 @@ class Leaderboard implements \JsonSerializable{
 	}
 
 	public function spawn() : void{
+		$source = ExternalIntegrationRegistry::getInstance()->getSource($this->getType());
 		foreach($this->model->getViewers() as $player){
 			$this->model->send($player, Action::ADD);
-			$this->update();
+			$this->update($source !== null ? $source->getEntries() : []);
 		}
 	}
 
@@ -103,7 +109,7 @@ class Leaderboard implements \JsonSerializable{
 	}
 
 	public function isCustomDataType() : bool{
-		return !in_array($this->model->getCompoundTag()->getString(self::TAG_TYPE), DataType::ALL, true);
+		return !in_array($this->getType(), DataType::ALL, true);
 	}
 
 	public function update(array $data = []) : void{
@@ -118,7 +124,7 @@ class Leaderboard implements \JsonSerializable{
 		$this->updateText(Utils::getTopStatsText($data, $this->model, $this->text, self::TYPE_TEXT, $this->forceSorting));
 		$this->updateTitle(Utils::getTopStatsText($data, $this->model, $this->title, self::TYPE_TITLE, $this->forceSorting));
 		if($this->model instanceof NonPlayerCharacter){
-			$skin = Utils::getTopStatsPlayerSkin($data, $this->model->getCompoundTag()->getString(self::TAG_TYPE), $this->model->getCompoundTag()->getByte(self::TAG_TOP));
+			$skin = Utils::getTopStatsPlayerSkin($data, $this->getType(), $this->model->getCompoundTag()->getByte(self::TAG_TOP));
 			$this->model->setSkin($skin);
 		}
 	}

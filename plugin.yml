@@ -4,7 +4,7 @@ version: 0.3.4
 main: Nicholass003\TopStats\TopStats
 author: nicholass003
 website: https://github.com/nicholass003/TopStats
-softdepend: ["BedrockEconomy", "EconomyAPI"]
+softdepend: ["BedrockEconomy", "EconomyAPI", "TopVoter"]
 permissions:
   topstats.command:
     default: op

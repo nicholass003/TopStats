@@ -24,11 +24,11 @@ declare(strict_types=1);
 
 namespace Nicholass003\TopStats;
 
-use Nicholass003\TopStats\libs\_a095aba4b8b2dbda\CortexPE\Commando\PacketHooker;
-use Nicholass003\TopStats\libs\_a095aba4b8b2dbda\DaPigGuy\libPiggyEconomy\libPiggyEconomy;
-use Nicholass003\TopStats\libs\_a095aba4b8b2dbda\DaPigGuy\libPiggyEconomy\providers\EconomyProvider;
-use Nicholass003\TopStats\libs\_a095aba4b8b2dbda\JackMD\UpdateNotifier\UpdateNotifier;
-use Nicholass003\TopStats\libs\_a095aba4b8b2dbda\Nicholass003\Textify\Lib\TextifyFactory;
+use Nicholass003\TopStats\libs\_df045a3ad22ce743\CortexPE\Commando\PacketHooker;
+use Nicholass003\TopStats\libs\_df045a3ad22ce743\DaPigGuy\libPiggyEconomy\libPiggyEconomy;
+use Nicholass003\TopStats\libs\_df045a3ad22ce743\DaPigGuy\libPiggyEconomy\providers\EconomyProvider;
+use Nicholass003\TopStats\libs\_df045a3ad22ce743\JackMD\UpdateNotifier\UpdateNotifier;
+use Nicholass003\TopStats\libs\_df045a3ad22ce743\Nicholass003\Textify\Lib\TextifyFactory;
 use Nicholass003\TopStats\Command\TopStatsCommand;
 use Nicholass003\TopStats\Database\Data\DataType;
 use Nicholass003\TopStats\Database\IDatabase;
@@ -64,7 +64,7 @@ use function trim;
 class TopStats extends PluginBase{
 	use SingletonTrait;
 
-	private const CONFIG_VERSION = "1.0.1";
+	private const CONFIG_VERSION = "1.0.2";
 
 	public const MAX_LIST = 10;
 	public const TIME_FORMAT = "{year}y {month}m {week}w {day}d {hour}h {minute}m {second}s";

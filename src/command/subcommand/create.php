@@ -62,13 +62,11 @@ class CreateSubCommand extends TopStatsSubCommand{
 		if(isset($args["model"])){
 			if(isset($args["type"])){
 				$builtInTypes = DataType::ALL;
-				$customTypes = $this->plugin->getConfig()->get("custom-data", []);
 
 				$externalTypes = ExternalIntegrationRegistry::getInstance()->getActiveTypes();
 
 				$allowedTypes = array_unique([
 					...$builtInTypes,
-					...$customTypes,
 					...$externalTypes
 				], SORT_STRING);
 

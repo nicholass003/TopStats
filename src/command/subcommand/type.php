@@ -25,9 +25,11 @@ declare(strict_types=1);
 namespace Nicholass003\TopStats\Command\SubCommand;
 
 use Nicholass003\TopStats\Database\Data\DataType;
+use Nicholass003\TopStats\External\ExternalIntegrationRegistry;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
-use function array_merge;
+use function array_unique;
+use const SORT_STRING;
 
 class TypeSubCommand extends TopStatsSubCommand{
 
@@ -37,7 +39,15 @@ class TypeSubCommand extends TopStatsSubCommand{
 
 	public function onRun(CommandSender $sender, string $aliasUsed, array $args) : void{
 		$sender->sendMessage(TextFormat::YELLOW . "TopStats DataType List:");
-		foreach(array_merge(DataType::ALL, $this->plugin->getConfig()->get("custom-data", [])) as $type){
+		$builtInTypes = DataType::ALL;
+
+		$externalTypes = ExternalIntegrationRegistry::getInstance()->getActiveTypes();
+
+		$allowedTypes = array_unique([
+			...$builtInTypes,
+			...$externalTypes
+		], SORT_STRING);
+		foreach($allowedTypes as $type){
 			$sender->sendMessage(TextFormat::GREEN . " - {$type}");
 		}
 	}

@@ -27,7 +27,6 @@ namespace Nicholass003\TopStats\Leaderboard;
 use Exception;
 use Nicholass003\Textify\Lib\TextifyFactory;
 use Nicholass003\TopStats\Event\TopStatsUpdateEvent;
-use Nicholass003\TopStats\External\ExternalIntegrationRegistry;
 use Nicholass003\TopStats\TopStats;
 use pocketmine\utils\Config;
 use function array_filter;
@@ -35,7 +34,6 @@ use function count;
 use function is_array;
 use function json_decode;
 use function json_encode;
-use function substr;
 
 class LeaderboardManager{
 
@@ -56,7 +54,12 @@ class LeaderboardManager{
 	}
 
 	public function remove(int $id) : LeaderboardManager{
+		$factory = TextifyFactory::getInstance();
+		$leaderboard = $this->get($id);
 		if(isset($this->leaderboards[$id])){
+			if($leaderboard !== null){
+				$factory->remove($leaderboard->getModel()->getActorId());
+			}
 			unset($this->leaderboards[$id]);
 		}
 		return $this;
@@ -108,33 +111,32 @@ class LeaderboardManager{
 			return false;
 		}
 
-		foreach($leaderboards as $id => $leaderboard){
+		foreach($leaderboards as $leaderboard){
 			$leaderboard->update($data);
 		}
 		return true;
 	}
 
 	public function loadData() : void{
-		foreach($this->leaderboardData->getAll() as $sid => $raw){
-			$id = (int) substr((string) $sid, 3);
-
+		$runtimeId = 0;
+		foreach($this->leaderboardData->getAll() as $raw){
 			$data = json_decode($raw, true);
+			$id = $data["id"] ?? null;
+			if($id === null){
+				throw new Exception("Leaderboard UUID not found!");
+			}
 			if(!is_array($data)){
-				throw new Exception("Invalid leaderboard data format for ID: $id");
+				throw new Exception("Invalid leaderboard data format for UUID: $id");
 			}
 
-			$model = TextifyFactory::getInstance()->get($data["id"] ?? null);
+			$model = TextifyFactory::getInstance()->get($id);
 			if($model === null){
-				throw new Exception("Model not found for leaderboard ID: $id");
+				throw new Exception("Model not found for leaderboard UUID: $id");
 			}
 
 			$leaderboard = new Leaderboard($model);
-			if($leaderboard->getModel()->getModelPosition()->getWorld()->isLoaded()){
-				$source = ExternalIntegrationRegistry::getInstance()->getSource($leaderboard->getType());
-				$leaderboard->update($source !== null ? $source->getEntries() : []);
-			}
-
-			$this->leaderboards[$id] = $leaderboard;
+			$this->leaderboards[$runtimeId] = $leaderboard;
+			++$runtimeId;
 		}
 	}
 
@@ -144,8 +146,8 @@ class LeaderboardManager{
 
 	public function saveData() : void{
 		$data = [];
-		foreach($this->leaderboards() as $id => $leaderboard){
-			$data["ID:{$id}"] = json_encode($leaderboard);
+		foreach($this->leaderboards() as $leaderboard){
+			$data[] = json_encode($leaderboard);
 			$leaderboard->getModel()->destroy();
 		}
 		$this->leaderboardData->setAll($data);

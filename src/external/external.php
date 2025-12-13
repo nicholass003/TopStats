@@ -46,8 +46,14 @@ interface ExternalIntegration extends ExternalTypeNames{
 	/**
 	 * Extract data from event → format:
 	 * [
-	 *   "PlayerA" => value,
-	 *   "PlayerB" => value,
+	 *   dummy => [
+	 *              "name" => "PlayerA",
+	 * 				"data-type" => value
+	 * 		      ],
+	 *   dummy => [
+	 *              "name" => "PlayerB",
+	 * 				"data-type" => value
+	 * 		      ],
 	 * ]
 	 */
 	public function extractData(object $event) : array;

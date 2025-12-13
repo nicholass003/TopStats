@@ -24,9 +24,9 @@ declare(strict_types=1);
 
 namespace Nicholass003\TopStats\Leaderboard;
 
-use Nicholass003\TopStats\libs\_de76fefc7ce99526\Nicholass003\Textify\Lib\Model\Action;
-use Nicholass003\TopStats\libs\_de76fefc7ce99526\Nicholass003\Textify\Lib\Model\Model;
-use Nicholass003\TopStats\libs\_de76fefc7ce99526\Nicholass003\Textify\Lib\Model\NonPlayerCharacter;
+use Nicholass003\TopStats\libs\_45c7098180b1d18e\Nicholass003\Textify\Lib\Model\Action;
+use Nicholass003\TopStats\libs\_45c7098180b1d18e\Nicholass003\Textify\Lib\Model\Model;
+use Nicholass003\TopStats\libs\_45c7098180b1d18e\Nicholass003\Textify\Lib\Model\NonPlayerCharacter;
 use Nicholass003\TopStats\Database\Data\DataType;
 use Nicholass003\TopStats\Database\IDatabase;
 use Nicholass003\TopStats\External\ExternalIntegrationRegistry;
@@ -124,7 +124,7 @@ class Leaderboard implements \JsonSerializable{
 		$this->updateText(Utils::getTopStatsText($data, $this->model, $this->text, self::TYPE_TEXT, $this->forceSorting));
 		$this->updateTitle(Utils::getTopStatsText($data, $this->model, $this->title, self::TYPE_TITLE, $this->forceSorting));
 		if($this->model instanceof NonPlayerCharacter){
-			$skin = Utils::getTopStatsPlayerSkin($data, $this->getType(), $this->model->getCompoundTag()->getByte(self::TAG_TOP));
+			$skin = Utils::getTopStatsPlayerSkin($data, $this->getType(), $this->model->getCompoundTag()->getByte(self::TAG_TOP), $this->forceSorting);
 			$this->model->setSkin($skin);
 		}
 	}

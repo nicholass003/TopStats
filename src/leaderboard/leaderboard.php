@@ -124,7 +124,7 @@ class Leaderboard implements \JsonSerializable{
 		$this->updateText(Utils::getTopStatsText($data, $this->model, $this->text, self::TYPE_TEXT, $this->forceSorting));
 		$this->updateTitle(Utils::getTopStatsText($data, $this->model, $this->title, self::TYPE_TITLE, $this->forceSorting));
 		if($this->model instanceof NonPlayerCharacter){
-			$skin = Utils::getTopStatsPlayerSkin($data, $this->getType(), $this->model->getCompoundTag()->getByte(self::TAG_TOP));
+			$skin = Utils::getTopStatsPlayerSkin($data, $this->getType(), $this->model->getCompoundTag()->getByte(self::TAG_TOP), $this->forceSorting);
 			$this->model->setSkin($skin);
 		}
 	}

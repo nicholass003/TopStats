@@ -97,6 +97,12 @@ use function array_keys;
 
 
 
+
+
+
+
+
+
 final class ExternalIntegrationRegistry{
 	use SingletonTrait;
 

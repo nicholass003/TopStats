@@ -24,7 +24,7 @@ declare(strict_types=1);
 
 namespace Nicholass003\TopStats\Command\SubCommand;
 
-use Nicholass003\TopStats\libs\_45c7098180b1d18e\CortexPE\Commando\args\RawStringArgument;
+use Nicholass003\TopStats\libs\_9a932cf1e1d7d78c\CortexPE\Commando\args\RawStringArgument;
 use Nicholass003\TopStats\Database\SQLInterface;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;

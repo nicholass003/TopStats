@@ -24,8 +24,8 @@ declare(strict_types=1);
 
 namespace Nicholass003\TopStats\Command\SubCommand;
 
-use Nicholass003\TopStats\libs\_9a932cf1e1d7d78c\CortexPE\Commando\args\IntegerArgument;
-use Nicholass003\TopStats\libs\_9a932cf1e1d7d78c\Nicholass003\Textify\Lib\Model\Model;
+use Nicholass003\TopStats\libs\_d76fbc6db9c5e649\CortexPE\Commando\args\IntegerArgument;
+use Nicholass003\TopStats\libs\_d76fbc6db9c5e649\Nicholass003\Textify\Lib\Model\Model;
 use pocketmine\command\CommandSender;
 use pocketmine\player\Player;
 use pocketmine\utils\TextFormat;
@@ -52,6 +52,10 @@ class TeleportSubCommand extends TopStatsSubCommand{
 				if(in_array((int) $args["id"], array_keys($leaderboards), true)){
 					foreach($leaderboards as $id => $leaderboard){
 						if($leaderboard->getModel() instanceof Model && $id === (int) $args["id"]){
+							if(!$leaderboard->getModel()->getModelPosition()->isValid()){
+								$sender->sendMessage(TextFormat::RED . "Cannot teleport to a world that has not been loaded.");
+								return;
+							}
 							$sender->teleport($leaderboard->getModel()->getModelPosition());
 							$sender->sendMessage(TextFormat::GREEN . "Success teleported to TopStats position with id: {$id}");
 							break;

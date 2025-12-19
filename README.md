@@ -24,6 +24,7 @@
 ### SubCommands
 | SubCommands | Description | Permissions |
 |----- | --------| ------ |
+|`autosave` |  Auto-save TopStats Database | `topstats.command.autosave` |
 |`create` |  Spawn TopStats | `topstats.command.create` |
 |`delete` | Delete TopStats | `topstats.command.delete` |
 |`list` | TopStats List | `topstats.command.list` |

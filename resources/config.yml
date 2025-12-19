@@ -36,12 +36,6 @@ time-format: "{year}y {month}m {week}w {day}d {hour}h {minute}m {second}s"
 external-integrations:
   TopVoter: true
 
-# Custom Data
-# Set custom data to initialize Leaderboard type data
-custom-data:
-  - "vote"
-  - "exampledata1"
-  - "exampledata2"
 # Supported Models:
 # - player
 # - text

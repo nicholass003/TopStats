@@ -52,6 +52,10 @@ class TeleportSubCommand extends TopStatsSubCommand{
 				if(in_array((int) $args["id"], array_keys($leaderboards), true)){
 					foreach($leaderboards as $id => $leaderboard){
 						if($leaderboard->getModel() instanceof Model && $id === (int) $args["id"]){
+							if(!$leaderboard->getModel()->getModelPosition()->isValid()){
+								$sender->sendMessage(TextFormat::RED . "Cannot teleport to a world that has not been loaded.");
+								return;
+							}
 							$sender->teleport($leaderboard->getModel()->getModelPosition());
 							$sender->sendMessage(TextFormat::GREEN . "Success teleported to TopStats position with id: {$id}");
 							break;

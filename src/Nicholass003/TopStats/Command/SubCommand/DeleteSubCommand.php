@@ -24,7 +24,7 @@ declare(strict_types=1);
 
 namespace Nicholass003\TopStats\Command\SubCommand;
 
-use Nicholass003\TopStats\libs\_85c73aa65d49c026\CortexPE\Commando\args\IntegerArgument;
+use Nicholass003\TopStats\libs\_3a083282d126e516\CortexPE\Commando\args\IntegerArgument;
 use pocketmine\command\CommandSender;
 use pocketmine\player\Player;
 use pocketmine\utils\TextFormat;

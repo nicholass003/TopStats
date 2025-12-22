@@ -24,10 +24,9 @@ declare(strict_types=1);
 
 namespace Nicholass003\TopStats\Listener;
 
-use Nicholass003\TopStats\libs\_85c73aa65d49c026\Nicholass003\Textify\Lib\Model\Action;
-use Nicholass003\TopStats\libs\_85c73aa65d49c026\Nicholass003\Textify\Lib\Model\NonPlayerCharacter;
-use Nicholass003\TopStats\libs\_85c73aa65d49c026\Nicholass003\Textify\Lib\Model\Text;
-use Nicholass003\TopStats\libs\_85c73aa65d49c026\Nicholass003\Textify\Lib\TextifyFactory;
+use Nicholass003\TopStats\libs\_3a083282d126e516\Nicholass003\Textify\Lib\Model\Action;
+use Nicholass003\TopStats\libs\_3a083282d126e516\Nicholass003\Textify\Lib\Model\NonPlayerCharacter;
+use Nicholass003\TopStats\libs\_3a083282d126e516\Nicholass003\Textify\Lib\Model\Text;
 use Nicholass003\TopStats\Database\Data\DataAction;
 use Nicholass003\TopStats\Database\Data\DataType;
 use Nicholass003\TopStats\Leaderboard\LeaderboardManager;
@@ -79,7 +78,9 @@ class EventListener implements Listener{
 		foreach($this->leaderboardManager->leaderboards() as $leaderboard){
 			$model = $leaderboard->getModel();
 			if($model instanceof Text){
-				$leaderboard->spawn();
+				if($model->getModelPosition()->getWorld() === $player->getWorld()){
+					$model->send($player, Action::ADD);
+				}
 			}
 		}
 	}
@@ -87,17 +88,17 @@ class EventListener implements Listener{
 	public function onEntityTeleport(EntityTeleportEvent $event) : void{
 		$entity = $event->getEntity();
 		if($entity instanceof Player){
-			$from = $event->getFrom();
-			$to = $event->getTo();
+			$from = $event->getFrom()->getWorld();
+			$to = $event->getTo()->getWorld();
 			if($from !== $to){
 				foreach($this->leaderboardManager->leaderboards() as $leaderboard){
 					$model = $leaderboard->getModel();
 					$world = $model->getModelPosition()->getWorld();
 					if($model instanceof Text){
-						if($world !== $to->getWorld()){
+						if($world !== $to){
 							$model->send($entity, Action::REMOVE);
 						}
-						if($world === $to->getWorld()){
+						if($world === $to){
 							$model->send($entity, Action::ADD);
 						}
 					}

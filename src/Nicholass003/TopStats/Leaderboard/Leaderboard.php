@@ -24,9 +24,9 @@ declare(strict_types=1);
 
 namespace Nicholass003\TopStats\Leaderboard;
 
-use Nicholass003\TopStats\libs\_d76fbc6db9c5e649\Nicholass003\Textify\Lib\Model\Action;
-use Nicholass003\TopStats\libs\_d76fbc6db9c5e649\Nicholass003\Textify\Lib\Model\Model;
-use Nicholass003\TopStats\libs\_d76fbc6db9c5e649\Nicholass003\Textify\Lib\Model\NonPlayerCharacter;
+use Nicholass003\TopStats\libs\_85c73aa65d49c026\Nicholass003\Textify\Lib\Model\Action;
+use Nicholass003\TopStats\libs\_85c73aa65d49c026\Nicholass003\Textify\Lib\Model\Model;
+use Nicholass003\TopStats\libs\_85c73aa65d49c026\Nicholass003\Textify\Lib\Model\NonPlayerCharacter;
 use Nicholass003\TopStats\Database\Data\DataType;
 use Nicholass003\TopStats\Database\IDatabase;
 use Nicholass003\TopStats\External\ExternalIntegrationRegistry;

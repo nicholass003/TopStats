@@ -24,8 +24,10 @@ declare(strict_types=1);
 
 namespace Nicholass003\TopStats\Listener;
 
-use Nicholass003\TopStats\libs\_d76fbc6db9c5e649\Nicholass003\Textify\Lib\Model\NonPlayerCharacter;
-use Nicholass003\TopStats\libs\_d76fbc6db9c5e649\Nicholass003\Textify\Lib\Model\Text;
+use Nicholass003\TopStats\libs\_85c73aa65d49c026\Nicholass003\Textify\Lib\Model\Action;
+use Nicholass003\TopStats\libs\_85c73aa65d49c026\Nicholass003\Textify\Lib\Model\NonPlayerCharacter;
+use Nicholass003\TopStats\libs\_85c73aa65d49c026\Nicholass003\Textify\Lib\Model\Text;
+use Nicholass003\TopStats\libs\_85c73aa65d49c026\Nicholass003\Textify\Lib\TextifyFactory;
 use Nicholass003\TopStats\Database\Data\DataAction;
 use Nicholass003\TopStats\Database\Data\DataType;
 use Nicholass003\TopStats\Leaderboard\LeaderboardManager;
@@ -38,6 +40,7 @@ use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\entity\EntityItemPickupEvent;
 use pocketmine\event\entity\EntityRegainHealthEvent;
+use pocketmine\event\entity\EntityTeleportEvent;
 use pocketmine\event\inventory\CraftItemEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerChangeSkinEvent;
@@ -77,6 +80,28 @@ class EventListener implements Listener{
 			$model = $leaderboard->getModel();
 			if($model instanceof Text){
 				$leaderboard->spawn();
+			}
+		}
+	}
+
+	public function onEntityTeleport(EntityTeleportEvent $event) : void{
+		$entity = $event->getEntity();
+		if($entity instanceof Player){
+			$from = $event->getFrom();
+			$to = $event->getTo();
+			if($from !== $to){
+				foreach($this->leaderboardManager->leaderboards() as $leaderboard){
+					$model = $leaderboard->getModel();
+					$world = $model->getModelPosition()->getWorld();
+					if($model instanceof Text){
+						if($world !== $to->getWorld()){
+							$model->send($entity, Action::REMOVE);
+						}
+						if($world === $to->getWorld()){
+							$model->send($entity, Action::ADD);
+						}
+					}
+				}
 			}
 		}
 	}

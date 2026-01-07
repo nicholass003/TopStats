@@ -78,7 +78,11 @@ class EventListener implements Listener{
 		foreach($this->leaderboardManager->leaderboards() as $leaderboard){
 			$model = $leaderboard->getModel();
 			if($model instanceof Text){
-				if($model->getModelPosition()->getWorld() === $player->getWorld()){
+				$pos = $model->getModelPosition();
+				if(!$pos->isValid()){
+					continue;
+				}
+				if($pos->getWorld() === $player->getWorld()){
 					$model->send($player, Action::ADD);
 				}
 			}

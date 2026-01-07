@@ -24,11 +24,11 @@ declare(strict_types=1);
 
 namespace Nicholass003\TopStats;
 
-use Nicholass003\TopStats\libs\_05ec4535640dd243\CortexPE\Commando\PacketHooker;
-use Nicholass003\TopStats\libs\_05ec4535640dd243\DaPigGuy\libPiggyEconomy\libPiggyEconomy;
-use Nicholass003\TopStats\libs\_05ec4535640dd243\DaPigGuy\libPiggyEconomy\providers\EconomyProvider;
-use Nicholass003\TopStats\libs\_05ec4535640dd243\JackMD\UpdateNotifier\UpdateNotifier;
-use Nicholass003\TopStats\libs\_05ec4535640dd243\Nicholass003\Textify\Lib\TextifyFactory;
+use Nicholass003\TopStats\libs\_809aa045474901d4\CortexPE\Commando\PacketHooker;
+use Nicholass003\TopStats\libs\_809aa045474901d4\DaPigGuy\libPiggyEconomy\libPiggyEconomy;
+use Nicholass003\TopStats\libs\_809aa045474901d4\DaPigGuy\libPiggyEconomy\providers\EconomyProvider;
+use Nicholass003\TopStats\libs\_809aa045474901d4\JackMD\UpdateNotifier\UpdateNotifier;
+use Nicholass003\TopStats\libs\_809aa045474901d4\Nicholass003\Textify\Lib\TextifyFactory;
 use Nicholass003\TopStats\Command\TopStatsCommand;
 use Nicholass003\TopStats\Database\Data\DataType;
 use Nicholass003\TopStats\Database\IDatabase;

@@ -24,9 +24,9 @@ declare(strict_types=1);
 
 namespace Nicholass003\TopStats\Listener;
 
-use Nicholass003\TopStats\libs\_05ec4535640dd243\Nicholass003\Textify\Lib\Model\Action;
-use Nicholass003\TopStats\libs\_05ec4535640dd243\Nicholass003\Textify\Lib\Model\NonPlayerCharacter;
-use Nicholass003\TopStats\libs\_05ec4535640dd243\Nicholass003\Textify\Lib\Model\Text;
+use Nicholass003\TopStats\libs\_809aa045474901d4\Nicholass003\Textify\Lib\Model\Action;
+use Nicholass003\TopStats\libs\_809aa045474901d4\Nicholass003\Textify\Lib\Model\NonPlayerCharacter;
+use Nicholass003\TopStats\libs\_809aa045474901d4\Nicholass003\Textify\Lib\Model\Text;
 use Nicholass003\TopStats\Database\Data\DataAction;
 use Nicholass003\TopStats\Database\Data\DataType;
 use Nicholass003\TopStats\Leaderboard\LeaderboardManager;
@@ -78,7 +78,11 @@ class EventListener implements Listener{
 		foreach($this->leaderboardManager->leaderboards() as $leaderboard){
 			$model = $leaderboard->getModel();
 			if($model instanceof Text){
-				if($model->getModelPosition()->getWorld() === $player->getWorld()){
+				$pos = $model->getModelPosition();
+				if(!$pos->isValid()){
+					continue;
+				}
+				if($pos->getWorld() === $player->getWorld()){
 					$model->send($player, Action::ADD);
 				}
 			}

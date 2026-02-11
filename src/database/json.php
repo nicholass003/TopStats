@@ -67,11 +67,11 @@ class JsonDatabase implements IDatabase{
 			if(!isset($this->data[$xuid]["name"])){
 				$this->data[$xuid]["name"] = $player->getName();
 			}
-			foreach(DataType::ALL as $type){
+			foreach(DataType::RAW() as $type){
 				$this->data[$xuid][$type] = 0;
 			}
 		}else{
-			foreach(DataType::ALL as $type){
+			foreach(DataType::RAW() as $type){
 				if(!isset($this->data[$xuid][$type])){
 					$this->data[$xuid][$type] = 0;
 				}
@@ -83,7 +83,7 @@ class JsonDatabase implements IDatabase{
 		$xuid = (int) $player->getXuid();
 		if(isset($this->data[$xuid])){
 			foreach($data as $key => $value){
-				if(!in_array($key, DataType::ALL, true)){
+				if(!DataType::isRaw($key)){
 					throw new \InvalidArgumentException("Invalid DataType {$key}");
 				}
 				$this->action($xuid, $key, $value, $action);

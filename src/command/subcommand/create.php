@@ -61,6 +61,7 @@ class CreateSubCommand extends TopStatsSubCommand{
 		}
 		if(isset($args["model"])){
 			if(isset($args["type"])){
+				$type = $args["type"];
 				$builtInTypes = DataType::ALL;
 
 				$externalTypes = ExternalIntegrationRegistry::getInstance()->getActiveTypes();
@@ -70,12 +71,12 @@ class CreateSubCommand extends TopStatsSubCommand{
 					...$externalTypes
 				], SORT_STRING);
 
-				if(!in_array($args["type"], $allowedTypes, true)){
+				if(!in_array($type, $allowedTypes, true)){
 					$sender->sendMessage(TextFormat::RED . "Usage: /topstats " . $aliasUsed . " " . $args["model"] . " <type> <top>");
 					$sender->sendMessage(TextFormat::RED . "Type \"/topstats types\" to get type list");
 					return;
 				}
-				if($args["type"] === DataType::MONEY){
+				if($type === DataType::MONEY){
 					if($this->plugin->getEconomyProvider() === null){
 						$sender->sendMessage(TextFormat::RED . "No EconomyProvider found, you must install the Economy plugin to enable this feature.");
 						$sender->sendMessage(TextFormat::RED . "Example: \"BedrockEconomy\" or \"EconomyAPI\"");
@@ -107,14 +108,20 @@ class CreateSubCommand extends TopStatsSubCommand{
 				}
 
 				$extraData = [
-					Textify::TAG_COMPOUND => CompoundTag::create()->setTag(Model::TAG_MODEL, CompoundTag::create()->setString(Leaderboard::TAG_TYPE, $args["type"])->setByte(Leaderboard::TAG_TOP, $args["top"] ?? 0))
+					Textify::TAG_COMPOUND => CompoundTag::create()->setTag(Model::TAG_MODEL, CompoundTag::create()->setString(Leaderboard::TAG_TYPE, $type)->setByte(Leaderboard::TAG_TOP, $args["top"] ?? 0))
 				];
 
-				$source = ExternalIntegrationRegistry::getInstance()->getSource($args["type"]);
+				$source = ExternalIntegrationRegistry::getInstance()->getSource($type);
 				$entries = $source !== null ? $source->getEntries() : [];
 				$forceSorting = $source !== null ? $source->getIntegration()->isForceSorting() : false;
 				if($variant === Variant::PLAYER){
-					$extraData[Textify::TAG_SKIN] = Utils::getTopStatsPlayerSkin(DataType::get($args["type"]) !== false ? $this->plugin->getDatabase()->getTemporaryData() : $entries, $args["type"], (int) $args["top"] ?? 1);
+					$dataset = [];
+					if(DataType::isRaw($type) || DataType::isDerived($type)){
+						$dataset = $this->plugin->getDatabase()->getTemporaryData();
+					}else{
+						$dataset = $entries;
+					}
+					$extraData[Textify::TAG_SKIN] = Utils::getTopStatsPlayerSkin($dataset, $type, (int) $args["top"] ?? 1);
 				}elseif($variant === Variant::TEXT && $center){
 					$location = Location::fromObject($location->add(0, 0.5, 0), $location->getWorld());
 				}
@@ -124,7 +131,7 @@ class CreateSubCommand extends TopStatsSubCommand{
 				$leaderboard->setForceSorting($forceSorting);
 				$leaderboard->spawn();
 
-				$sender->sendMessage(TextFormat::GREEN . "Successfully spawn TopStats with model: " . $args["model"] . " type: " . $args["type"]);
+				$sender->sendMessage(TextFormat::GREEN . "Successfully spawn TopStats with model: " . $args["model"] . " type: " . $type);
 			}else{
 				$sender->sendMessage(TextFormat::RED . "Usage: /topstats " . $aliasUsed . " " . $args["model"] . " <type> <top>");
 			}

@@ -76,7 +76,7 @@ class SQLiteDatabase implements SQLInterface{
 					continue;
 				}
 				$this->data[$data["xuid"]]["name"] = $data["name"];
-				foreach(DataType::ALL as $type){
+				foreach(DataType::RAW() as $type){
 					$this->data[$data["xuid"]][$type] = $data[DataType::get($type)] ?? 0;
 				}
 			}
@@ -104,7 +104,7 @@ class SQLiteDatabase implements SQLInterface{
 				"name" => $player->getName()
 			]);
 		}
-		foreach(DataType::ALL as $type){
+		foreach(DataType::RAW() as $type){
 			$this->data[$xuid][$type] ??= 0;
 		}
 	}
@@ -115,7 +115,7 @@ class SQLiteDatabase implements SQLInterface{
 			return;
 		}
 		foreach($data as $key => $value){
-			if(!in_array($key, DataType::ALL, true)){
+			if(!DataType::isRaw($key)){
 				throw new \InvalidArgumentException("Invalid DataType {$key}");
 			}
 			$this->applyAction($xuid, $key, $value, $action);
@@ -156,7 +156,7 @@ class SQLiteDatabase implements SQLInterface{
 		}
 		foreach($this->data as $xuid => $stats){
 			$args = ["xuid" => (string) $xuid, "name" => $stats["name"]];
-			foreach(DataType::ALL as $type){
+			foreach(DataType::RAW() as $type){
 				$args[DataType::get($type)] = $stats[$type] ?? 0;
 			}
 			$this->query(DBQuery::INSERT_OR_UPDATE_PLAYER_STATS, DBAction::CHANGE, $args);

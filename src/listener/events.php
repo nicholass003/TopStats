@@ -115,12 +115,14 @@ class EventListener implements Listener{
 		$player = $event->getPlayer();
 		$this->plugin->getDatabase()->update($player, [DataType::DEATH => 1], DataAction::ADDITION);
 		$this->leaderboardManager->dispatchLeaderboardUpdate(DataType::DEATH);
+		$this->leaderboardManager->dispatchLeaderboardUpdate(DataType::KDR);
 		$source = $player->getLastDamageCause();
 		if($source instanceof EntityDamageByEntityEvent){
 			$attacker = $source->getDamager() ;
-			if($attacker instanceof Player){
+			if($attacker instanceof Player && $attacker !== $player){
 				$this->plugin->getDatabase()->update($attacker, [DataType::KILL => 1], DataAction::ADDITION);
 				$this->leaderboardManager->dispatchLeaderboardUpdate(DataType::KILL);
+				$this->leaderboardManager->dispatchLeaderboardUpdate(DataType::KDR);
 			}
 		}
 	}

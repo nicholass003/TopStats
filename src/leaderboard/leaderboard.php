@@ -121,6 +121,10 @@ class Leaderboard implements \JsonSerializable{
 			return;
 		}
 
+		if(DataType::isDerived($this->getType())){
+			$data = Utils::applyDerivedStat($data, $this->getType());
+		}
+
 		$this->updateText(Utils::getTopStatsText($data, $this->model, $this->text, self::TYPE_TEXT, $this->forceSorting));
 		$this->updateTitle(Utils::getTopStatsText($data, $this->model, $this->title, self::TYPE_TITLE, $this->forceSorting));
 		if($this->model instanceof NonPlayerCharacter){

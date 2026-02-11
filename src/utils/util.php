@@ -167,6 +167,20 @@ class Utils{
 		}
 		return DataAction::NONE;
 	}
+
+	public static function applyDerivedStat(array $data, string $type) : array{
+		switch($type){
+			case DataType::KDR:
+				foreach($data as $xuid => &$stats){
+					$kill = $stats[DataType::KILL] ?? 0;
+					$death = $stats[DataType::DEATH] ?? 0;
+
+					$stats[DataType::KDR] = $death <= 0 ? (float) $kill : round($kill / $death, 2);
+				}
+			break;
+		}
+		return $data;
+	}
 }
 
 class NumberFormatter{

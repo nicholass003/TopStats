@@ -64,7 +64,7 @@ use function trim;
 class TopStats extends PluginBase{
 	use SingletonTrait;
 
-	private const CONFIG_VERSION = "1.0.2";
+	private const CONFIG_VERSION = "1.0.3";
 
 	public const MAX_LIST = 10;
 	public const TIME_FORMAT = "{year}y {month}m {week}w {day}d {hour}h {minute}m {second}s";
@@ -286,11 +286,11 @@ class TopStats extends PluginBase{
 			){}
 
 			public function onRun() : void{
-				if(($database = $this->database) instanceof SQLInterface){
-					if(!$database->isAutoSaveActive()){
+				if($this->database instanceof SQLInterface){
+					if(!$this->database->isAutoSaveActive()){
 						return;
 					}
-					$database->saveData();
+					$this->database->saveData();
 				}
 			}
 		}, SQLInterface::AUTO_SAVE_INTERVAL);

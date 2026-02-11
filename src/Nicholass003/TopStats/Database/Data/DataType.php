@@ -24,6 +24,8 @@ declare(strict_types=1);
 
 namespace Nicholass003\TopStats\Database\Data;
 
+use function array_filter;
+use function in_array;
 use function str_replace;
 
 final class DataType{
@@ -48,6 +50,7 @@ final class DataType{
 	public const HEAL = "heal";
 	public const ITEM_PICKUP = "item-pickup";
 	public const JUMP = "jump";
+	public const KDR = "kdr";
 	public const KICK = "kick";
 	public const MONEY = "money";
 	public const ONLINE_TIME = "online-time";
@@ -71,6 +74,7 @@ final class DataType{
 		self::HEAL,
 		self::ITEM_PICKUP,
 		self::JUMP,
+		self::KDR,
 		self::KICK,
 		self::MONEY,
 		self::ONLINE_TIME,
@@ -78,7 +82,7 @@ final class DataType{
 	];
 
 	public static function setup() : void{
-		foreach(self::ALL as $type){
+		foreach(self::RAW() as $type){
 			self::$types[$type] = self::reprocess($type);
 		}
 	}
@@ -90,5 +94,20 @@ final class DataType{
 
 	private static function reprocess(string $value) : string{
 		return str_replace("-", "_", $value);
+	}
+
+	public static function RAW() : array{
+		return array_filter(self::ALL, fn($type) => !self::isDerived($type));
+	}
+
+	public static function isDerived(string $type) : bool{
+		return match($type){
+			self::KDR => true,
+			default => false
+		};
+	}
+
+	public static function isRaw(string $type) : bool{
+		return in_array($type, self::RAW(), true);
 	}
 }

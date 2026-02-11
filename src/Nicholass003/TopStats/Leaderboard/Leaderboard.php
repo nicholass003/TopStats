@@ -24,9 +24,9 @@ declare(strict_types=1);
 
 namespace Nicholass003\TopStats\Leaderboard;
 
-use Nicholass003\TopStats\libs\_809aa045474901d4\Nicholass003\Textify\Lib\Model\Action;
-use Nicholass003\TopStats\libs\_809aa045474901d4\Nicholass003\Textify\Lib\Model\Model;
-use Nicholass003\TopStats\libs\_809aa045474901d4\Nicholass003\Textify\Lib\Model\NonPlayerCharacter;
+use Nicholass003\TopStats\libs\_645edd5be11ebe78\Nicholass003\Textify\Lib\Model\Action;
+use Nicholass003\TopStats\libs\_645edd5be11ebe78\Nicholass003\Textify\Lib\Model\Model;
+use Nicholass003\TopStats\libs\_645edd5be11ebe78\Nicholass003\Textify\Lib\Model\NonPlayerCharacter;
 use Nicholass003\TopStats\Database\Data\DataType;
 use Nicholass003\TopStats\Database\IDatabase;
 use Nicholass003\TopStats\External\ExternalIntegrationRegistry;
@@ -119,6 +119,10 @@ class Leaderboard implements \JsonSerializable{
 
 		if(count($data) === 0){
 			return;
+		}
+
+		if(DataType::isDerived($this->getType())){
+			$data = Utils::applyDerivedStat($data, $this->getType());
 		}
 
 		$this->updateText(Utils::getTopStatsText($data, $this->model, $this->text, self::TYPE_TEXT, $this->forceSorting));

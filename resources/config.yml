@@ -1,7 +1,7 @@
 # TopStats Configuration #
 # WARNING: Do NOT change the config-version manually!
 # This version is managed by the plugin and changing it may cause issues.
-config-version: "1.0.2"
+config-version: "1.0.3"
 # Supported Databases:
 # - json
 # - mysql
@@ -57,6 +57,7 @@ external-integrations:
 # - heal -> Number of Health Recovered
 # - item-pickup -> Number of Items Taken
 # - jump -> Number of Player Jumps
+# - kdr -> Number of Player KDR
 # - kick -> Number of Player Kicked
 # - money -> Number of Player Money
 # - online-time -> Number of Player Online Time
@@ -82,6 +83,7 @@ external-integrations:
 # - rank_heal -> Top Rank value of Health Recovered
 # - rank_item-pickup -> Top Rank value of Items Taken
 # - rank_jump -> Top Rank value of Player Jumps
+# - rank_kdr -> Top Rank value of Player KDR
 # - rank_kick -> Top Rank value of Player Kicked
 # - rank_money -> Top Rank value of Player Money
 # - rank_online-time -> Top Rank value of Player Online Time
@@ -139,6 +141,9 @@ models:
     jump:
       title: "#{rank_jump} {player}"
       description: "With jumps {jump}"
+    kdr:
+      title: "#{rank_kdr} {player}"
+      description: "With KDR {kdr}"
     kick:
       title: "#{rank_kick} {player}"
       description: "With kicked {kick}"
@@ -213,6 +218,9 @@ models:
     jump:
       title: ">> TOP JUMPS <<"
       description: "#{rank_jump} {player} {jump}{line}"
+    kdr:
+      title: ">> TOP KDR <<"
+      description: "#{rank_kdr} {player} {kdr}{line}"
     kick:
       title: ">> TOP KICKED <<"
       description: "#{rank_kick} {player} {kick}{line}"

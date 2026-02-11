@@ -24,11 +24,11 @@ declare(strict_types=1);
 
 namespace Nicholass003\TopStats;
 
-use Nicholass003\TopStats\libs\_809aa045474901d4\CortexPE\Commando\PacketHooker;
-use Nicholass003\TopStats\libs\_809aa045474901d4\DaPigGuy\libPiggyEconomy\libPiggyEconomy;
-use Nicholass003\TopStats\libs\_809aa045474901d4\DaPigGuy\libPiggyEconomy\providers\EconomyProvider;
-use Nicholass003\TopStats\libs\_809aa045474901d4\JackMD\UpdateNotifier\UpdateNotifier;
-use Nicholass003\TopStats\libs\_809aa045474901d4\Nicholass003\Textify\Lib\TextifyFactory;
+use Nicholass003\TopStats\libs\_645edd5be11ebe78\CortexPE\Commando\PacketHooker;
+use Nicholass003\TopStats\libs\_645edd5be11ebe78\DaPigGuy\libPiggyEconomy\libPiggyEconomy;
+use Nicholass003\TopStats\libs\_645edd5be11ebe78\DaPigGuy\libPiggyEconomy\providers\EconomyProvider;
+use Nicholass003\TopStats\libs\_645edd5be11ebe78\JackMD\UpdateNotifier\UpdateNotifier;
+use Nicholass003\TopStats\libs\_645edd5be11ebe78\Nicholass003\Textify\Lib\TextifyFactory;
 use Nicholass003\TopStats\Command\TopStatsCommand;
 use Nicholass003\TopStats\Database\Data\DataType;
 use Nicholass003\TopStats\Database\IDatabase;
@@ -64,7 +64,7 @@ use function trim;
 class TopStats extends PluginBase{
 	use SingletonTrait;
 
-	private const CONFIG_VERSION = "1.0.2";
+	private const CONFIG_VERSION = "1.0.3";
 
 	public const MAX_LIST = 10;
 	public const TIME_FORMAT = "{year}y {month}m {week}w {day}d {hour}h {minute}m {second}s";
@@ -286,11 +286,11 @@ class TopStats extends PluginBase{
 			){}
 
 			public function onRun() : void{
-				if(($database = $this->database) instanceof SQLInterface){
-					if(!$database->isAutoSaveActive()){
+				if($this->database instanceof SQLInterface){
+					if(!$this->database->isAutoSaveActive()){
 						return;
 					}
-					$database->saveData();
+					$this->database->saveData();
 				}
 			}
 		}, SQLInterface::AUTO_SAVE_INTERVAL);

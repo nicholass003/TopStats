@@ -24,9 +24,9 @@ declare(strict_types=1);
 
 namespace Nicholass003\TopStats\Listener;
 
-use Nicholass003\TopStats\libs\_809aa045474901d4\Nicholass003\Textify\Lib\Model\Action;
-use Nicholass003\TopStats\libs\_809aa045474901d4\Nicholass003\Textify\Lib\Model\NonPlayerCharacter;
-use Nicholass003\TopStats\libs\_809aa045474901d4\Nicholass003\Textify\Lib\Model\Text;
+use Nicholass003\TopStats\libs\_645edd5be11ebe78\Nicholass003\Textify\Lib\Model\Action;
+use Nicholass003\TopStats\libs\_645edd5be11ebe78\Nicholass003\Textify\Lib\Model\NonPlayerCharacter;
+use Nicholass003\TopStats\libs\_645edd5be11ebe78\Nicholass003\Textify\Lib\Model\Text;
 use Nicholass003\TopStats\Database\Data\DataAction;
 use Nicholass003\TopStats\Database\Data\DataType;
 use Nicholass003\TopStats\Leaderboard\LeaderboardManager;
@@ -115,12 +115,14 @@ class EventListener implements Listener{
 		$player = $event->getPlayer();
 		$this->plugin->getDatabase()->update($player, [DataType::DEATH => 1], DataAction::ADDITION);
 		$this->leaderboardManager->dispatchLeaderboardUpdate(DataType::DEATH);
+		$this->leaderboardManager->dispatchLeaderboardUpdate(DataType::KDR);
 		$source = $player->getLastDamageCause();
 		if($source instanceof EntityDamageByEntityEvent){
 			$attacker = $source->getDamager() ;
-			if($attacker instanceof Player){
+			if($attacker instanceof Player && $attacker !== $player){
 				$this->plugin->getDatabase()->update($attacker, [DataType::KILL => 1], DataAction::ADDITION);
 				$this->leaderboardManager->dispatchLeaderboardUpdate(DataType::KILL);
+				$this->leaderboardManager->dispatchLeaderboardUpdate(DataType::KDR);
 			}
 		}
 	}

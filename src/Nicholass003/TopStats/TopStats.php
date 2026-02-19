@@ -24,11 +24,12 @@ declare(strict_types=1);
 
 namespace Nicholass003\TopStats;
 
-use Nicholass003\TopStats\libs\_645edd5be11ebe78\CortexPE\Commando\PacketHooker;
-use Nicholass003\TopStats\libs\_645edd5be11ebe78\DaPigGuy\libPiggyEconomy\libPiggyEconomy;
-use Nicholass003\TopStats\libs\_645edd5be11ebe78\DaPigGuy\libPiggyEconomy\providers\EconomyProvider;
-use Nicholass003\TopStats\libs\_645edd5be11ebe78\JackMD\UpdateNotifier\UpdateNotifier;
-use Nicholass003\TopStats\libs\_645edd5be11ebe78\Nicholass003\Textify\Lib\TextifyFactory;
+use Nicholass003\TopStats\libs\_2d130c0445b04077\bStats\PocketmineMp\Metrics;
+use Nicholass003\TopStats\libs\_2d130c0445b04077\CortexPE\Commando\PacketHooker;
+use Nicholass003\TopStats\libs\_2d130c0445b04077\DaPigGuy\libPiggyEconomy\libPiggyEconomy;
+use Nicholass003\TopStats\libs\_2d130c0445b04077\DaPigGuy\libPiggyEconomy\providers\EconomyProvider;
+use Nicholass003\TopStats\libs\_2d130c0445b04077\JackMD\UpdateNotifier\UpdateNotifier;
+use Nicholass003\TopStats\libs\_2d130c0445b04077\Nicholass003\Textify\Lib\TextifyFactory;
 use Nicholass003\TopStats\Command\TopStatsCommand;
 use Nicholass003\TopStats\Database\Data\DataType;
 use Nicholass003\TopStats\Database\IDatabase;
@@ -228,6 +229,8 @@ class TopStats extends PluginBase{
 		$this->registerExternalIntegrations();
 		$this->leaderboardManager->loadData();
 		$this->registerTasks();
+
+		(new Metrics($this, 29632));
 	}
 
 	protected function onDisable() : void{

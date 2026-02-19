@@ -24,6 +24,7 @@ declare(strict_types=1);
 
 namespace Nicholass003\TopStats;
 
+use bStats\PocketmineMp\Metrics;
 use CortexPE\Commando\PacketHooker;
 use DaPigGuy\libPiggyEconomy\libPiggyEconomy;
 use DaPigGuy\libPiggyEconomy\providers\EconomyProvider;
@@ -228,6 +229,8 @@ class TopStats extends PluginBase{
 		$this->registerExternalIntegrations();
 		$this->leaderboardManager->loadData();
 		$this->registerTasks();
+
+		(new Metrics($this, 29632));
 	}
 
 	protected function onDisable() : void{

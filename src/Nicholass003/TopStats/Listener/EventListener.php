@@ -24,9 +24,9 @@ declare(strict_types=1);
 
 namespace Nicholass003\TopStats\Listener;
 
-use Nicholass003\TopStats\libs\_86cd70581b547d1c\Nicholass003\Textify\Lib\Model\Action;
-use Nicholass003\TopStats\libs\_86cd70581b547d1c\Nicholass003\Textify\Lib\Model\NonPlayerCharacter;
-use Nicholass003\TopStats\libs\_86cd70581b547d1c\Nicholass003\Textify\Lib\Model\Text;
+use Nicholass003\TopStats\libs\_9c045afa1782fd45\Nicholass003\Textify\Lib\Model\Action;
+use Nicholass003\TopStats\libs\_9c045afa1782fd45\Nicholass003\Textify\Lib\Model\NonPlayerCharacter;
+use Nicholass003\TopStats\libs\_9c045afa1782fd45\Nicholass003\Textify\Lib\Model\Text;
 use Nicholass003\TopStats\Database\Data\DataAction;
 use Nicholass003\TopStats\Database\Data\DataType;
 use Nicholass003\TopStats\Leaderboard\LeaderboardManager;

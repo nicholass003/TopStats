@@ -25,7 +25,7 @@ declare(strict_types=1);
 namespace Nicholass003\TopStats\Leaderboard;
 
 use Exception;
-use Nicholass003\TopStats\libs\_86cd70581b547d1c\Nicholass003\Textify\Lib\TextifyFactory;
+use Nicholass003\TopStats\libs\_9c045afa1782fd45\Nicholass003\Textify\Lib\TextifyFactory;
 use Nicholass003\TopStats\Event\TopStatsUpdateEvent;
 use Nicholass003\TopStats\TopStats;
 use pocketmine\utils\Config;

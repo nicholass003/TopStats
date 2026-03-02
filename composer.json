@@ -8,6 +8,7 @@
         "ifera-mc/update-notifier": "dev-master",
         "paroxity/commando": "dev-master",
         "sof3/libasynql": "^4.2.3",
+        "dktapps/pmforms": "^2.1.0",
         "bstats/pocketmine-mp": "^1.0.0",
         "nicholass003/textify": "dev-main",
         "sof3/infoapi": "dev-master"

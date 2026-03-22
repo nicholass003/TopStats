@@ -14,7 +14,8 @@
         "sof3/infoapi": "dev-master"
     },
     "require-dev": {
-        "sof3/pharynx": "^0.3.6"
+        "sof3/pharynx": "^0.3.6",
+        "code-lts/doctum": "^5.6"
     },
     "repositories": [
         {

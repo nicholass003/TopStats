@@ -1,0 +1,44 @@
+name: Build & Deploy API Docs
+
+on:
+  push:
+    branches: [stable]
+
+permissions:
+  contents: write
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.2
+          extensions: mbstring, json
+          coverage: none
+
+      - name: Install dependencies
+        run: composer install --no-dev --prefer-dist --no-progress
+
+      - name: Install Doctum
+        run: composer require --dev code-lts/doctum
+
+      - name: Generate documentation
+        run: php vendor/code-lts/doctum/bin/doctum update doctum.php
+
+      - name: Deploy to gh-pages
+        run: |
+          git clone --depth=1 --branch gh-pages https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} gh-pages
+          rm -rf gh-pages/*
+          cp -r build/api/* gh-pages/
+          cd gh-pages
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "Update API docs" || echo "No changes"
+          git push

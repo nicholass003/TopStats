@@ -29,7 +29,7 @@ jobs:
         run: composer require --ignore-platform-reqs --dev code-lts/doctum
 
       - name: Generate documentation
-        run: php vendor/code-lts/doctum/bin/doctum update doctum.php
+        run: php vendor/bin/doctum.php update doctum.php
 
       - name: Deploy to gh-pages
         run: |

@@ -24,8 +24,8 @@ declare(strict_types=1);
 
 namespace Nicholass003\TopStats\Utils;
 
-use Nicholass003\TopStats\libs\_c3529f595dd55fae\Nicholass003\Textify\Lib\Model\Model;
-use Nicholass003\TopStats\libs\_c3529f595dd55fae\Nicholass003\Textify\Lib\Model\NonPlayerCharacter;
+use Nicholass003\TopStats\libs\_f4ca9dcdd7ec60f5\Nicholass003\Textify\Lib\Model\Model;
+use Nicholass003\TopStats\libs\_f4ca9dcdd7ec60f5\Nicholass003\Textify\Lib\Model\NonPlayerCharacter;
 use Nicholass003\TopStats\Database\Data\DataAction;
 use Nicholass003\TopStats\Database\Data\DataType;
 use Nicholass003\TopStats\Leaderboard\Leaderboard;
@@ -33,7 +33,7 @@ use Nicholass003\TopStats\TopStats;
 use pocketmine\entity\Human;
 use pocketmine\entity\Skin;
 use pocketmine\player\Player;
-use Nicholass003\TopStats\libs\_c3529f595dd55fae\SOFe\InfoAPI\InfoAPI;
+use Nicholass003\TopStats\libs\_f4ca9dcdd7ec60f5\SOFe\InfoAPI\InfoAPI;
 use function count;
 use function floor;
 use function is_numeric;
@@ -183,8 +183,87 @@ use function uasort;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * Format numeric values into short readable form.
+ */
 class NumberFormatter{
 
+	/**
+	 * Convert a number into compact form (e.g. 1.2K, 3.4M).
+	 */
 	public static function short(float|int $number, int $precision = 1) : string{
 		if($number < 1000){
 			return (string) $number;

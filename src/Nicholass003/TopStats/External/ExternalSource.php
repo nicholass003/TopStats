@@ -75,10 +75,28 @@ use function array_keys;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * Represents a data source produced by an ExternalIntegration.
+ *
+ * Stores the latest extracted entries for a specific type.
+ */
 class ExternalSource{
 
 	/**
-	 * @param array<string, int|float> $entries
+	 * @param string                                      $type
+	 * @param ExternalIntegration                         $integration
+	 * @param list<array{name: string, value: int|float}> $entries
 	 */
 	public function __construct(
 		private string $type,
@@ -94,10 +112,16 @@ class ExternalSource{
 		return $this->integration;
 	}
 
+	/**
+	 * @return list<array{name: string, value: int|float}>
+	 */
 	public function getEntries() : array{
 		return $this->entries;
 	}
 
+	/**
+	 * @param list<array{name: string, value: int|float}> $entries
+	 */
 	public function setEntries(array $entries) : void{
 		$this->entries = $entries;
 	}

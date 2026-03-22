@@ -24,9 +24,9 @@ declare(strict_types=1);
 
 namespace Nicholass003\TopStats\Leaderboard;
 
-use Nicholass003\TopStats\libs\_c3529f595dd55fae\Nicholass003\Textify\Lib\Model\Action;
-use Nicholass003\TopStats\libs\_c3529f595dd55fae\Nicholass003\Textify\Lib\Model\Model;
-use Nicholass003\TopStats\libs\_c3529f595dd55fae\Nicholass003\Textify\Lib\Model\NonPlayerCharacter;
+use Nicholass003\TopStats\libs\_f4ca9dcdd7ec60f5\Nicholass003\Textify\Lib\Model\Action;
+use Nicholass003\TopStats\libs\_f4ca9dcdd7ec60f5\Nicholass003\Textify\Lib\Model\Model;
+use Nicholass003\TopStats\libs\_f4ca9dcdd7ec60f5\Nicholass003\Textify\Lib\Model\NonPlayerCharacter;
 use Nicholass003\TopStats\Database\Data\DataType;
 use Nicholass003\TopStats\Database\IDatabase;
 use Nicholass003\TopStats\External\ExternalIntegrationRegistry;
@@ -35,6 +35,12 @@ use Nicholass003\TopStats\Utils\Utils;
 use function count;
 use function in_array;
 
+/**
+ * Represents a single leaderboard instance.
+ *
+ * Handles rendering, updating, and interaction with
+ * data sources (database or external integrations).
+ */
 class Leaderboard implements \JsonSerializable{
 
 	protected IDatabase $database;
@@ -54,6 +60,9 @@ class Leaderboard implements \JsonSerializable{
 
 	protected int $id;
 
+	/**
+	 * @param Model $model
+	 */
 	public function __construct(
 		protected Model $model
 	){
@@ -63,35 +72,58 @@ class Leaderboard implements \JsonSerializable{
 		$this->id = Utils::getNextTopStatsIds();
 	}
 
+	/**
+	 * Unique runtime identifier of this leaderboard.
+	 */
 	public function getId() : int{
 		return $this->id;
 	}
 
+	/**
+	 * Leaderboard data type (e.g. "kdr", "kills").
+	 */
 	public function getType() : string{
 		return $this->model->getCompoundTag()->getString(self::TAG_TYPE);
 	}
 
+	/**
+	 * Underlying model used for rendering.
+	 */
 	public function getModel() : Model{
 		return $this->model;
 	}
 
+	/**
+	 * Replace the model instance.
+	 */
 	public function setModel(Model $model) : Leaderboard{
 		$this->model = $model;
 		return $this;
 	}
 
+	/**
+	 * Update the displayed text.
+	 */
 	public function updateText(string $text) : Leaderboard{
 		$this->model->setText($text);
 		$this->model->update(Action::EDIT);
 		return $this;
 	}
 
+	/**
+	 * Update the displayed title.
+	 */
 	public function updateTitle(string $title) : Leaderboard{
 		$this->model->setTitle($title);
 		$this->model->update(Action::EDIT);
 		return $this;
 	}
 
+	/**
+	 * Spawn the leaderboard for all current viewers.
+	 *
+	 * Sends the model and triggers an initial update.
+	 */
 	public function spawn() : void{
 		$source = ExternalIntegrationRegistry::getInstance()->getSource($this->getType());
 		foreach($this->model->getViewers() as $player){
@@ -100,18 +132,32 @@ class Leaderboard implements \JsonSerializable{
 		}
 	}
 
+	/**
+	 * Whether sorting is handled externally.
+	 */
 	public function isForceSorting() : bool{
 		return $this->forceSorting;
 	}
 
+	/**
+	 * Enable or disable external sorting.
+	 */
 	public function setForceSorting(bool $value = true) : void{
 		$this->forceSorting = $value;
 	}
 
+	/**
+	 * Check if this leaderboard uses a custom data type.
+	 */
 	public function isCustomDataType() : bool{
 		return !in_array($this->getType(), DataType::ALL, true);
 	}
 
+	/**
+	 * Update leaderboard content using provided or database data.
+	 *
+	 * @param array<string, array<string, int|float|string>> $data
+	 */
 	public function update(array $data = []) : void{
 		if(!$this->isCustomDataType()){
 			$data = $this->database->getTemporaryData();
@@ -127,12 +173,23 @@ class Leaderboard implements \JsonSerializable{
 
 		$this->updateText(Utils::getTopStatsText($data, $this->model, $this->text, self::TYPE_TEXT, $this->forceSorting));
 		$this->updateTitle(Utils::getTopStatsText($data, $this->model, $this->title, self::TYPE_TITLE, $this->forceSorting));
+
 		if($this->model instanceof NonPlayerCharacter){
-			$skin = Utils::getTopStatsPlayerSkin($data, $this->getType(), $this->model->getCompoundTag()->getByte(self::TAG_TOP), $this->forceSorting);
+			$skin = Utils::getTopStatsPlayerSkin(
+				$data,
+				$this->getType(),
+				$this->model->getCompoundTag()->getByte(self::TAG_TOP),
+				$this->forceSorting
+			);
 			$this->model->setSkin($skin);
 		}
 	}
 
+	/**
+	 * Serialize leaderboard data for storage.
+	 *
+	 * @return array{id: int}
+	 */
 	public function jsonSerialize() : array{
 		return [
 			"id" => $this->model->getActorId()

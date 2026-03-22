@@ -103,6 +103,38 @@ use function array_keys;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * Registry for managing all external integrations.
+ *
+ * Responsible for:
+ * - Registering integrations
+ * - Listening to events
+ * - Dispatching leaderboard updates
+ */
 final class ExternalIntegrationRegistry{
 	use SingletonTrait;
 
@@ -112,6 +144,12 @@ final class ExternalIntegrationRegistry{
 	/** @var array<string, ExternalIntegration> */
 	private array $integrations = [];
 
+	/**
+	 * Registers a new external integration and binds its event listener.
+	 *
+	 * @param ExternalIntegration $integration
+	 * @param int                 $eventPriority
+	 */
 	public function register(ExternalIntegration $integration, int $eventPriority = EventPriority::NORMAL) : void{
 		$type = $integration->getType();
 		$eventClass = $integration->getEventClass();
@@ -132,10 +170,16 @@ final class ExternalIntegrationRegistry{
 			);
 	}
 
+	/**
+	 * Unregisters an integration by type.
+	 */
 	public function unregister(string $type) : void{
-		unset($this->sources[$type]);
+		unset($this->sources[$type], $this->integrations[$type]);
 	}
 
+	/**
+	 * Handles incoming events and updates the corresponding data source.
+	 */
 	private function handleEvent(string $type, ExternalIntegration $integration, Event $ev) : void{
 		$data = $integration->extractData($ev);
 
@@ -151,12 +195,19 @@ final class ExternalIntegrationRegistry{
 			->dispatchLeaderboardUpdate($type, $source->getEntries());
 	}
 
+	/**
+	 * Returns the data source for a given type.
+	 *
+	 * @return ExternalSource|null
+	 */
 	public function getSource(string $type) : ?ExternalSource{
 		return $this->sources[$type] ?? null;
 	}
 
 	/**
-	 * Return list of active external types (ex: ["vote", "kdr", ...])
+	 * Returns all active integration types.
+	 *
+	 * @return list<string>
 	 */
 	public function getActiveTypes() : array{
 		return array_keys($this->integrations);

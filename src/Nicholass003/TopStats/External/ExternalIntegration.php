@@ -31,46 +31,57 @@ use pocketmine\Server;
 use pocketmine\utils\SingletonTrait;
 use function array_keys;
 
+/**
+ * Defines a contract for integrating external data sources into TopStats.
+ *
+ * Implementations are responsible for:
+ * - Declaring a unique type identifier
+ * - Providing the event class they listen to
+ * - Extracting structured leaderboard data from events
+ */
 interface ExternalIntegration extends ExternalTypeNames{
 
 	/**
-	 * Return unique type string (ex: "vote", "kdr", "playtime")
+	 * Returns a unique identifier for this integration.
+	 *
+	 * Example: "vote", "kdr", "playtime"
 	 */
 	public function getType() : string;
 
 	/**
-	 * Class of events to be handled
+	 * Returns the fully-qualified class name of the event
+	 * this integration listens to.
+	 *
+	 * @return class-string<Event>
 	 */
 	public function getEventClass() : string;
 
 	/**
-	 * Extract data from event → format:
+	 * Extracts leaderboard data from the given event.
+	 *
+	 * The returned array must follow this structure:
+	 *
 	 * [
-	 *   dummy => [
-	 *              "name" => "PlayerA",
-	 * 				"data-type" => value
-	 * 		      ],
-	 *   dummy => [
-	 *              "name" => "PlayerB",
-	 * 				"data-type" => value
-	 * 		      ],
+	 *     [
+	 *         "name" => "PlayerA",
+	 *         "value" => 123
+	 *     ],
+	 *     [
+	 *         "name" => "PlayerB",
+	 *         "value" => 456
+	 *     ]
 	 * ]
+	 *
+	 * @param Event $event
+	 * @return list<array{name: string, value: int|float}>
 	 */
 	public function extractData(object $event) : array;
 
 	/**
-	 * Indicates whether the integration already performs its own sorting
-	 * inside `extractData()`, meaning TopStats should NOT sort the data again.
+	 * Whether this integration already sorts its data internally.
 	 *
-	 * If this returns **true**, the integration guarantees that the array returned
-	 * by `extractData()` is already properly sorted (usually in descending order),
-	 * and therefore TopStats must use the data as-is without applying any
-	 * additional sorting.
-	 *
-	 * If this returns **false**, TopStats will apply its internal sorting logic
-	 * to the extracted data.
-	 *
-	 * @return bool  True if integration handles sorting; false if TopStats should sort.
+	 * If true, TopStats will not apply additional sorting.
+	 * If false, TopStats will sort the data after extraction.
 	 */
 	public function isForceSorting() : bool;
 }

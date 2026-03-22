@@ -26,7 +26,7 @@ jobs:
         run: composer install --ignore-platform-reqs --no-dev --prefer-dist --no-progress
 
       - name: Install Doctum
-        run: composer require --dev code-lts/doctum
+        run: composer require --ignore-platform-reqs --dev code-lts/doctum
 
       - name: Generate documentation
         run: php vendor/code-lts/doctum/bin/doctum update doctum.php

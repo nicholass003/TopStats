@@ -23,7 +23,7 @@ jobs:
           coverage: none
 
       - name: Install dependencies
-        run: composer install --no-dev --prefer-dist --no-progress
+        run: composer install --ignore-platform-reqs --no-dev --prefer-dist --no-progress
 
       - name: Install Doctum
         run: composer require --dev code-lts/doctum

@@ -31,54 +31,72 @@ use pocketmine\Server;
 use pocketmine\utils\SingletonTrait;
 use function array_keys;
 
+/**
+ * Defines a contract for integrating external data sources into TopStats.
+ *
+ * Implementations are responsible for:
+ * - Declaring a unique type identifier
+ * - Providing the event class they listen to
+ * - Extracting structured leaderboard data from events
+ */
 interface ExternalIntegration extends ExternalTypeNames{
 
 	/**
-	 * Return unique type string (ex: "vote", "kdr", "playtime")
+	 * Returns a unique identifier for this integration.
+	 *
+	 * Example: "vote", "kdr", "playtime"
 	 */
 	public function getType() : string;
 
 	/**
-	 * Class of events to be handled
+	 * Returns the fully-qualified class name of the event
+	 * this integration listens to.
+	 *
+	 * @return class-string<Event>
 	 */
 	public function getEventClass() : string;
 
 	/**
-	 * Extract data from event → format:
+	 * Extracts leaderboard data from the given event.
+	 *
+	 * The returned array must follow this structure:
+	 *
 	 * [
-	 *   dummy => [
-	 *              "name" => "PlayerA",
-	 * 				"data-type" => value
-	 * 		      ],
-	 *   dummy => [
-	 *              "name" => "PlayerB",
-	 * 				"data-type" => value
-	 * 		      ],
+	 *     [
+	 *         "name" => "PlayerA",
+	 *         "value" => 123
+	 *     ],
+	 *     [
+	 *         "name" => "PlayerB",
+	 *         "value" => 456
+	 *     ]
 	 * ]
+	 *
+	 * @param Event $event
+	 * @return list<array{name: string, value: int|float}>
 	 */
 	public function extractData(object $event) : array;
 
 	/**
-	 * Indicates whether the integration already performs its own sorting
-	 * inside `extractData()`, meaning TopStats should NOT sort the data again.
+	 * Whether this integration already sorts its data internally.
 	 *
-	 * If this returns **true**, the integration guarantees that the array returned
-	 * by `extractData()` is already properly sorted (usually in descending order),
-	 * and therefore TopStats must use the data as-is without applying any
-	 * additional sorting.
-	 *
-	 * If this returns **false**, TopStats will apply its internal sorting logic
-	 * to the extracted data.
-	 *
-	 * @return bool  True if integration handles sorting; false if TopStats should sort.
+	 * If true, TopStats will not apply additional sorting.
+	 * If false, TopStats will sort the data after extraction.
 	 */
 	public function isForceSorting() : bool;
 }
 
+/**
+ * Represents a data source produced by an ExternalIntegration.
+ *
+ * Stores the latest extracted entries for a specific type.
+ */
 class ExternalSource{
 
 	/**
-	 * @param array<string, int|float> $entries
+	 * @param string                                      $type
+	 * @param ExternalIntegration                         $integration
+	 * @param list<array{name: string, value: int|float}> $entries
 	 */
 	public function __construct(
 		private string $type,
@@ -94,15 +112,29 @@ class ExternalSource{
 		return $this->integration;
 	}
 
+	/**
+	 * @return list<array{name: string, value: int|float}>
+	 */
 	public function getEntries() : array{
 		return $this->entries;
 	}
 
+	/**
+	 * @param list<array{name: string, value: int|float}> $entries
+	 */
 	public function setEntries(array $entries) : void{
 		$this->entries = $entries;
 	}
 }
 
+/**
+ * Registry for managing all external integrations.
+ *
+ * Responsible for:
+ * - Registering integrations
+ * - Listening to events
+ * - Dispatching leaderboard updates
+ */
 final class ExternalIntegrationRegistry{
 	use SingletonTrait;
 
@@ -112,6 +144,12 @@ final class ExternalIntegrationRegistry{
 	/** @var array<string, ExternalIntegration> */
 	private array $integrations = [];
 
+	/**
+	 * Registers a new external integration and binds its event listener.
+	 *
+	 * @param ExternalIntegration $integration
+	 * @param int                 $eventPriority
+	 */
 	public function register(ExternalIntegration $integration, int $eventPriority = EventPriority::NORMAL) : void{
 		$type = $integration->getType();
 		$eventClass = $integration->getEventClass();
@@ -132,10 +170,16 @@ final class ExternalIntegrationRegistry{
 			);
 	}
 
+	/**
+	 * Unregisters an integration by type.
+	 */
 	public function unregister(string $type) : void{
-		unset($this->sources[$type]);
+		unset($this->sources[$type], $this->integrations[$type]);
 	}
 
+	/**
+	 * Handles incoming events and updates the corresponding data source.
+	 */
 	private function handleEvent(string $type, ExternalIntegration $integration, Event $ev) : void{
 		$data = $integration->extractData($ev);
 
@@ -151,12 +195,19 @@ final class ExternalIntegrationRegistry{
 			->dispatchLeaderboardUpdate($type, $source->getEntries());
 	}
 
+	/**
+	 * Returns the data source for a given type.
+	 *
+	 * @return ExternalSource|null
+	 */
 	public function getSource(string $type) : ?ExternalSource{
 		return $this->sources[$type] ?? null;
 	}
 
 	/**
-	 * Return list of active external types (ex: ["vote", "kdr", ...])
+	 * Returns all active integration types.
+	 *
+	 * @return list<string>
 	 */
 	public function getActiveTypes() : array{
 		return array_keys($this->integrations);

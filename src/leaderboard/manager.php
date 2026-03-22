@@ -35,6 +35,14 @@ use function is_array;
 use function json_decode;
 use function json_encode;
 
+/**
+ * Manages all leaderboard instances and their lifecycle.
+ *
+ * Responsible for:
+ * - Storing active leaderboards
+ * - Loading and saving persistent data
+ * - Dispatching update events
+ */
 class LeaderboardManager{
 
 	/** @var array<int, Leaderboard> */
@@ -48,11 +56,17 @@ class LeaderboardManager{
 		$this->leaderboardData = new Config($this->plugin->getDataFolder() . "leaderboards.json", Config::JSON);
 	}
 
+	/**
+	 * Add a leaderboard instance.
+	 */
 	public function add(Leaderboard $leaderboard) : LeaderboardManager{
 		$this->leaderboards[$leaderboard->getId()] = $leaderboard;
 		return $this;
 	}
 
+	/**
+	 * Remove a leaderboard by ID and destroy its model.
+	 */
 	public function remove(int $id) : LeaderboardManager{
 		$factory = TextifyFactory::getInstance();
 		$leaderboard = $this->get($id);
@@ -65,11 +79,16 @@ class LeaderboardManager{
 		return $this;
 	}
 
+	/**
+	 * Get a leaderboard by ID.
+	 */
 	public function get(int $id) : ?Leaderboard{
 		return $this->leaderboards[$id] ?? null;
 	}
 
 	/**
+	 * Get all registered leaderboards.
+	 *
 	 * @return array<int, Leaderboard>
 	 */
 	public function leaderboards() : array{
@@ -77,6 +96,9 @@ class LeaderboardManager{
 	}
 
 	/**
+	 * Get all leaderboards matching a specific type.
+	 *
+	 * @param string $type
 	 * @return array<int, Leaderboard>
 	 */
 	public function getLeaderboardFromType(string $type) : array{
@@ -117,6 +139,11 @@ class LeaderboardManager{
 		return true;
 	}
 
+	/**
+	 * Load leaderboard data from storage.
+	 *
+	 * @throws Exception If data format is invalid or model is missing
+	 */
 	public function loadData() : void{
 		$runtimeId = 0;
 		foreach($this->leaderboardData->getAll() as $raw){
@@ -140,10 +167,18 @@ class LeaderboardManager{
 		}
 	}
 
+	/**
+	 * Access the underlying leaderboard storage config.
+	 */
 	public function getLeaderboardData() : Config{
 		return $this->leaderboardData;
 	}
 
+	/**
+	 * Save all leaderboard data to storage.
+	 *
+	 * Also destroys associated models before saving.
+	 */
 	public function saveData() : void{
 		$data = [];
 		foreach($this->leaderboards() as $leaderboard){

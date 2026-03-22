@@ -26,19 +26,56 @@ namespace Nicholass003\TopStats\Database;
 
 use pocketmine\player\Player;
 
+/**
+ * Defines a database driver for TopStats.
+ *
+ * Implementations handle loading, storing, and updating
+ * player statistics data.
+ */
 interface IDatabase{
 
+	/**
+	 * Database driver name.
+	 */
 	public function getName() : string;
 
+	/**
+	 * Load all data into memory.
+	 */
 	public function loadData() : void;
 
+	/**
+	 * Get all cached player data.
+	 *
+	 * @return array<string, array<string, int|float|string>>
+	 */
 	public function getTemporaryData() : array;
 
+	/**
+	 * Get a specific value for a player.
+	 *
+	 * @param Player $player
+	 * @param string $type
+	 * @return int|float|string|false
+	 */
 	public function getTemporaryDataValue(Player $player, string $type) : mixed;
 
+	/**
+	 * Persist all data to storage.
+	 */
 	public function saveData() : void;
 
+	/**
+	 * Create a new data entry for a player.
+	 */
 	public function create(Player $player) : void;
 
+	/**
+	 * Update player data with a specific action.
+	 *
+	 * @param Player                   $player
+	 * @param array<string, int|float> $data
+	 * @param int                      $action One of DataAction constants
+	 */
 	public function update(Player $player, array $data, int $action) : void;
 }

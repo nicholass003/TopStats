@@ -28,19 +28,33 @@ use Nicholass003\TopStats\Leaderboard\Leaderboard;
 use pocketmine\event\Cancellable;
 use pocketmine\event\CancellableTrait;
 
+/**
+ * Fired when leaderboards of a specific type are about to be updated.
+ *
+ * This event can be cancelled to prevent the update process.
+ */
 class TopStatsUpdateEvent extends TopStatsEvent implements Cancellable{
 	use CancellableTrait;
 
+	/**
+	 * @param string                  $type
+	 * @param array<int, Leaderboard> $leaderboards
+	 */
 	public function __construct(
 		private string $type,
 		private array $leaderboards = []
 	){}
 
+	/**
+	 * Leaderboard type being updated.
+	 */
 	public function getType() : string{
 		return $this->type;
 	}
 
 	/**
+	 * Leaderboards affected by this update.
+	 *
 	 * @return array<int, Leaderboard>
 	 */
 	public function getLeaderboards() : array{

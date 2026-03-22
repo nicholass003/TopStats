@@ -24,7 +24,7 @@ declare(strict_types=1);
 
 namespace Nicholass003\TopStats\Command\SubCommand;
 
-use Nicholass003\TopStats\libs\_f4ca9dcdd7ec60f5\CortexPE\Commando\BaseSubCommand;
+use Nicholass003\TopStats\libs\_0fcb3ca39b8874b8\CortexPE\Commando\BaseSubCommand;
 use Nicholass003\TopStats\Leaderboard\LeaderboardManager;
 use Nicholass003\TopStats\TopStats;
 use pocketmine\plugin\Plugin;

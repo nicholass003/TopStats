@@ -24,12 +24,12 @@ declare(strict_types=1);
 
 namespace Nicholass003\TopStats;
 
-use Nicholass003\TopStats\libs\_f4ca9dcdd7ec60f5\bStats\PocketmineMp\Metrics;
-use Nicholass003\TopStats\libs\_f4ca9dcdd7ec60f5\CortexPE\Commando\PacketHooker;
-use Nicholass003\TopStats\libs\_f4ca9dcdd7ec60f5\DaPigGuy\libPiggyEconomy\libPiggyEconomy;
-use Nicholass003\TopStats\libs\_f4ca9dcdd7ec60f5\DaPigGuy\libPiggyEconomy\providers\EconomyProvider;
-use Nicholass003\TopStats\libs\_f4ca9dcdd7ec60f5\JackMD\UpdateNotifier\UpdateNotifier;
-use Nicholass003\TopStats\libs\_f4ca9dcdd7ec60f5\Nicholass003\Textify\Lib\TextifyFactory;
+use Nicholass003\TopStats\libs\_0fcb3ca39b8874b8\bStats\PocketmineMp\Metrics;
+use Nicholass003\TopStats\libs\_0fcb3ca39b8874b8\CortexPE\Commando\PacketHooker;
+use Nicholass003\TopStats\libs\_0fcb3ca39b8874b8\DaPigGuy\libPiggyEconomy\libPiggyEconomy;
+use Nicholass003\TopStats\libs\_0fcb3ca39b8874b8\DaPigGuy\libPiggyEconomy\providers\EconomyProvider;
+use Nicholass003\TopStats\libs\_0fcb3ca39b8874b8\JackMD\UpdateNotifier\UpdateNotifier;
+use Nicholass003\TopStats\libs\_0fcb3ca39b8874b8\Nicholass003\Textify\Lib\TextifyFactory;
 use Nicholass003\TopStats\Command\TopStatsCommand;
 use Nicholass003\TopStats\Database\Data\DataType;
 use Nicholass003\TopStats\Database\IDatabase;

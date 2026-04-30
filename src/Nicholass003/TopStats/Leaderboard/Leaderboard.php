@@ -24,9 +24,9 @@ declare(strict_types=1);
 
 namespace Nicholass003\TopStats\Leaderboard;
 
-use Nicholass003\TopStats\libs\_113f28876795d8c3\Nicholass003\Textify\Lib\Model\Action;
-use Nicholass003\TopStats\libs\_113f28876795d8c3\Nicholass003\Textify\Lib\Model\Model;
-use Nicholass003\TopStats\libs\_113f28876795d8c3\Nicholass003\Textify\Lib\Model\NonPlayerCharacter;
+use Nicholass003\TopStats\libs\_554c9147dd0153e8\Nicholass003\Textify\Lib\Model\Action;
+use Nicholass003\TopStats\libs\_554c9147dd0153e8\Nicholass003\Textify\Lib\Model\Model;
+use Nicholass003\TopStats\libs\_554c9147dd0153e8\Nicholass003\Textify\Lib\Model\NonPlayerCharacter;
 use Nicholass003\TopStats\Database\Data\DataType;
 use Nicholass003\TopStats\Database\IDatabase;
 use Nicholass003\TopStats\External\ExternalIntegrationRegistry;
@@ -34,6 +34,8 @@ use Nicholass003\TopStats\TopStats;
 use Nicholass003\TopStats\Utils\Utils;
 use function count;
 use function in_array;
+use function is_string;
+use function trim;
 
 /**
  * Represents a single leaderboard instance.
@@ -66,9 +68,22 @@ class Leaderboard implements \JsonSerializable{
 	public function __construct(
 		protected Model $model
 	){
+		$config = TopStats::getInstance()->getConfig();
+		$basePath = "models." . $model->getVariant()->value . "." . $this->getType();
+
+		$text = $config->getNested($basePath . ".description");
+		$title = $config->getNested($basePath . ".title");
+
+		if(!$text || (is_string($text) && trim($text) === '')){
+			throw new \UnexpectedValueException("Configuration models.{$model->getVariant()->value}.{$this->getType()}.description is missing or empty");
+		}
+		if(!$title || (is_string($title) && trim($title) === '')){
+			throw new \UnexpectedValueException("Configuration models.{$model->getVariant()->value}.{$this->getType()}.title is missing or empty");
+		}
+
 		$this->database = TopStats::getInstance()->getDatabase();
-		$this->text = TopStats::getInstance()->getConfig()->getNested("models." . $model->getVariant()->value . "." . $this->getType() . ".description");
-		$this->title = TopStats::getInstance()->getConfig()->getNested("models." . $model->getVariant()->value . "." . $this->getType() . ".title");
+		$this->text = $text;
+		$this->title = $title;
 		$this->id = Utils::getNextTopStatsIds();
 	}
 

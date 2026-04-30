@@ -88,7 +88,6 @@ final class DataType{
 	}
 
 	public static function get(string $type) : false|string{
-		$type = self::reprocess($type);
 		return self::$types[$type] ?? false;
 	}
 
